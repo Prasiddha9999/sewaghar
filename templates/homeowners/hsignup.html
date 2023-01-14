@@ -1,0 +1,187 @@
+{% load static%}
+{% static "images" as baseUrl %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'homeowners/css/signin.css' %}">
+    <script src="{% static 'javascript/home.js' %}"></script>
+    <title>Sewa Ghar</title>
+    <link  rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <link rel="icon" href="{% static 'images/logo.png' %}">
+    <!-- Font Awesome 4-->
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+</head>
+<body>
+    <!-- Nav Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top py-0">
+        <div class="container">
+          
+          <a class="navbar-brand" href="{% url 'home' %}">
+            <img src="{% static 'images/logo.png' %}" width="70" height="70" alt="">
+          </a>
+          <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse" id="navbar">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'hsignin' %}">Book the Service</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'aboutus' %}">AboutUs</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'blog' %}">Blog</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">For Home Owner</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">For Professional</a>
+              </li>
+            </ul>
+        </div>
+      </div>
+      </nav>
+
+
+   <!-- signup -->
+        <div class="container-fluid">
+            <div class="row login">
+              <div class="col-lg-6 col-md-6 col-12 col-xxl-6 shadow-lg p-3 mb-5 bg-body rounded">
+                <div class="text-center">
+                 
+                    <h3 class="pt-10 mb-5 pb-1">Create Account For Home Owner</h3>
+                  </div>
+  
+                  <form action="hsignup" method="post">
+                    {% csrf_token %}
+                    <div class="form-outline mb-4">
+                      <label class="form-label" for="name">Full Name</label>
+                      <input type="text" id="name" name = "full_name" class="form-control" placeholder="Enter your Full Name" required/>
+                      </div>
+
+                    <div class="form-outline mb-4">
+                    <label class="form-label" for="homeemail">Email</label>
+                    <input type="email" id="homeemail" name = "email" class="form-control" placeholder="Enter your email address" required/>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                      <label class="form-label" for="number">Contact Number</label>
+                      <input type="text" id="number" name = "number" class="form-control" placeholder="Enter your  Contact Number" required/>
+                      </div>
+
+                      <div class="form-outline mb-4">
+                        <label class="form-label" for="address">Address</label>
+                        <input type="text" id="name" name = "address" class="form-control" placeholder="Enter your Address" required/>
+                        </div>
+  
+                    <div class="form-outline mb-4">
+                    <label class="form-label" for="homepassword1">Password</label>
+                    <input type="password" id="homepassword1" name = "homepassword1" class="form-control" placeholder="Enter your Password" required/>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                      <label class="form-label" for="homepassword2">Conform Password</label>
+                      <input type="password" id="homepassword2" name = "homepassword2" class="form-control" placeholder="Enter your Password" required/>
+                      </div> 
+
+                    <div class="mb-3">
+                      <label for="photo" class="form-label">Attached Your Photo</label>
+                      <input class="form-control"  name = "photo" type="file" id="photo" >
+                    </div>
+                    
+                    <!-- if some error dispaly message here-->
+                    <div class="errormsg">
+                      {% for message in messages%}
+                      <h5>{{message}}</h5>
+                      {% endfor%}
+                    </div>
+  
+                    <div class="text-center pt-1 mb-5 pb-1">
+                      <button class="btn btn-outline-danger my-5" type="Submit">SignUp</button><br>
+                    </div>
+
+                  </form>
+              </div>
+    
+              <div class="col-lg-6 col-md-6 col-12 col-xxl-6 text-center shadow p-3 mb-5 rounded" style="background-color: #f07147d2">
+                <br><br><br><br><br><br><br><br>
+                <h3 class="mb-4">Already have an account?</h3><br>
+                <p class="medium mb-0">If you already have an account on Sewa ghar you can just click the button Sign In.</p><br>
+                <button type="button" class="btn btn-outline-secondary my-5"><a href="{% url 'hsignin' %}">SignIn</a></button>
+              </div>
+            </div>  
+          </div>
+                      
+     <!-- footer -->
+<footer class="text-center text-lg-start text-white mt-5" style="background-color: #323742">
+  <div class="container p-4 pb-0">
+    <section class="">
+      <div class="row">
+        
+      <!-- Grid column -->
+      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+        <h6 class="text-uppercase mb-4 font-weight-bold">---About---</h6>
+        <p><a class="text-white" href="blog.html">BLOG</a></p>
+        <p><a class="text-white" href="aboutus.html">ABOUT US</a></p>
+        <p><a class="text-white" href="privacypolicy.html" target="_blank">PRIVACY POLICY</a></p>
+        <p><a class="text-white" href="termsandcondition.html" target="_blank">TERMS AND CONDITION</a></p>
+      </div>
+
+        <!-- Grid column -->
+        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+          <h6 class="text-uppercase mb-4 font-weight-bold">---Service---</h6>
+          <p class="text-white">- Home Repairs</p>
+          <p class="text-white">- Carpenter</p>
+          <p class="text-white">- Painter</p>
+          <p class="text-white">- Computer Repair</p>
+          <p class="text-white">- Electrician</p>
+          <p class="text-white">- Plumber</p>
+       
+        </div>
+
+        <!-- Grid column -->
+        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+          <h6 class="text-uppercase mb-4 font-weight-bold">Contact</h6>
+          <p><i class="fa fa-home mr-3"></i> Balaju "8" Kathmandu</p>
+          <p><i class="fa fa-envelope mr-3"></i> sajilosewa@gmail.com</p>
+          <p><i class="fa fa-phone mr-3"></i> 9863144095</p>
+        
+          
+        </div>
+
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+          <h6 class="text-uppercase mb-4 font-weight-bold text-center" style="color: #e9724a">Sewa Ghar</h6>
+          
+          <!-- map -->
+          <img src="{% static 'images/map.png'%}" class="d-block w-100 mb-2" alt="Map of Sewa Ghar">
+          <!-- Icon -->
+          <div class="icon">
+            <!-- Facebook -->
+
+         <a class="btn btn-primary btn-floating m-1" style="background-color: #3b5998" href="www.facebook.com" role="button"><i class="fa fa-facebook"></i></a>
+        <a class="btn btn-primary btn-floating m-1" style="background-color: #55acee" href="www.twitter.com" role="button"><i class="fa fa-twitter"></i></a>
+         <a class="btn btn-primary btn-floating m-1" style="background-color: #e1496f" href="www.instagram.com" role="button"><i class="fa fa-instagram"></i></a>
+         <a class="btn btn-primary btn-floating m-1" style="background-color: #0082ca" href="www.linkedin.com" role="button"><i class="fa fa-linkedin"></i></a>
+        </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Copyright -->
+  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">© 2023 Copyright: Sewa Ghar</div>
+</footer>
+
+
+</body>
+
+</html>

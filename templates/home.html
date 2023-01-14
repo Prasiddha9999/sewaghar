@@ -1,0 +1,299 @@
+
+{% load static%}
+{% static "images" as baseUrl %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <script src="{% static 'javascript/home.js' %}"></script>
+    <title>Sewa Ghar</title>
+    <link  rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <link rel="icon" href="{% static 'images/logo.png' %}">
+    <!-- Font Awesome 4-->
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+</head>
+<body>
+    <!-- Nav Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top py-0">
+        <div class="container">
+          
+          <a class="navbar-brand" href="{% url 'home' %}">
+            <img src="{% static 'images/logo.png' %}" width="70" height="70" alt="">
+          </a>
+          <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse" id="navbar">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'hsignin' %}">Book the Service</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'aboutus' %}">AboutUs</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'blog' %}">Blog</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'hsignin' %}">For Home Owner</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'psignin' %}">For Professional</a>
+              </li>
+            </ul>
+        </div>
+      </div>
+      </nav>
+
+      <!-- Slider -->
+      <header>
+      <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="{% static 'images/home.png' %}" class="d-block w-100" alt="Sewa Ghar">
+          </div>
+          <div class="carousel-item">
+            <img src="{% static 'images/homeb.png' %}" class="d-block w-100" alt="Sewa Ghar">
+          </div>
+          <div class="carousel-item">
+            <img src="{% static 'images/homec.jpg' %}" class="d-block w-100" alt="Sewa Ghar">
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- About Sewa Ghar-->
+    <section class="main_heading my-5">
+      <div class="text-center">
+        <h1 class="display-5">About Us</h1>
+        <hr class="w-25 mx-auto"/>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
+            <figure>
+              <img src="{% static 'images/home.png'%}" alt="About Us IMG" class="img-fluid content-img">
+            </figure>
+          </div>
+
+          <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
+            <h1>Sewa Ghar</h1>
+            <p>
+              This appis to fix all problems related to your homes like home appliances, electricians, carpentry, and other 
+household issues. In this app, Home Owners request the service from professionals and 
+professionals will give the service to the home Owners. A mediator or admin can manage
+and view the activity of both homeowners and professionals. The aim of the project is to 
+create Sewa Ghar with an online communication system and choose professionals by 
+viewing their ratings, profile, etc.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+    
+<!--Why choose Us -->
+    <section class="main_heading my-5">
+      <div class="text-center">
+        <h1 class="display-5">Choose Us</h1>
+        <hr class="w-25 mx-auto"/>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
+            <h1>Why Choose Sewa Ghar?</h1>
+            <p>
+              It gives freedom to choose the best professionals.
+              Easily chat with homeowners and professionals.
+              Homeowners can view their history.
+              It will be faster and more user-friendly.
+              Home Owners can fare for Price in chat.
+              Home Owners can find professionals at the nearest Location
+            </p>
+          </div>
+          <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
+            <figure>
+              <img src="{% static 'images/whyus.jpg'%}" alt="About Us IMG" class="img-fluid content-img">
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP TO USE SEWA GHAR FOR HOME OWNER -->
+    <section class="main_heading my-5">
+      <div class="text-center">
+        <h1 class="display-5">For Home Owners</h1>
+        <hr class="w-25 mx-auto"/>
+    </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
+            <figure>
+              <img src="{% static 'images/homeowner.jpg'%}" alt="About Us IMG" class="img-fluid content-img">
+            </figure>
+          </div>
+          <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
+            <h1>Step to use for Home Owner</h1>
+            <p>
+Step1:
+<br>Step2:
+<br>Step3:
+<br>Step4:
+<br>Step5:
+<br>Step6:
+<br>Step7:
+</p>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+     <!-- STEP TO USE SEWA GHAR FOR PROFESSIONALS -->
+     <section class="main_heading my-5">
+      <div class="text-center">
+        <h1 class="display-5">For Professionals</h1>
+        <hr class="w-25 mx-auto"/>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
+            <h1>Step to use for professionals</h1>
+            <p>
+              Step1:
+              <br>Step2:
+              <br>Step3:
+              <br>Step4:
+              <br>Step5:
+              <br>Step6:
+              <br>Step7:
+</p>
+
+          </div>
+          <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
+            <figure>
+              <img src="{% static 'images/professionals.jpg'%}" alt="About Us IMG" class="img-fluid content-img">
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+<!-- client says -->
+    <section class="main_heading my-5">
+      <div class="text-center">
+        <h1 class="display-5">What Our Client Says?</h1>
+        <hr class="w-25 mx-auto"/>
+      </div>
+    </section>
+
+
+<!-- client slider -->
+<!-- Slider -->
+<header>
+  <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner text-center">
+      <div class="carousel-item abc active text-center">
+        <img src="{% static 'images/democomment1.png'%}" class="d-block w-60 " alt="About Us IMG">
+      </div>
+      <div class="carousel-item abc">
+        <img src="{% static 'images/democomment2.png'%}" class="d-block w-60 " alt="About Us IMG">
+      </div>
+      <div class="carousel-item abc">
+        <img src="{% static 'images/democomment3.png'%}" class="d-block w-60 " alt="About Us IMG">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</header>   
+<!-- footer -->
+<footer class="text-center text-lg-start text-white mt-5" style="background-color: #323742">
+  <div class="container p-4 pb-0">
+    <section class="">
+      <div class="row">
+        
+      <!-- Grid column -->
+      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+        <h6 class="text-uppercase mb-4 font-weight-bold">---About---</h6>
+        <p><a class="text-white" href="blog.html">BLOG</a></p>
+        <p><a class="text-white" href="aboutus.html">ABOUT US</a></p>
+        <p><a class="text-white" href="privacypolicy.html" target="_blank">PRIVACY POLICY</a></p>
+        <p><a class="text-white" href="termsandcondition.html" target="_blank">TERMS AND CONDITION</a></p>
+      </div>
+
+        <!-- Grid column -->
+        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+          <h6 class="text-uppercase mb-4 font-weight-bold">---Service---</h6>
+          <p class="text-white">- Home Repairs</p>
+          <p class="text-white">- Carpenter</p>
+          <p class="text-white">- Painter</p>
+          <p class="text-white">- Computer Repair</p>
+          <p class="text-white">- Electrician</p>
+          <p class="text-white">- Plumber</p>
+       
+        </div>
+
+        <!-- Grid column -->
+        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+          <h6 class="text-uppercase mb-4 font-weight-bold">Contact</h6>
+          <p><i class="fa fa-home mr-3"></i> Balaju "8" Kathmandu</p>
+          <p><i class="fa fa-envelope mr-3"></i> sajilosewa@gmail.com</p>
+          <p><i class="fa fa-phone mr-3"></i> 9863144095</p>
+        
+          
+        </div>
+
+        <!-- Grid column -->
+        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+          <h6 class="text-uppercase mb-4 font-weight-bold text-center" style="color: #e9724a">Sewa Ghar</h6>
+          
+          <!-- map -->
+          <img src="{% static 'images/map.png'%}" class="d-block w-100 mb-2" alt="Map of Sewa Ghar">
+          <!-- Icon -->
+          <div class="icon">
+            <!-- Facebook -->
+
+         <a class="btn btn-primary btn-floating m-1" style="background-color: #3b5998" href="www.facebook.com" role="button"><i class="fa fa-facebook"></i></a>
+        <a class="btn btn-primary btn-floating m-1" style="background-color: #55acee" href="www.twitter.com" role="button"><i class="fa fa-twitter"></i></a>
+         <a class="btn btn-primary btn-floating m-1" style="background-color: #e1496f" href="www.instagram.com" role="button"><i class="fa fa-instagram"></i></a>
+         <a class="btn btn-primary btn-floating m-1" style="background-color: #0082ca" href="www.linkedin.com" role="button"><i class="fa fa-linkedin"></i></a>
+        </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Copyright -->
+  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">© 2023 Copyright: Sewa Ghar</div>
+</footer>
+
+
+</body>
+
+</html>
