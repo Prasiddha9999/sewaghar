@@ -1,0 +1,270 @@
+{% load static%}
+{% static "images" as baseUrl %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <script src="{% static 'javascript/home.js' %}"></script>
+    <title>Sewa Ghar</title>
+    <link  rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <link rel="icon" href="{% static 'images/logo.png' %}">
+    <!-- Font Awesome 4-->
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"> 
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
+    
+</head>
+<body>
+  <!-- Nav Bar -->
+ <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top py-0">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'home' %}">
+      <img src="{% static 'images/logo.png' %}" width="70" height="70" alt="">
+    </a>
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="input-group px-5 ">
+        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+        <button type="button" class="btn btn-outline-primary">search</button>
+      </div>
+      <div class="navbar-collapse collapse" id="navbar">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'aboutus' %}">AboutUs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'blog' %}">Blogs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link px-4">
+              <span id="boot-icon" class="bi bi-bell" style="font-size: 25px; -webkit-text-stroke-width: 1.2px;"></span></a>
+            </li>    
+            
+            <li class="nav-item">
+              <a class="nav-link px-4">
+              <span id="boot-icon" class="bi bi-bookmark" style="font-size: 25px; -webkit-text-stroke-width: 1.2px;"></span></a>
+            </li>  
+
+            <li class="nav-item dropdown">
+              <a class=" bi bi-person nav-link dropdown-toggle" style="font-size: 25px; -webkit-text-stroke-width: 1.2px;"  id="navbarDropdown"  data-bs-toggle="dropdown" aria-expanded="false">
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li class="dropdown-item" aria-disabled="true"></li>  Prasiddha Regmi</a></li>
+                <li><a class="dropdown-item" href="#">My Profile</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+      </div>
+    </div>
+    </nav>
+
+    <script>
+      var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
+var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+return new bootstrap.Dropdown(dropdownToggleEl)
+})
+    </script>
+ 
+
+    <!-- Middle Section -->
+    <br><br>
+    <div class="text-center my-5">
+      <h3 class="display-5">SubSystem: <u>Carpenter</u></h3>
+      <hr class="w-25 mx-auto"/>
+    </div>
+    <br>
+<!-- Services -->
+<div class="container">
+<div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3 justify-content-center">
+  <div class="col">
+    <div class="p-3 border bg-light">Carpenter Repair Only</div>
+  </div>
+  <div class="col">
+    <div class="p-3 border bg-light">Sofa Repair</div>
+  </div>
+  <div class="col">
+    <div class="p-3 border bg-light">Expert in all type of work</div>
+  </div>
+
+</div>
+</div>
+<br><br>
+<hr>
+<br><br>
+<div class="text-center">
+<h3>Some Important Facts</h3>
+<hr class="w-25 mx-auto"/>
+</div>
+
+
+
+<div class="container mp-5">
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
+      <p><em><u>
+        It gives freedom to choose the best professionals.It gives freedom to choose the best professionals.
+      </p>
+    </div>
+    <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
+      <!-- No field -->
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
+      <!-- No field -->
+    </div>
+    <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
+      <p>
+        Easily chat with homeowners and professionals.Easily chat with homeowners and professionals.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
+      <p>
+        Homeowners can view their history.Homeowners can view their history.
+      </p>
+    </div>
+    <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
+      <!-- No field -->
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
+      <!-- No field -->
+    </div>
+    <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
+      <p>
+        It will be faster and more user-friendly.It will be faster and more user-friendly.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
+      <p>
+        Home Owners can fare for Price.Home Owners can fare for Price.
+    </p>
+    </div>
+    <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
+      <!-- No field -->
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
+      <!-- No field -->
+    </div>
+    <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
+      <p>
+        Home Owners can find professionals at the nearest Location. Home Owners can find professionals at the nearest Location
+     </p>
+    </div>
+  </div>
+</div>
+</em></u>
+</div>
+  <br>
+  <hr>
+  <br>
+  <div class="text-center">
+    <h3>Give us valuable comment or feedback here....</h3>
+    <hr class="w-50 mx-auto"/>
+  </div>
+
+  <div class="mb-3 mx-5">
+    <label for="exampleFormControlTextarea1" class="form-label"><b>Comment</b></label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+    <br>
+    <button class="btn btn-primary" type="submit">Post</button>
+  </div>
+
+   <!-- footer -->
+   <footer class="text-center text-lg-start text-white mt-5" style="background-color: #323742">
+    <div class="container p-4 pb-0">
+      <section class="">
+        <div class="row">
+          
+        <!-- Grid column -->
+        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+          <h6 class="text-uppercase mb-4 font-weight-bold">---About---</h6>
+          <p><a class="text-white" href="blog.html">BLOG</a></p>
+          <p><a class="text-white" href="aboutus.html">ABOUT US</a></p>
+          <p><a class="text-white" href="privacypolicy.html" target="_blank">PRIVACY POLICY</a></p>
+          <p><a class="text-white" href="termsandcondition.html" target="_blank">TERMS AND CONDITION</a></p>
+        </div>
+  
+          <!-- Grid column -->
+          <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+            <h6 class="text-uppercase mb-4 font-weight-bold">---Service---</h6>
+            <p class="text-white">- Home Repairs</p>
+            <p class="text-white">- Carpenter</p>
+            <p class="text-white">- Painter</p>
+            <p class="text-white">- Computer Repair</p>
+            <p class="text-white">- Electrician</p>
+            <p class="text-white">- Plumber</p>
+         
+          </div>
+  
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+            <h6 class="text-uppercase mb-4 font-weight-bold">Contact</h6>
+            <p><i class="fa fa-home mr-3"></i> Balaju "8" Kathmandu</p>
+            <p><i class="fa fa-envelope mr-3"></i> sajilosewa@gmail.com</p>
+            <p><i class="fa fa-phone mr-3"></i> 9863144095</p>
+          
+            
+          </div>
+  
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+            <h6 class="text-uppercase mb-4 font-weight-bold text-center" style="color: #e9724a">Sewa Ghar</h6>
+            
+            <!-- map -->
+            <img src="{% static 'images/map.png'%}" class="d-block w-100 mb-2" alt="Map of Sewa Ghar">
+            <!-- Icon -->
+            <div class="icon">
+              <!-- Facebook -->
+  
+           <a class="btn btn-primary btn-floating m-1" style="background-color: #3b5998" href="www.facebook.com" role="button"><i class="fa fa-facebook"></i></a>
+          <a class="btn btn-primary btn-floating m-1" style="background-color: #55acee" href="www.twitter.com" role="button"><i class="fa fa-twitter"></i></a>
+           <a class="btn btn-primary btn-floating m-1" style="background-color: #e1496f" href="www.instagram.com" role="button"><i class="fa fa-instagram"></i></a>
+           <a class="btn btn-primary btn-floating m-1" style="background-color: #0082ca" href="www.linkedin.com" role="button"><i class="fa fa-linkedin"></i></a>
+          </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">© 2023 Copyright: Sewa Ghar</div>
+  </footer>
+  
+  
+  </body>
+  
+  </html>
+  
