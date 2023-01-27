@@ -45,6 +45,21 @@ def profile(request):
 def bookings(request):
     return render(request, "homeowners/bookings.html")
 
-def bookingdetail(request):
-    return render(request, "homeowners/bookingdetail.html")
+def bookingdetails(request):
+    return render(request, "homeowners/bookingdetails.html")
+
+def requestdetails(request):
+    return render(request, "professionals/requestdetails.html")
+
+def request(request):
+    return render(request, "professionals/request.html")
+
+def professionalprofile(request):
+    return render(request, "professionals/professionalprofile.html")
+
+def professionalnotification(request):
+    return render(request, "professionals/professionalnotification.html")
+
+def adminhomepage(request):
+    return render(request, "admin/adminhomepage.html")
 

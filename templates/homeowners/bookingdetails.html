@@ -101,61 +101,49 @@ return new bootstrap.Dropdown(dropdownToggleEl)
         </div>
         <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
           <!-- appointment date time show -->
-          <div class="container">
-            <div class="row">
-              <div class="col"><h5>Date:</h5></div>
-              <div class="col"><h5>Time:</h5></div>         
+<div class="professionals_image">
+    <img src="{% static 'images/professionals.jpg'%}" class="col-4 rounded float-start" alt="Professioanal Image">
+</div>
+<div class="profes_details">
+    <div class="row">
+        <div class="col"><h5>Date: 2022/10/15</h5></div>
+        <div class="col"><h5>Time: 10:45 PM</h5></div>         
+      </div>
+      <hr>
+<h3>-Name: Ram Sharma</h3>
+<h5>-Age: 25</h5>
+<h5>-Location: Balaju</h5>
+<h5>-Mobile no: 9863144095</h5>
+</div>
+<br><br><br><br><br>
+<p>A Carpenter is a someone who builds or repair the thing which is made from woods.</p>
+
+<h5>Service Charge Perhour : 150</h5>
+<h5>Rating : 4/5</h5>
+<br>
+<div class="solvebtn text-center">
+    <button type="button" class="btn btn-primary" disabled>Solved</button>
+  </div>
+<br>
+          <div class="col-md">
+            <div class="form-floating">
+              <select class="form-select" id="floatingSelectGrid" aria-label="Floating label select example">
+                <option selected>Choose Number</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="2">4</option>
+                <option value="3">5</option>
+              </select>
+              <label for="floatingSelectGrid">Ratings</label>
             </div>
-            <hr>
-
-          <!-- Search Professionals-->
-          <p><b>Filter Professionals by location</b></p>
-          <div class="input-group px-0 ">
-            <input type="search" class="form-control rounded" placeholder="Search here......" aria-label="Search" aria-describedby="search-addon" />
-            <button type="button" class="btn btn-outline-primary">Search</button>
           </div>
-
- <!--List of Professionals-->
- <div class="table-wrapper-scroll-y my-custom-scrollbar">
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Rating</th>
-                <th scope="col">More</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Ram</td>
-                <td>3/5</td>
-                <td><a href="#">viewmore</a></td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Shyam</td>
-                <td>4/5</td>
-                <td><a href="#">viewmore</a></td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Hari</td>
-                <td>3/5</td>
-                <td><a href="#">viewmore</a></td>
-              </tr>
-              
-            </tbody>
-          </table>
-        </div>
-
-          </div>
-
-          <div class="nextprevious">
-            <button type="button" class="btn btn-danger back">--Back</button>
-          </div>
-
+<br>
+<h5>Pay Through Khalti</h5>
+<div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Grand Total">
+    <button class="btn btn-outline-success" type="button">Pay</button>
+  </div>
         </div>
       </div>
     </div>

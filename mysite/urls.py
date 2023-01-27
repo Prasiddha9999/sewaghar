@@ -17,7 +17,11 @@ urlpatterns = [
     path("notification",views.notification, name="notification"),
     path("profile",views.profile, name="profile"),
     path("bookings",views.bookings, name="bookings"),
-    path("bookingdetail",views.bookingdetail, name="bookingdetail"),
+    path("bookingdetails",views.bookingdetails, name="bookingdetails"),
+    path("requestdetails",views.requestdetails, name="requestdetails"),
+    path("request",views.request, name="request"),
+    path("professionalprofile",views.professionalprofile, name="professionalprofile"),
+    path("professionalnotification",views.professionalnotification, name="professionalnotification"),
+    path("adminhomepage",views.adminhomepage, name="adminhomepage"),
 ]
-
 
