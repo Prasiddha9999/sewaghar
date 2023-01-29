@@ -60,4 +60,7 @@ def logout(request):
     auth.logout(request)
     return redirect("/")
 
+def adminsignin(request):
+    return render(request, "admin/adminsignin.html")    
+
 

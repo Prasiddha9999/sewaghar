@@ -1,0 +1,64 @@
+{% load static%}
+{% static "images" as baseUrl %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'professionals/css/signin.css' %}">
+    <script src="{% static 'javascript/home.js' %}"></script>
+    <title>Sewa Ghar</title>
+    <link  rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <link rel="icon" href="{% static 'images/logo.png' %}">
+    <!-- Font Awesome 4-->
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+</head>
+<body>
+    <!-- Nav Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top py-0">
+        <div class="container">
+          
+          <a class="navbar-brand" href="{% url 'home' %}">
+            <img src="{% static 'images/logo.png' %}" width="70" height="70" alt="">
+          </a>
+          <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+      </nav>
+
+
+    <!-- signip -->
+        <div class="container-fluid">
+            <div class="row login">
+              <div class="col-lg-12 col-md-12 col-12 col-xxl-12 shadow-lg mb-2 bg-body rounded">
+                <div class="text-center">
+                    <br><br><br><br>
+                    <h3 class="pt-10 mb-5 pb-1">Admin login</h3>
+                  </div>
+  
+                  <form>
+                    <div class="form-outline mb-4">
+                    <label class="form-label" for="adminpassword">Username</label>
+                    <input type="email" id="adminemail" class="form-control" placeholder="Enter your email address" required/>
+                    </div>
+  
+                    <div class="form-outline mb-4">
+                    <label class="form-label" for="adminpassword">Password</label> 
+                    <input type="password" id="adminpassword" class="form-control" placeholder="Enter your Password" required/>
+                    </div>
+  
+                    <div class="text-center pt-1 mb-5 pb-1">
+                      <button class="btn btn-outline-danger my-5" type="button">Login</button><br>
+                    </div>
+                  </form>
+           
+
+
+</body>
+
+</html>

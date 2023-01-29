@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from user.models import Account_HomeOwner
+from user.models import All_Service
 
 # Create your views here.
 
@@ -19,7 +21,8 @@ def termsandcondition(request):
     return render(request, "termsandcondition.html")
 
 def service(request):
-    return render(request, "homeowners/service.html")
+    serv = All_Service.objects.all().distinct('service') 
+    return render(request, "homeowners/service.html",{'serv':serv})
 
 def subservice(request):
     return render(request, "homeowners/subservice.html")
@@ -62,4 +65,75 @@ def professionalnotification(request):
 
 def adminhomepage(request):
     return render(request, "admin/adminhomepage.html")
+
+def admincreateservice(request):
+    if request.method =="POST":
+        service = request.POST.get('service')
+        subservice = request.POST.get('subservice')
+        photo = request.POST.get('photo')
+        desc = request.POST.get('desc')
+        
+        serv = All_Service(
+            service = service,
+            subservice = subservice,
+            photo = photo,
+            desc = desc   
+        )
+        print(desc)
+        serv.save()
+    return render(request, "admin/admincreateservice.html")
+
+def adminmessage(request):
+    return render(request, "admin/adminmessage.html")
+
+def adminorderdetail(request):
+    return render(request, "admin/adminorderdetail.html")
+
+def adminprofile(request):
+    return render(request, "admin/adminprofile.html")
+
+def adminservicedetail(request):
+    serv = All_Service.objects.all()
+    return render(request, "admin/adminservicedetail.html",{'serv':serv})
+
+def adminservicelist(request):
+    serv = All_Service.objects.all() 
+    return render(request, "admin/adminservicelist.html",{'serv':serv})
+
+def adminservicemandetail(request):
+    return render(request, "admin/adminservicemandetail.html")
+
+def adminservicemanlist(request):
+    return render(request, "admin/adminservicemanlist.html")
+
+def adminuserdetail(request):
+    return render(request, "admin/adminuserdetail.html")
+
+def adminusermanlist(request):
+    # ho: Account_HomeOwner.objects.all()
+    
+    # context = {
+    #     'ho':ho,
+    # }
+    return render(request, 'admin/adminusermanlist.html')
+
+def adminvieworder(request):
+    return render(request, "admin/adminvieworder.html")
+
+def adminnotification(request):
+    return render(request, "admin/adminnotification.html")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

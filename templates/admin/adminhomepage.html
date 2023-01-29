@@ -8,7 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'admin/css/styles.css' %}">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <script src="{% static 'admin/js/scripts.js' %}"></script>
     <title>Sewa Ghar</title>
     <link  rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
@@ -21,48 +20,55 @@
 
     
 </head>
-<body>
+<body> 
  
- {% comment %} <!--Main Navigation-->
+ <!--Main Navigation-->
 <header>
   <!-- Sidebar start -->
   <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
     <div class="position-sticky">
-      <div class="list-group list-group-flush mx-3 mt-4">
-        <a href="#" class="list-group-item list-group-item-action py-2 ripple active" aria-current="true"><i class="fas fa-tachometer-alt fa-fw me-3"></i><span>Main dashboard</span></a>
-        <a href="#" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-chart-area fa-fw me-3"></i><span>Webiste traffic</span></a> 
-        <a href="#" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-chart-bar fa-fw me-3"></i><span>Orders</span></a>
-        <a href="#" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-users fa-fw me-3"></i><span>Users</span></a>
+      <div class="list-group list-group-flush mx-3 mt-5">       
+        <a href="{% url 'adminhomepage' %}" class="list-group-item list-group-item-action py-2 ripple active" aria-current="true"><i class=""></i><span>Dashboard</span></a>
+        <a href="{% url 'adminservicemanlist' %}" class="list-group-item list-group-item-action py-2 ripple"><i class=""></i><span>Professional</span></a> 
+        <a href="{% url 'adminusermanlist' %}" class="list-group-item list-group-item-action py-2 ripple"><i class=""></i><span>Homeowner</span></a>
+        <a href="{% url 'adminservicelist' %}" class="list-group-item list-group-item-action py-2 ripple"><i class=""></i><span>Services</span></a>
+        <a href="{% url 'admincreateservice' %}" class="list-group-item list-group-item-action py-2 ripple "><i class=""></i><span>Create Service</span></a>
+        <a href="{% url 'adminvieworder' %}" class="list-group-item list-group-item-action py-2 ripple"><i class=""></i><span>ViewOrder</span></a>
+        <a href="{% url 'adminmessage' %}" class="list-group-item list-group-item-action py-2 ripple"><i class=""></i><span>Message</span></a>
       </div>
     </div>
   </nav>
   <!-- Sidebar end-->
-
-   <!-- Nav Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top py-0">
-      <div class="container">
-        <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'images/logo.png' %}" width="70" height="70" alt=""></a>
-
-        <nav class="navbar-expand-sm bg-light justify-content-center">
-          <ul class="navbar-nav">
-    
+  
+      <!-- Nav Bar -->
+ <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top py-0">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'home' %}">
+      <img src="{% static 'images/logo.png' %}" width="70" height="70" alt="">
+    </a>
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-collapse collapse" id="navbar">
+          <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link px-4"><span id="boot-icon" class="bi bi-bell" style="font-size: 25px; -webkit-text-stroke-width: 1.2px;"></span></a>
-            </li>
-    
-            <li class="nav-item dropdown">
-              <a class=" bi bi-person nav-link dropdown-toggle" style="font-size: 25px; -webkit-text-stroke-width: 1.2px;"  id="navbarDropdown"  data-bs-toggle="dropdown" aria-expanded="false"></a>
+              <a class="nav-link px-4" href="{% url 'adminnotification' %}">
+              <span id="boot-icon" class="bi bi-bell" style="font-size: 25px; -webkit-text-stroke-width: 1.2px;"></span></a>
+            </li>    
+  
+              <li class="nav-item dropdown">
+                <a class=" bi bi-person nav-link dropdown-toggle" style="font-size: 25px; -webkit-text-stroke-width: 1.2px;"  id="navbarDropdown"  data-bs-toggle="dropdown" aria-expanded="false">
+                </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <li class="dropdown-item" aria-disabled="true"></li>  Prasiddha Regmi</a></li>
-                  <li><a class="dropdown-item" href="#">My Profile</a></li>
+                  <li><a class="dropdown-item" href="{% url 'adminprofile' %}">My Profile</a></li>
                   <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#">Logout</a></li>
-                </ul>
+                  <li><a class="dropdown-item" href="{% url 'home' %}">Logout</a></li>
+              </ul>
             </li>
-    
           </ul>
-        </nav>
       </div>
+    </div>
     </nav>
   <!-- Navbar -->
 </header>
@@ -70,107 +76,55 @@
 
 <!--Main layout-->
 <main style="margin-top: 58px">
-  <div class="container pt-4">
-
+  <div class="container pt-4" >
+    <div class="row">
+      <div class="col-lg-3 col-6">
+      
+      <div class="small-box bg-info">
+      <div class="inner">
+      <h3>150</h3>
+      <p>Register User</p>
+      </div>
+      <div class="icon">
+      <i class="ion ion-bag"></i>
+      </div>
+      <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+      </div>
+      
+      <div class="col-lg-3 col-6">
+      
+      <div class="small-box bg-success">
+      <div class="inner">
+        <h3>44</h3>
+      <p>Total Service Man</p>
+      </div>
+      <div class="icon">
+      <i class="ion ion-stats-bars"></i>
+      </div>
+      <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+      </div>
+      
+      <div class="col-lg-3 col-6">
+      
+      <div class="small-box bg-warning">
+      <div class="inner">
+      <h3>44</h3>
+      <p>Service Categories</p>
+      </div>
+      <div class="icon">
+      <i class="ion ion-person-add"></i>
+      </div>
+      <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+      </div>
+      
+      </div>
 
   </div>
 </main>
-<!--Main layout--> {% endcomment %}
-
-
-<div class="container-fluid">
-  <div class="row flex-nowrap">
-      <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
-          <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-              <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                  <span class="fs-5 d-none d-sm-inline">Menu</span>
-              </a>
-              <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                  <li class="nav-item">
-                      <a href="#" class="nav-link align-middle px-0">
-                          <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
-                      </a>
-                  </li>
-                  <li>
-                      <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                          <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span> </a>
-                      <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
-                          <li class="w-100">
-                              <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1 </a>
-                          </li>
-                          <li>
-                              <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2 </a>
-                          </li>
-                      </ul>
-                  </li>
-                  <li>
-                      <a href="#" class="nav-link px-0 align-middle">
-                          <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Orders</span></a>
-                  </li>
-                  <li>
-                      <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
-                          <i class="fs-4 bi-bootstrap"></i> <span class="ms-1 d-none d-sm-inline">Bootstrap</span></a>
-                      <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
-                          <li class="w-100">
-                              <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1</a>
-                          </li>
-                          <li>
-                              <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2</a>
-                          </li>
-                      </ul>
-                  </li>
-                  <li>
-                      <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                          <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">Products</span> </a>
-                          <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
-                          <li class="w-100">
-                              <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 1</a>
-                          </li>
-                          <li>
-                              <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 2</a>
-                          </li>
-                          <li>
-                              <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 3</a>
-                          </li>
-                          <li>
-                              <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 4</a>
-                          </li>
-                      </ul>
-                  </li>
-                  <li>
-                      <a href="#" class="nav-link px-0 align-middle">
-                          <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Customers</span> </a>
-                  </li>
-              </ul>
-              <hr>
-              <div class="dropdown pb-4">
-                  <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                      <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
-                      <span class="d-none d-sm-inline mx-1">loser</span>
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                      <li><a class="dropdown-item" href="#">New project...</a></li>
-                      <li><a class="dropdown-item" href="#">Settings</a></li>
-                      <li><a class="dropdown-item" href="#">Profile</a></li>
-                      <li>
-                          <hr class="dropdown-divider">
-                      </li>
-                      <li><a class="dropdown-item" href="#">Sign out</a></li>
-                  </ul>
-              </div>
-          </div>
-      </div>
-      <div class="col py-3">
-          <h3>Left Sidebar with Submenus</h3>
-          <p class="lead">
-              An example 2-level sidebar with collasible menu items. The menu functions like an "accordion" where only a single 
-              menu is be open at a time. While the sidebar itself is not toggle-able, it does responsively shrink in width on smaller screens.</p>
-          <ul class="list-unstyled">
-              <li><h5>Responsive</h5> shrinks in width, hides text labels and collapses to icons only on mobile</li>
-          </ul>
-      </div>
-  </div>
-</div>
+<!--Main layout-->
   </body>
   
   </html>

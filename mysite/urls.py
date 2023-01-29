@@ -23,5 +23,30 @@ urlpatterns = [
     path("professionalprofile",views.professionalprofile, name="professionalprofile"),
     path("professionalnotification",views.professionalnotification, name="professionalnotification"),
     path("adminhomepage",views.adminhomepage, name="adminhomepage"),
+    path("admincreateservice",views.admincreateservice, name="admincreateservice"),
+    path("adminmessage",views.adminmessage, name="adminmessage"),
+    path("adminorderdetail",views.adminorderdetail, name="adminorderdetail"),
+    path("adminprofile",views.adminprofile, name="adminprofile"),
+    path("adminservicedetail",views.adminservicedetail, name="adminservicedetail"),
+    path("adminservicelist",views.adminservicelist, name="adminservicelist"),
+    path("adminservicemandetail",views.adminservicemandetail, name="adminservicemandetail"),
+    path("adminservicemanlist",views.adminservicemanlist, name="adminservicemanlist"),
+    path("adminuserdetail",views.adminuserdetail, name="adminuserdetail"),
+    path("adminusermanlist",views.adminusermanlist, name="adminusermanlist"),
+    path("adminvieworder",views.adminvieworder, name="adminvieworder"),
+    path("adminnotification",views.adminnotification, name="adminnotification"),
 ]
+
+
+
+
+
+
+
+
+
+
+
+
+
 
