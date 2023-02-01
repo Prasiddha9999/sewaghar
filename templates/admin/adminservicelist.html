@@ -97,10 +97,10 @@
        <tr>
            <th scope="row">{{i.service_id}}</th>
            <td>{{i.service}}</td>
-           <td><img src="'{{i.photo}}'" width="70" height="70" alt=""></td>
+           <td><img src="'{{i.photo}}'" width="70" height="70" alt=""></td> 
            <td>{{i.desc}}</td>
-           <td><a href="#">View More<a></td>
-            <td><a href="#">Delete<a></td>
+           <td><a href="{% url 'adminservicedetail'%}">View More</a></td>
+           <td><a href="deleteservice/{{i.id}}" type="submit" >Delete<a></td>
        </tr>
        {%endfor%}
 

@@ -35,6 +35,11 @@ urlpatterns = [
     path("adminusermanlist",views.adminusermanlist, name="adminusermanlist"),
     path("adminvieworder",views.adminvieworder, name="adminvieworder"),
     path("adminnotification",views.adminnotification, name="adminnotification"),
+    
+    
+    
+    
+    path("deleteservice/<str:id>",views.deleteservice, name="deleteservice"),
 ]
 
 

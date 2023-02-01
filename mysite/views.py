@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_list_or_404
 from django.http import HttpResponse
 from user.models import Account_HomeOwner
 from user.models import All_Service
@@ -100,8 +100,9 @@ def adminservicelist(request):
     serv = All_Service.objects.all() 
     return render(request, "admin/adminservicelist.html",{'serv':serv})
 
-def adminservicemandetail(request):
-    return render(request, "admin/adminservicemandetail.html")
+def adminservicemandetail(request,service_id):
+    serv=get_list_or_404(All_Service,pk=service_id)
+    return render(request, "admin/adminservicemandetail.html",{'serv':serv})
 
 def adminservicemanlist(request):
     return render(request, "admin/adminservicemanlist.html")
@@ -124,6 +125,14 @@ def adminnotification(request):
     return render(request, "admin/adminnotification.html")
 
 
+
+
+
+def deleteservice(request, id):
+    serv=All_Service.objects.filter(id = id)
+    serv.delete()
+    
+    return render(request, "admin/adminservicemanlist.html")
 
 
 

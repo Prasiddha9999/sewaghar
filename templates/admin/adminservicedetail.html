@@ -93,7 +93,7 @@
                       <div class="form-outline mb-4">
                         <div>
                           <label>Service</label>
-                          <input value="{{i.service}}" class="form-control" name='service' id="exampleFormControlTextarea1" ></textarea>
+                          <input value="{{serv.service}}" class="form-control" name='service' id="exampleFormControlTextarea1" ></textarea>
                       </div>
                       </div>
 
@@ -135,11 +135,11 @@
 
                 <div class="mb-3">
                   <label for="photo" class="form-label">Upload Photo to Update</label>
-                  <input value="{{i.photo}}" class="form-control" name='photo' type="file" id="photo" >
+                  <input value="{{serv.photo}}" class="form-control" name='photo' type="file" id="photo" >
                 </div> 
 
                       <label>Description</label>
-                      <textarea value="{{i.desc}}" class="form-control" name='desc' id="exampleFormControlTextarea1" rows="1"></textarea>
+                      <textarea value="{{serv.desc}}" class="form-control" name='desc' id="exampleFormControlTextarea1" rows="1"></textarea>
                   </div>
 
               <div class="editbtn text-end">
@@ -164,7 +164,7 @@ $(document).ready(function(){
 		$(this).attr("disabled", "disabled");
 		var index = $("table tbody tr:last-child").index();
         var row = '<tr>' +
-            '<td><input value="{{i.subservice}}" class="form-control" name="sub-service" id="name"></td>' +
+            '<td><input value="{{serv.subservice}}" class="form-control" name="sub-service" id="name"></td>' +
 			'<td>' + actions + '</td>' +
         '</tr>';
     	$("table").append(row);		
@@ -195,7 +195,7 @@ $(document).ready(function(){
 	// Edit row on edit button click
 	$(document).on("click", ".edit", function(){		
         $(this).parents("tr").find("td:not(:last-child)").each(function(){
-			$(this).html('<input value="{{i.subservice}}" class="form-control" value="' + $(this).text() + '">');
+			$(this).html('<input value="{{serv.subservice}}" class="form-control" value="' + $(this).text() + '">');
 		});		
 		$(this).parents("tr").find(".add, .edit").toggle();
 		$(".add-new").attr("disabled", "disabled");
