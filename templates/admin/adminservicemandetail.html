@@ -96,23 +96,22 @@
        </div>
        <div class="col-lg-7 col-md-7 col-12 col-xxl-7">
            <div class="Professional_details">
-            <h5>Name: Ram Sharma</h5>
-            <h5>Email: abc@gmail.com</h5>
-            <h5>Mobile Number: 9863144095</h5>
-            <h5>Address: Ram Sharma</h5>
-            <h5>Name: Kharibot</h5>
-            <h5>Age: Ram Sharma</h5>
-            <h5>Gender: Male</h5>
-            <h5>Service: Carpenter</h5>
-            <h5>Sub-service: Repair Only</h5>
-            <h5>Exprience: 5 years</h5>
-            <h5>Password: abc@123</h5>
-            <h5>Description: I am a Carpenter.</h5>
+            <h5>Name: {{po.full_name}}</h5>
+            <h5>Email: {{po.email}}</h5>
+            <h5>Mobile Number: {{po.number}}</h5>
+            <h5>Address: {{po.address}}</h5>
+            <h5>Age: {{po.age}}</h5>
+            <h5>Gender: {{po.gender}}</h5>
+            <h5>Service: {{po.service}}</h5>
+            <h5>Sub-service: {{po.subservice}}</h5>
+            <h5>Exprience: {{po.exprience}}</h5>
+            <h5>Password: {{po.password}}</h5>
+            <h5>Description: {{po.desc}}</h5>
             <br>
             <div class="actionbtn">
               <br>
               <button type="button" class="btn btn-success">Accept</button>
-              <button type="button" class="btn btn-danger">Reject</button>
+              <button><a href="../deleteserviceman/{{po.professional_id}}" class="btn btn-danger" type="submit">Reject<a></button>
             </div>
           <br><br>
       </div>

@@ -84,7 +84,6 @@
       <hr class="w-25 mx-auto">
     </div>
  
-    {%for i in serv%}
     <div class="container">
       <div class="col-lg-12 col-md-12 col-12 col-xxl-12">
           <div class="service_details">
@@ -130,7 +129,7 @@
                                   </tbody>
                               </table>
                           </div>
-         
+          
                       </div>
 
                 <div class="mb-3">
@@ -139,7 +138,7 @@
                 </div> 
 
                       <label>Description</label>
-                      <textarea value="{{serv.desc}}" class="form-control" name='desc' id="exampleFormControlTextarea1" rows="1"></textarea>
+                      <input value="{{serv.desc}}" type="textarea" class="form-control" name='desc' id="exampleFormControlTextarea1" rows="1"></input>
                   </div>
 
               <div class="editbtn text-end">
@@ -208,7 +207,7 @@ $(document).ready(function(){
 });
 
 </script>
-{%endfor%}
+
 </main>
 
   </body>

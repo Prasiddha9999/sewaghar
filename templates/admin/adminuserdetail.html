@@ -87,21 +87,22 @@
        <div class="col-lg-5 col-md-5 col-12 col-xxl-5 d-flex flex-column">
         <h5>Profile Picture</h5>      
            <div class="professionals_image">
-               <img src="{% static 'images/professionals.jpg'%}" class="col-8 rounded float-start" alt="Professioanal Image">
+               <img src="{{ho.photo}}" class="col-8 rounded float-start" alt="Professioanal Image">
            </div>
        </div>
        <div class="col-lg-7 col-md-7 col-12 col-xxl-7">
            <div class="Professional_details">
             <br>
-            <h5>Name: Ram Sharma</h5>
-            <h5>Email: abc@gmail.com</h5>
-            <h5>Mobile Number: 9863144095</h5>
-            <h5>Address: Kharibot</h5>
-            <h5>Password: abc@123</h5>
+            <h5>Name:  {{ho.full_name}}</h5>
+            <h5>Email:  {{ho.email}}</h5>
+            <h5>Mobile Number:  {{ho.number}}</h5>
+            <h5>Address:  {{ho.address}}</h5>
+            <h5>Password:  {{ho.password}}</h5>
             <br>
             <div class="actionbtn">
               <br>
-              <button type="button" class="btn btn-danger">Remove User</button>
+              <td><a href="../deleteuser/{{ho.homeowner_id}}" class="btn btn-danger" type="submit">Delete<a></td>
+              
             </div>
           <br><br>
       </div>

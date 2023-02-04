@@ -1,7 +1,10 @@
-from django.shortcuts import render, get_list_or_404
+from django.shortcuts import render, get_list_or_404, redirect
 from django.http import HttpResponse
 from user.models import Account_HomeOwner
+from user.models import Account_Professional
+from user.models import Order
 from user.models import All_Service
+from user.models import Message
 
 # Create your views here.
 
@@ -64,7 +67,14 @@ def professionalnotification(request):
     return render(request, "professionals/professionalnotification.html")
 
 def adminhomepage(request):
-    return render(request, "admin/adminhomepage.html")
+    h = Account_HomeOwner.objects.all().count()
+    p = Account_Professional.objects.all().count()
+    s = All_Service.objects.all().count()
+    ho = {'h': h}
+    po = {'p': p}
+    so = {'s': s}
+    context = {**ho, **po, **so}
+    return render(request, "admin/adminhomepage.html",context)
 
 def admincreateservice(request):
     if request.method =="POST":
@@ -84,55 +94,67 @@ def admincreateservice(request):
     return render(request, "admin/admincreateservice.html")
 
 def adminmessage(request):
-    return render(request, "admin/adminmessage.html")
+    msg = Message.objects.all() 
+    return render(request, "admin/adminmessage.html",{'msg':msg})
 
-def adminorderdetail(request):
-    return render(request, "admin/adminorderdetail.html")
+def adminorderdetail(request,ok):
+    ord = Order.objects.get(order_id=ok) 
+    return render(request, "admin/adminorderdetail.html",{'ord':ord})
 
 def adminprofile(request):
     return render(request, "admin/adminprofile.html")
 
-def adminservicedetail(request):
-    serv = All_Service.objects.all()
-    return render(request, "admin/adminservicedetail.html",{'serv':serv})
+def adminservicedetail(request,pk):
+    serv = All_Service.objects.get(service_id=pk) 
+    return render(request,"admin/adminservicedetail.html",{'serv':serv})
 
 def adminservicelist(request):
     serv = All_Service.objects.all() 
     return render(request, "admin/adminservicelist.html",{'serv':serv})
 
-def adminservicemandetail(request,service_id):
-    serv=get_list_or_404(All_Service,pk=service_id)
-    return render(request, "admin/adminservicemandetail.html",{'serv':serv})
+def adminservicemandetail(request,pok):
+    po = Account_Professional.objects.get(professional_id=pok)
+    return render(request, "admin/adminservicemandetail.html",{'po':po})
 
 def adminservicemanlist(request):
-    return render(request, "admin/adminservicemanlist.html")
+    po = Account_Professional.objects.all()
+    return render(request, "admin/adminservicemanlist.html",{'po':po})
 
-def adminuserdetail(request):
-    return render(request, "admin/adminuserdetail.html")
+def adminuserdetail(request,hk):
+    ho = Account_HomeOwner.objects.get(homeowner_id=hk)
+    return render(request, "admin/adminuserdetail.html",{'ho':ho})
 
 def adminusermanlist(request):
-    # ho: Account_HomeOwner.objects.all()
-    
-    # context = {
-    #     'ho':ho,
-    # }
-    return render(request, 'admin/adminusermanlist.html')
+    ho =Account_HomeOwner.objects.all()
+    return render(request, 'admin/adminusermanlist.html',{'ho':ho})
 
 def adminvieworder(request):
-    return render(request, "admin/adminvieworder.html")
+    ord = Order.objects.all()
+    return render(request, "admin/adminvieworder.html",{'ord':ord})
 
 def adminnotification(request):
     return render(request, "admin/adminnotification.html")
 
 
+def deleteservice(request, service_id):
+    serv = All_Service.objects.filter(service_id = service_id).delete() 
+    return redirect("adminservicelist")
 
+def deleteuser(request, homeowner_id):
+    ho = Account_HomeOwner.objects.filter(homeowner_id = homeowner_id).delete() 
+    return redirect("adminusermanlist")
 
+def deleteserviceman(request, professional_id):
+    po = Account_Professional.objects.filter(professional_id = professional_id).delete() 
+    return redirect("adminservicemanlist")
 
-def deleteservice(request, id):
-    serv=All_Service.objects.filter(id = id)
-    serv.delete()
-    
-    return render(request, "admin/adminservicemanlist.html")
+def deleteorder(request, order_id):
+    ord = Order.objects.filter(order_id = order_id).delete() 
+    return redirect("adminvieworder")
+
+def deletemsg(request, msg_id):
+    msg = Message.objects.filter(msg_id = msg_id).delete() 
+    return redirect("adminmessage")
 
 
 

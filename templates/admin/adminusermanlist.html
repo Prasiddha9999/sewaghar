@@ -95,17 +95,17 @@
        </tr>
      </thead>
      <tbody>
-      {% comment %} {%global for i in ho %} {% endcomment %}
+      {%for i in ho %}
        <tr>
-           <th scope="row">1</th>
-           <td>{{i.name}}</td>
+           <th scope="row">{{i.homeowner_id}}</th>
+           <td>{{i.full_name}}</td>
            <td>{{i.email}}</td>
-           <td>{{i.mobilno}}</td>
+           <td>{{i.number}}</td>
            <td>{{i.address}}</td>
-           <td><a href="#">View More<a></td>
-            <td><a href="#">Delete<a></td>
+           <td><a href="{%url 'adminuserdetail' hk=i.homeowner_id%}">View More<a></td>
+            <td><a href="deleteuser/{{i.homeowner_id}}" type="submit">Delete<a></td>
        </tr>
-      {% comment %} {% endfor%} {% endcomment %}
+      {% endfor%}
      </tbody>
    </table>
  </div>

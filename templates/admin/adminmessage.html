@@ -93,29 +93,15 @@
        </tr>
      </thead>
      <tbody>
+      {%for i in msg%}
        <tr>
-           <th scope="row">1</th>
-           <td>Ram</td>
-           <td>abc@gmail.com</td>
-           <td>Ram Sharma did bad work.</td>
-            <td><a href="#">Delete<a></td>
+           <th scope="row">{{i.msg_id}}</th>
+           <td>({{i.homeowner_id}}|{{i.professional_id}})</td>
+           <td>({{i.homeowner_id}}|{{i.professional_id}})</td>
+           <td>{{i.message}}</td>
+           <td><a href="deletemsg/{{i.msg_id}}" type="submit">Delete<a></td>
        </tr>
-      
-       <tr>
-        <th scope="row">2</th>
-        <td>Ram</td>
-        <td>abc@gmail.com</td>
-        <td>Ram Sharma did bad work.</td>
-         <td><a href="#">Delete<a></td>
-    </tr>
-
-    <tr>
-      <th scope="row">3</th>
-      <td>Ram</td>
-      <td>abc@gmail.com</td>
-      <td>Ram Sharma did bad work.</td>
-       <td><a href="#">Delete<a></td>
-  </tr>
+      {%endfor%}
      </tbody>
    </table>
  </div>

@@ -25,21 +25,34 @@ urlpatterns = [
     path("adminhomepage",views.adminhomepage, name="adminhomepage"),
     path("admincreateservice",views.admincreateservice, name="admincreateservice"),
     path("adminmessage",views.adminmessage, name="adminmessage"),
-    path("adminorderdetail",views.adminorderdetail, name="adminorderdetail"),
+
     path("adminprofile",views.adminprofile, name="adminprofile"),
-    path("adminservicedetail",views.adminservicedetail, name="adminservicedetail"),
+    
+    path("adminservicedetail/<int:pk>",views.adminservicedetail, name="adminservicedetail"),
+    
     path("adminservicelist",views.adminservicelist, name="adminservicelist"),
-    path("adminservicemandetail",views.adminservicemandetail, name="adminservicemandetail"),
+    
+    path("adminservicemandetail/<int:pok>",views.adminservicemandetail, name="adminservicemandetail"),
+    
     path("adminservicemanlist",views.adminservicemanlist, name="adminservicemanlist"),
-    path("adminuserdetail",views.adminuserdetail, name="adminuserdetail"),
+    
+    path("adminuserdetail/<int:hk>",views.adminuserdetail, name="adminuserdetail"),
+    
     path("adminusermanlist",views.adminusermanlist, name="adminusermanlist"),
+    
     path("adminvieworder",views.adminvieworder, name="adminvieworder"),
+    
+    path("adminorderdetail/<int:ok>",views.adminorderdetail, name="adminorderdetail"),
+    
     path("adminnotification",views.adminnotification, name="adminnotification"),
     
     
     
-    
-    path("deleteservice/<str:id>",views.deleteservice, name="deleteservice"),
+    path("deleteservice/<str:service_id>",views.deleteservice, name="deleteservice"),
+    path("deleteuser/<str:homeowner_id>",views.deleteuser, name="deleteuser"),
+    path("deleteserviceman/<str:professional_id>",views.deleteserviceman, name="deleteserviceman"),
+    path("deleteorder/<str:order_id>",views.deleteorder, name="deleteorder"),
+    path("deletemsg/<str:msg_id>",views.deletemsg, name="deletemsg"),
 ]
 
 

@@ -93,39 +93,18 @@
        </tr>
      </thead>
      <tbody>
+      {%for i in ord%}
        <tr>
-           <th scope="row">1</th>
-           <td>Ram Sharma</td>
-           <td>Shyam Sharma</td>
-           <td>2023/12/2</td>
-           <td>10:45 PM</td>
-           <td>Solved</td>
-           <td><a href="#">View More<a></td>
-            <td><a href="#">Delete<a></td>
+           <th scope="row">{{i.order_id}}</th>
+           <td>{{i.professional_id}}</td>
+           <td>{{i.homeowner_id}}</td>
+           <td>{{i.date}}</td>
+           <td>{{i.time}}</td>
+           <td>{{i.status}}</td>
+           <td><a href="{%url 'adminorderdetail' ok=i.order_id%}">View More<a></td>
+           <td><a href="deleteorder/{{i.order_id}}" type="submit">Delete<a></td>
        </tr>
-
-       <tr>
-        <th scope="row">3</th>
-        <td>Ram Sharma</td>
-        <td>Shyam Sharma</td>
-        <td>2023/12/2</td>
-        <td>10:45 PM</td>
-        <td>Solved</td>
-        <td><a href="#">View More<a></td>
-         <td><a href="#">Delete<a></td>
-    </tr>
-
-    <tr>
-      <th scope="row">3</th>
-      <td>Ram Sharma</td>
-      <td>Shyam Sharma</td>
-      <td>2023/12/2</td>
-      <td>10:45 PM</td>
-      <td>Solved</td>
-      <td><a href="#">View More<a></td>
-       <td><a href="#">Delete<a></td>
-  </tr>
-     
+       {%endfor%}
      </tbody>
    </table>
  </div>

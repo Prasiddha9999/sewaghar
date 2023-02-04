@@ -95,24 +95,24 @@
 
 <div class="profes_details">
    <div class="row">
-       <div class="col"><h5>Date: 2022/10/15</h5></div>
-       <div class="col"><h5>Time: 10:45 PM</h5></div>         
+       <div class="col"><h5>{{ord.date}}</h5></div>
+       <div class="col"><h5>{{ord.time}}</h5></div>         
      </div>
      <hr>
-<h3>Name: Ram Sharma</h3>
-<h5>Age: 25</h5>
-<h5>Location: Balaju</h5>
-<h5>Mobile no: 9863144095</h5>
-<h5>Home no: 27 'K'</h5>
-<h5>Service: Carpenter</h5>
-<h5>Professionals: Ram Sharma</h5>
+<h3>Name: {{ord.homeowner_id}}</h3>
+<h5>Location: {{ord.address}}</h5>
+<h5>Mobile no: {{ord.number}}</h5>
+<h5>Home no: {{ord.houseno}}</h5>
+<h5>Service: {{ord.service}}</h5>
+<h5>Sub-Service: {{ord.subservice}}</h5>
+<h5>Professionals: {{ord.professional_id}}</h5>
 </div>
-<h5>Service Charge Perhour : 150</h5>
-<h5>Earned: 235</h5>   
+<h5>Service Charge Perhour : {{ord.rateperhour}}</h5>
+<h5>Earned: {{ord.rating}}</h5>   
 
 <br>
 <div class="solvebtn text-center">
-   <button type="button" class="btn btn-primary" disabled>Solved</button>
+   <button type="button" class="btn btn-primary" disabled>{{ord.status}}</button>
  </div>
 <br>
        </div>

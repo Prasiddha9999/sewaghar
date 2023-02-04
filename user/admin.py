@@ -5,3 +5,6 @@ from .models import *
 
 admin.site.register(Account_HomeOwner)
 admin.site.register(All_Service)
+admin.site.register(Account_Professional)
+admin.site.register(Order)
+admin.site.register(Message)
