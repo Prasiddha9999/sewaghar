@@ -53,3 +53,7 @@ body {
 .icon.btn{
 margin: auto;
 }
+.errormsg{
+  color:rgb(250, 31, 31);
+  text-align: center;
+}

@@ -33,6 +33,7 @@
         <a href="{% url 'adminusermanlist' %}" class="list-group-item list-group-item-action py-2 ripple"><i class=""></i><span>Homeowner</span></a>
         <a href="{% url 'adminservicelist' %}" class="list-group-item list-group-item-action py-2 ripple active"><i class=""></i><span>Services</span></a>
         <a href="{% url 'admincreateservice' %}" class="list-group-item list-group-item-action py-2 ripple "><i class=""></i><span>Create Service</span></a>
+        <a href="{% url 'admincreatesubservice' %}" class="list-group-item list-group-item-action py-2 ripple "><i class=""></i><span>Create Sub-Service</span></a>
         <a href="{% url 'adminvieworder' %}" class="list-group-item list-group-item-action py-2 ripple"><i class=""></i><span>ViewOrder</span></a>
         <a href="{% url 'adminmessage' %}" class="list-group-item list-group-item-action py-2 ripple"><i class=""></i><span>Message</span></a>
       </div>
@@ -86,6 +87,7 @@
        <tr>
            <th scope="col">#</th>
            <th scope="col">Name</th>
+           <th scope="col">Sub-service</th>
            <th scope="col">Image</th>
            <th scope="col">Description</th>
            <th scope="col">Details</th>
@@ -97,6 +99,7 @@
        <tr>
            <th scope="row">{{i.service_id}}</th>
            <td>{{i.service}}</td>
+           <td>{{i.subservice}}</td>
            <td><img src="'{{i.photo}}'" width="70" height="70" alt=""></td> 
            <td>{{i.desc}}</td>
            

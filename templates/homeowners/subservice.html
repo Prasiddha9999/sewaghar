@@ -77,22 +77,19 @@ return new bootstrap.Dropdown(dropdownToggleEl)
     <!-- Middle Section -->
     <br><br>
     <div class="text-center my-5">
-      <h3 class="display-5">SubSystem: <u>Carpenter</u></h3>
+      <h3 class="display-5">SubSystem: <u>{{s}}</u></h3>
       <hr class="w-25 mx-auto"/>
     </div>
     <br>
 <!-- Services -->
 <div class="container">
 <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3 justify-content-center">
+  {%for subservice in servs%}
   <div class="col">
-    <div class="p-3 border bg-light">Carpenter Repair Only</div>
+    <a href="#" class="p-3 border bg-light">{{subservice}}</a>
   </div>
-  <div class="col">
-    <div class="p-3 border bg-light">Sofa Repair</div>
-  </div>
-  <div class="col">
-    <div class="p-3 border bg-light">Expert in all type of work</div>
-  </div>
+  {%endfor%}
+
 
 </div>
 </div>

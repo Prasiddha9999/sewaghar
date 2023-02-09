@@ -40,6 +40,7 @@ class Account_Professional(models.Model):
     subservice = models.CharField(max_length=100)
     exprience = models.CharField(max_length=100)
     desc = models.TextField(max_length=1000)
+    status = models.CharField(max_length=1000, default='pending')
     
     class Meta:
         ordering=('-register',)   
@@ -51,7 +52,7 @@ class All_Service(models.Model):
     service_id = models.AutoField(primary_key=True)
     service = models.CharField(max_length=255)
     subservice = models.CharField(max_length=255)
-    photo = models.ImageField()
+    photo = models.ImageField(upload_to='images/', default=None)
     desc = models.TextField(max_length=255)
 
 class Order(models.Model):
@@ -60,7 +61,7 @@ class Order(models.Model):
     date = models.DateField((u"Appointment Date"), blank=True)
     time = models.TimeField((u"Appointment Time"), blank=True)
     subservice = models.CharField(max_length=255)
-    status = models.CharField(max_length=255)
+    status = models.CharField(max_length=255, default='Not-Solved')
     rating = models.IntegerField(max_length=5)
     rateperhour = models.CharField(max_length=10)
     houseno = models.CharField(max_length=255)
@@ -76,4 +77,8 @@ class Message(models.Model):
     message = models.TextField(max_length=500) 
     professional_id = models.CharField(max_length=50, null=True, blank=True)
     homeowner_id = models.CharField(max_length=50, null=True, blank=True)
+    
+class Service_List(models.Model):
+    servicelist_id = models.AutoField(primary_key=True)
+    service_list = models.CharField(max_length=255)
        

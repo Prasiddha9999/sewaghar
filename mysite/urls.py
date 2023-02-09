@@ -9,7 +9,7 @@ urlpatterns = [
     path("privacypolicy",views.privacypolicy, name="privacypolicy"),
     path("termsandcondition",views.termsandcondition, name="termsandcondition"),
     path("service",views.service, name="service"),
-    path("subservice",views.subservice, name="subservice"),
+    path("subservice/<str:sk>",views.subservice, name="subservice"),
     path("servicetime",views.servicetime, name="servicetime"),
     path("servicemanlist",views.servicemanlist, name="servicemanlist"),
     path("book",views.book, name="book"),
@@ -24,7 +24,10 @@ urlpatterns = [
     path("professionalnotification",views.professionalnotification, name="professionalnotification"),
     path("adminhomepage",views.adminhomepage, name="adminhomepage"),
     path("admincreateservice",views.admincreateservice, name="admincreateservice"),
-    path("adminmessage",views.adminmessage, name="adminmessage"),
+    
+    path("admincreatesubservice",views.admincreatesubservice, name="admincreatesubservice"),
+    
+    path("adminmessage>",views.adminmessage, name="adminmessage"),
 
     path("adminprofile",views.adminprofile, name="adminprofile"),
     
@@ -49,6 +52,7 @@ urlpatterns = [
     
     
     path("deleteservice/<str:service_id>",views.deleteservice, name="deleteservice"),
+    path("deleteservicelist/<str:servicelist_id>",views.deleteservicelist, name="deleteservicelist"),
     path("deleteuser/<str:homeowner_id>",views.deleteuser, name="deleteuser"),
     path("deleteserviceman/<str:professional_id>",views.deleteserviceman, name="deleteserviceman"),
     path("deleteorder/<str:order_id>",views.deleteorder, name="deleteorder"),

@@ -36,6 +36,7 @@
         <a href="{% url 'adminusermanlist' %}" class="list-group-item list-group-item-action py-2 ripple"><i class=""></i><span>Homeowner</span></a>
         <a href="{% url 'adminservicelist' %}" class="list-group-item list-group-item-action py-2 ripple active"><i class=""></i><span>Services</span></a>
         <a href="{% url 'admincreateservice' %}" class="list-group-item list-group-item-action py-2 ripple "><i class=""></i><span>Create Service</span></a>
+        <a href="{% url 'admincreatesubservice' %}" class="list-group-item list-group-item-action py-2 ripple "><i class=""></i><span>Create Sub-Service</span></a>
         <a href="{% url 'adminvieworder' %}" class="list-group-item list-group-item-action py-2 ripple"><i class=""></i><span>ViewOrder</span></a>
         <a href="{% url 'adminmessage' %}" class="list-group-item list-group-item-action py-2 ripple"><i class=""></i><span>Message</span></a>
       </div>
@@ -87,7 +88,7 @@
     <div class="container">
       <div class="col-lg-12 col-md-12 col-12 col-xxl-12">
           <div class="service_details">
-              <form action="{% url 'admincreateservice' %}" method="post">
+              <form action="{% url 'adminservicelist' %}" method="post">
                 {% csrf_token %}
                       <div class="form-outline mb-4">
                         <div>
@@ -96,41 +97,13 @@
                       </div>
                       </div>
 
-                      <div class="form-outline mb-1">
-                          <div class="table-wrapper">
-                              <div class="table-title">
-                                  <div class="row">
-                                      <div class="col-sm-6"></h5>Sub-service</h5></div>
-                                      <div class="col-sm-6">
-                                          <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button>
-                                      </div>
-                                  </div>
-                              </div>
-                              <table class="table table-bordered">
-                                  <thead>
-                                      <tr>
-                                        <th>Sub-Service Name</th>
-                                          <th>Actions</th>
-                                      </tr>
-                                  </thead>
-                                  <tbody>
-                                   
-                                    <tr>
-                                  
-                                      <td></td>
-                                      <td>
-                            <a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">Add</i></a>
-                                          <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">Edit</i></a>
-                                          <a class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">Delete</i></a>
-                                      </td>
-                                  </tr>
-                                     
-                                   
-                                  </tbody>
-                              </table>
-                          </div>
-          
+                      <div class="form-outline mb-4">
+                        <div>
+                          <label>Service</label>
+                          <input value="{{serv.subservice}}" class="form-control" name='subservice' id="exampleFormControlTextarea1" ></textarea>
                       </div>
+                      </div>
+
 
                 <div class="mb-3">
                   <label for="photo" class="form-label">Upload Photo to Update</label>
@@ -153,60 +126,7 @@
   </div>
 </div>
 
-<script>
-  // For add delete and edit thetable row
-$(document).ready(function(){
-	$('[data-toggle="tooltip"]').tooltip();
-	var actions = $("table td:last-child").html();
-	// Append table with add row form on add new button click
-    $(".add-new").click(function(){
-		$(this).attr("disabled", "disabled");
-		var index = $("table tbody tr:last-child").index();
-        var row = '<tr>' +
-            '<td><input value="{{serv.subservice}}" class="form-control" name="sub-service" id="name"></td>' +
-			'<td>' + actions + '</td>' +
-        '</tr>';
-    	$("table").append(row);		
-		$("table tbody tr").eq(index + 1).find(".add, .edit").toggle();
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-	// Add row on add button click
-	$(document).on("click", ".add", function(){
-		var empty = false;
-		var input = $(this).parents("tr").find('input[type="text"]');
-        input.each(function(){
-			if(!$(this).val()){
-				$(this).addClass("error");
-				empty = true;
-			} else{
-                $(this).removeClass("error");
-            }
-		});
-		$(this).parents("tr").find(".error").first().focus();
-		if(!empty){
-			input.each(function(){
-				$(this).parent("td").html($(this).val());
-			});			
-			$(this).parents("tr").find(".add, .edit").toggle();
-			$(".add-new").removeAttr("disabled");
-		}		
-    });
-	// Edit row on edit button click
-	$(document).on("click", ".edit", function(){		
-        $(this).parents("tr").find("td:not(:last-child)").each(function(){
-			$(this).html('<input value="{{serv.subservice}}" class="form-control" value="' + $(this).text() + '">');
-		});		
-		$(this).parents("tr").find(".add, .edit").toggle();
-		$(".add-new").attr("disabled", "disabled");
-    });
-	// Delete row on delete button click
-	$(document).on("click", ".delete", function(){
-        $(this).parents("tr").remove();
-		$(".add-new").removeAttr("disabled");
-    });
-});
 
-</script>
 
 </main>
 

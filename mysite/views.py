@@ -1,10 +1,14 @@
 from django.shortcuts import render, get_list_or_404, redirect
+from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 from user.models import Account_HomeOwner
 from user.models import Account_Professional
 from user.models import Order
 from user.models import All_Service
+from user.models import Service_List
 from user.models import Message
+from django.contrib import messages
+
 
 # Create your views here.
 
@@ -27,8 +31,17 @@ def service(request):
     serv = All_Service.objects.all().distinct('service') 
     return render(request, "homeowners/service.html",{'serv':serv})
 
-def subservice(request):
-    return render(request, "homeowners/subservice.html")
+def subservice(request,sk):
+    # servs = All_Service.objects.all()
+    # for i in servs:
+    #     servs = All_Service.objects.get(service=sk)
+    # ho = {'servs': servs}
+    servs = All_Service.objects.filter(service=sk).values_list('subservice')
+    s = sk
+    servs = {'servs': servs}
+    so = {'s': s}
+    context = {**servs, **so}
+    return render(request, "homeowners/subservice.html",context)
 
 def servicetime(request):
     return render(request, "homeowners/servicetime.html")
@@ -77,6 +90,22 @@ def adminhomepage(request):
     return render(request, "admin/adminhomepage.html",context)
 
 def admincreateservice(request):
+    servs = Service_List.objects.all().distinct('service_list') 
+    if request.method =="POST":
+        service_list = request.POST.get('service_list')
+        if Service_List.objects.filter(service_list=service_list).exists():
+                messages.info(request,'Sorry! Service Already Exist')
+                return redirect('admincreateservice')
+        else:    
+            serv = Service_List(
+                service_list = service_list 
+            )
+            serv.save()
+            messages.info(request,'New Service Created')
+    return render(request, "admin/admincreateservice.html",{'servs':servs})
+
+def admincreatesubservice(request):
+    servs = Service_List.objects.all().distinct('service_list') 
     if request.method =="POST":
         service = request.POST.get('service')
         subservice = request.POST.get('subservice')
@@ -89,12 +118,20 @@ def admincreateservice(request):
             photo = photo,
             desc = desc   
         )
-        print(desc)
         serv.save()
-    return render(request, "admin/admincreateservice.html")
+    return render(request, "admin/admincreatesubservice.html",{'servs':servs})
+
+
 
 def adminmessage(request):
     msg = Message.objects.all() 
+    # if Order.objects.filter(professional_id=False):
+    #     p = homeowner_id
+    # elif Order.objects.filter(homeowner_id=False):
+    #     p = professional_id
+    # ho = {'msg': msg}
+    # po = {'p': p}
+    # context = {**ho, **po}   
     return render(request, "admin/adminmessage.html",{'msg':msg})
 
 def adminorderdetail(request,ok):
@@ -105,11 +142,26 @@ def adminprofile(request):
     return render(request, "admin/adminprofile.html")
 
 def adminservicedetail(request,pk):
-    serv = All_Service.objects.get(service_id=pk) 
+    serv = All_Service.objects.get(service_id=pk)
+    # if request.method =="POST":
+    #     service = request.POST.get('service')
+    #     subservice = request.POST.get('subservice')
+    #     photo = request.POST.get('photo')
+    #     desc = request.POST.get('desc')
+        
+    #     serv = All_Service(
+    #         service = service,
+    #         subservice = subservice,
+    #         photo = photo,
+    #         desc = desc   
+    #     )
+    #     print(desc)
+    #     serv.save() 
     return render(request,"admin/adminservicedetail.html",{'serv':serv})
 
 def adminservicelist(request):
-    serv = All_Service.objects.all() 
+    # serv = All_Service.objects.exclude(service=True)
+    serv = All_Service.objects.all()
     return render(request, "admin/adminservicelist.html",{'serv':serv})
 
 def adminservicemandetail(request,pok):
@@ -140,6 +192,10 @@ def deleteservice(request, service_id):
     serv = All_Service.objects.filter(service_id = service_id).delete() 
     return redirect("adminservicelist")
 
+def deleteservicelist(request, servicelist_id):
+    serv = Service_List.objects.filter(servicelist_id = servicelist_id).delete() 
+    return redirect("admincreateservice")
+
 def deleteuser(request, homeowner_id):
     ho = Account_HomeOwner.objects.filter(homeowner_id = homeowner_id).delete() 
     return redirect("adminusermanlist")
@@ -155,6 +211,8 @@ def deleteorder(request, order_id):
 def deletemsg(request, msg_id):
     msg = Message.objects.filter(msg_id = msg_id).delete() 
     return redirect("adminmessage")
+
+
 
 
 
