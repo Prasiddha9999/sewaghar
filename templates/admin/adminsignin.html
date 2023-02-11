@@ -25,9 +25,6 @@
           <a class="navbar-brand" href="{% url 'home' %}">
             <img src="{% static 'images/logo.png' %}" width="70" height="70" alt="">
           </a>
-          <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
       </div>
       </nav>
 
@@ -41,19 +38,26 @@
                     <h3 class="pt-10 mb-5 pb-1">Admin login</h3>
                   </div>
   
-                  <form>
+                  <form  action="adminsignin" method="post">
+                    {% csrf_token %}
                     <div class="form-outline mb-4">
-                    <label class="form-label" for="adminpassword">Username</label>
-                    <input type="email" id="adminemail" class="form-control" placeholder="Enter your email address" required/>
+                    <label class="form-label" for="homeemail">Email</label>
+                    <input type="email" id="homeemail" name = "email" class="form-control" placeholder="Enter your email address" required/>
                     </div>
   
                     <div class="form-outline mb-4">
-                    <label class="form-label" for="adminpassword">Password</label> 
-                    <input type="password" id="adminpassword" class="form-control" placeholder="Enter your Password" required/>
+                    <label class="form-label" for="homepassword">Password</label>
+                    <input type="password" id="homepassword" name = "password" class="form-control" placeholder="Enter your Password" required/>
                     </div>
+                   <!-- if user gives wrong data dispaly here -->
+                    <div class="errormsg">
+                      {% for message in messages%}
+                      <h5>{{message}}</h5>
+                      {% endfor%}
+                  </div>
   
                     <div class="text-center pt-1 mb-5 pb-1">
-                      <button class="btn btn-outline-danger my-5" type="button">Login</button><br>
+                      <button class="btn btn-outline-danger my-5" type="submit">Login</button><br>
                     </div>
                   </form>
            

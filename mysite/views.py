@@ -36,18 +36,24 @@ def subservice(request,sk):
     # for i in servs:
     #     servs = All_Service.objects.get(service=sk)
     # ho = {'servs': servs}
-    servs = All_Service.objects.filter(service=sk).values_list('subservice')
+    servs = All_Service.objects.filter(service=sk)
     s = sk
     servs = {'servs': servs}
     so = {'s': s}
     context = {**servs, **so}
+    print(context)
     return render(request, "homeowners/subservice.html",context)
 
 def servicetime(request):
     return render(request, "homeowners/servicetime.html")
 
-def servicemanlist(request):
-    return render(request, "homeowners/servicemanlist.html")
+def servicemanlist(request,slk):
+    servs = Account_Professional.objects.filter(service=slk).values_list('full_name')
+    s = slk
+    servs = {'servs': servs}
+    so = {'s': s}
+    context = {**servs, **so}
+    return render(request, "homeowners/servicemanlist.html",context)
 
 def book(request):
     return render(request, "homeowners/book.html")
@@ -125,13 +131,9 @@ def admincreatesubservice(request):
 
 def adminmessage(request):
     msg = Message.objects.all() 
-    # if Order.objects.filter(professional_id=False):
-    #     p = homeowner_id
-    # elif Order.objects.filter(homeowner_id=False):
-    #     p = professional_id
-    # ho = {'msg': msg}
-    # po = {'p': p}
-    # context = {**ho, **po}   
+  
+    for i in msg:
+        print(msg) 
     return render(request, "admin/adminmessage.html",{'msg':msg})
 
 def adminorderdetail(request,ok):

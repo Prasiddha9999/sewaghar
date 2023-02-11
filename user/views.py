@@ -3,6 +3,9 @@ from django.contrib import messages
 from django.contrib.auth.models import User, auth
 from django.contrib.auth import authenticate, login
 
+
+
+
 # Create your views here.
 def hsignin(request):
      if request.method=='POST':
@@ -61,6 +64,26 @@ def logout(request):
     return redirect("/")
 
 def adminsignin(request):
-    return render(request, "admin/adminsignin.html")    
+     if request.method=='POST':
+         email = request.POST['email']
+         password = request.POST['password']   
+         user = User.objects.get(email=email)  
+         username=user.username
+         user = authenticate(request, username=username, password=password)
+         
+         print(user)
+         
+         if user is not None:
+             login(request,user)
+             return redirect('adminhomepage')
+         else:
+             messages.info(request,"Wrong email or password")
+             return redirect('hsignin')
+     else:
+        return render(request, "admin/adminsignin.html")  
+
+
+
+      
 
 

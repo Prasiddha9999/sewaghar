@@ -1,82 +1,6 @@
-{% load static%}
-{% static "images" as baseUrl %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'admin/css/styles.css' %}">
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <link rel="stylesheet" href="{% static 'admin/js/admin.js' %}">
-    <title>Sewa Ghar</title>
-    <link  rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    <link rel="icon" href="{% static 'images/logo.png' %}">
-    <!-- Font Awesome 4-->
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"> 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
-    
- 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</head>
-<body> 
- 
- <!--Main Navigation-->
-<header>
-  <!-- Sidebar start -->
-  <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
-    <div class="position-sticky">
-      <div class="list-group list-group-flush mx-3 mt-5">       
-        <a href="{% url 'adminhomepage' %}" class="list-group-item list-group-item-action py-2 ripple " aria-current="true"><i class=""></i><span>Dashboard</span></a>
-        <a href="{% url 'adminservicemanlist' %}" class="list-group-item list-group-item-action py-2 ripple"><i class=""></i><span>Professional</span></a> 
-        <a href="{% url 'adminusermanlist' %}" class="list-group-item list-group-item-action py-2 ripple"><i class=""></i><span>Homeowner</span></a>
-        <a href="{% url 'adminservicelist' %}" class="list-group-item list-group-item-action py-2 ripple"><i class=""></i><span>Services</span></a>
-        <a href="{% url 'admincreateservice' %}" class="list-group-item list-group-item-action py-2 ripple active"><i class=""></i><span>Create Service</span></a>
-        <a href="{% url 'admincreatesubservice' %}" class="list-group-item list-group-item-action py-2 ripple"><i class=""></i><span>Create Sub-Service</span></a>
-        <a href="{% url 'adminvieworder' %}" class="list-group-item list-group-item-action py-2 ripple"><i class=""></i><span>ViewOrder</span></a>
-        <a href="{% url 'adminmessage' %}" class="list-group-item list-group-item-action py-2 ripple"><i class=""></i><span>Message</span></a>
-      </div>
-    </div>
-  </nav>
-  <!-- Sidebar end-->
-  
-      <!-- Nav Bar -->
- <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top py-0">
-  <div class="container">
-    <a class="navbar-brand" href="{% url 'home' %}">
-      <img src="{% static 'images/logo.png' %}" width="70" height="70" alt="">
-    </a>
-      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar">
-          <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="navbar-collapse collapse" id="navbar">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link px-4" href="{% url 'adminnotification' %}">
-              <span id="boot-icon" class="bi bi-bell" style="font-size: 25px; -webkit-text-stroke-width: 1.2px;"></span></a>
-            </li>    
-
-            <li class="nav-item dropdown">
-              <a class=" bi bi-person nav-link dropdown-toggle" style="font-size: 25px; -webkit-text-stroke-width: 1.2px;"  id="navbarDropdown"  data-bs-toggle="dropdown" aria-expanded="false">
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li class="dropdown-item" aria-disabled="true"></li>  Prasiddha Regmi</a></li>
-                <li><a class="dropdown-item" href="{% url 'adminprofile' %}">My Profile</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="{% url 'home' %}">Logout</a></li>
-              </ul>
-            </li>
-          </ul>
-      </div>
-    </div>
-    </nav>
-  <!-- Navbar -->
-</header>
-<!--Main Navigation-->
+{% extends 'admin/base.html'%}
+{% block content %}
+<!--Main layout-->
 <main>
     <!-- Middle Section -->
     <br>
@@ -121,8 +45,6 @@
     </div>
 </div>
 </main>
-
-  </body>
-  
-  </html>
+<!--Main layout-->
+{% endblock %}
   

@@ -11,7 +11,7 @@ urlpatterns = [
     path("service",views.service, name="service"),
     path("subservice/<str:sk>",views.subservice, name="subservice"),
     path("servicetime",views.servicetime, name="servicetime"),
-    path("servicemanlist",views.servicemanlist, name="servicemanlist"),
+    path("servicemanlist/<str:slk>",views.servicemanlist, name="servicemanlist"),
     path("book",views.book, name="book"),
     path("unbook",views.unbook, name="unbook"),
     path("notification",views.notification, name="notification"),
@@ -27,7 +27,7 @@ urlpatterns = [
     
     path("admincreatesubservice",views.admincreatesubservice, name="admincreatesubservice"),
     
-    path("adminmessage>",views.adminmessage, name="adminmessage"),
+    path("adminmessage",views.adminmessage, name="adminmessage"),
 
     path("adminprofile",views.adminprofile, name="adminprofile"),
     
@@ -48,6 +48,7 @@ urlpatterns = [
     path("adminorderdetail/<int:ok>",views.adminorderdetail, name="adminorderdetail"),
     
     path("adminnotification",views.adminnotification, name="adminnotification"),
+    
     
     
     

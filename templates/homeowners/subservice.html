@@ -86,7 +86,7 @@ return new bootstrap.Dropdown(dropdownToggleEl)
 <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3 justify-content-center">
   {%for subservice in servs%}
   <div class="col">
-    <a href="#" class="p-3 border bg-light">{{subservice}}</a>
+    <a href="{%url 'servicemanlist' slk=subservice%}" class="p-3 border bg-light">{{subservice.subservice}}</a>
   </div>
   {%endfor%}
 

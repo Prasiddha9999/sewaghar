@@ -40,7 +40,7 @@ class Account_Professional(models.Model):
     subservice = models.CharField(max_length=100)
     exprience = models.CharField(max_length=100)
     desc = models.TextField(max_length=1000)
-    status = models.CharField(max_length=1000, default='pending')
+    status = models.BooleanField(default=False)
     
     class Meta:
         ordering=('-register',)   
@@ -61,8 +61,8 @@ class Order(models.Model):
     date = models.DateField((u"Appointment Date"), blank=True)
     time = models.TimeField((u"Appointment Time"), blank=True)
     subservice = models.CharField(max_length=255)
-    status = models.CharField(max_length=255, default='Not-Solved')
-    rating = models.IntegerField(max_length=5)
+    status = models.BooleanField(default=False)
+    rating = models.IntegerField()
     rateperhour = models.CharField(max_length=10)
     houseno = models.CharField(max_length=255)
     number = models.CharField(max_length=255)
