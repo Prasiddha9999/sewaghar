@@ -1,6 +1,7 @@
-from django.shortcuts import render, get_list_or_404, redirect
+from django.shortcuts import render, get_list_or_404, get_object_or_404, redirect
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from user.models import Account_HomeOwner
 from user.models import Account_Professional
 from user.models import Order
@@ -8,6 +9,8 @@ from user.models import All_Service
 from user.models import Service_List
 from user.models import Message
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -27,54 +30,92 @@ def privacypolicy(request):
 def termsandcondition(request):
     return render(request, "termsandcondition.html")
 
+@login_required(login_url="hsignin")
 def service(request):
     serv = All_Service.objects.all().distinct('service') 
     return render(request, "homeowners/service.html",{'serv':serv})
 
+@login_required(login_url="hsignin")
 def subservice(request,sk):
-    # servs = All_Service.objects.all()
-    # for i in servs:
-    #     servs = All_Service.objects.get(service=sk)
-    # ho = {'servs': servs}
     servs = All_Service.objects.filter(service=sk)
     s = sk
     servs = {'servs': servs}
     so = {'s': s}
     context = {**servs, **so}
-    print(context)
+    
     return render(request, "homeowners/subservice.html",context)
 
-def servicetime(request):
-    return render(request, "homeowners/servicetime.html")
-
+@login_required(login_url="hsignin")
+def servicetime(request,bk):
+    servs = Account_Professional.objects.filter(professional_id=bk)
+    s = bk   
+    if request.method =="POST":
+        date = request.POST.get('date')
+        time = request.POST.get('time')
+        number = request.POST.get('number')
+        houseno = request.POST.get('houseno')
+        address = request.POST.get('address')
+       
+        
+        serv = Order(
+            date = date,
+            time = time,
+            number = number,
+            houseno = houseno,
+            address = address,
+            professional_id = s
+            
+        )
+        serv.save()
+    
+    servs = {'servs': servs}
+    
+    so = {'s': s}
+    context = {**servs, **so}
+    print(servs)
+    return render(request, "homeowners/servicetime.html",context)
+    
+@login_required(login_url="hsignin")
 def servicemanlist(request,slk):
-    servs = Account_Professional.objects.filter(service=slk).values_list('full_name')
+    servs = Account_Professional.objects.filter(subservice=slk)
     s = slk
+   
+    print(s)
+  
     servs = {'servs': servs}
     so = {'s': s}
     context = {**servs, **so}
     return render(request, "homeowners/servicemanlist.html",context)
 
-def book(request):
-    return render(request, "homeowners/book.html")
+@login_required(login_url="hsignin")
+def book(request,sml):
+    sk = Account_Professional.objects.get(professional_id=sml)
+    return render(request, "homeowners/book.html",{'sk':sk})
 
+@login_required(login_url="hsignin")
 def unbook(request):
     return render(request, "homeowners/unbook.html")
 
+@login_required(login_url="hsignin")
 def notification(request):
     return render(request, "homeowners/notification.html")
 
+@login_required(login_url="hsignin")
 def profile(request):
     return render(request, "homeowners/profile.html")
 
+@login_required(login_url="hsignin")
 def bookings(request):
     return render(request, "homeowners/bookings.html")
 
+@login_required(login_url="hsignin")
 def bookingdetails(request):
     return render(request, "homeowners/bookingdetails.html")
 
+
 def requestdetails(request):
     return render(request, "professionals/requestdetails.html")
+
 
 def request(request):
     return render(request, "professionals/request.html")
@@ -214,6 +255,39 @@ def deletemsg(request, msg_id):
     msg = Message.objects.filter(msg_id = msg_id).delete() 
     return redirect("adminmessage")
 
+def activate(request, professional_id):
+    instance = get_object_or_404(Account_Professional, professional_id=professional_id)
+    instance.status = not instance.status
+    instance.save()
+    return redirect("adminservicemanlist")
+
+def update_my_model(request, service_id):
+    servs = Account_Professional.objects.filter(service_id = service_id)
+    if request.method =="POST":       
+        serv = All_Service(request.POST, servs=servs)         
+        if serv.is_valid():
+            serv.save()
+            return redirect('update_my_model')
+    else:
+        serv = All_Service(servs=servs) 
+    return render(request, 'adminservicedetail', {'serv': serv})
+
+
+
+def usermessage(request):
+    #   professional_id = Account_Professional.objects.get(professional_id = professional_id)
+      if request.method =="POST":
+          message = request.POST.get('message')
+        #   homeowner_id = Account_HomeOwner.objects.get(homeowner_id = request.user.username)
+         
+          
+          messages = Message(
+            #  homeowner_id=homeowner_id, 
+             message = message,
+              
+          )
+          messages.save() 
+      return HttpResponseRedirect("")
 
 
 

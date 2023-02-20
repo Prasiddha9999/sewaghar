@@ -1,5 +1,6 @@
-{% extends 'admin/base.html'%}
+{% extends 'admin/bases.html'%}
 {% block content %}
+{% load static %}
 <!--Main layout-->
 <main>
    <!-- Middle Section -->
@@ -14,7 +15,7 @@
      <div class="row">
        <div class="col-lg-5 col-md-5 col-12 col-xxl-5 d-flex flex-column ">
          <div class="professionals_image">
-          <img src="{{ord.photo}}" class="col-8 rounded float-center" alt="Professioanal Image">
+          <img src="/media/{{ord.photo}}" class="col-8 rounded float-center" alt="Professioanal Image">
        </div>
         
        </div>
@@ -40,7 +41,11 @@
 
 <br>
 <div class="solvebtn text-center">
-   <button type="button" class="btn btn-primary" disabled>{{ord.status}}</button>
+  {% if ord.status %}
+  <button type="button" class="btn btn-primary" disabled>Solved</button>
+  {%else%}
+  <button type="button" class="btn btn-primary" disabled>Pending</button> 
+  {% endif %} 
  </div>
 <br>
        </div>

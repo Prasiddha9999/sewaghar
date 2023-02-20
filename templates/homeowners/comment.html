@@ -1,0 +1,13 @@
+<div class="text-center">
+    <h3>Give us valuable comment or feedback here....</h3>
+    <hr class="w-50 mx-auto"/>
+  </div>
+<form method="post" action="{%url 'usermessage'%}">
+    {%csrf_token%}
+    <div class="mb-3 mx-5">
+      <label for="exampleFormControlTextarea1" class="form-label"><b>Comment</b></label>
+      <textarea class="form-control" name="message" id="exampleFormControlTextarea1" rows="3"></textarea>
+      <br>
+      <button class="btn btn-primary" type="submit">Post</button>
+    </div>
+  </form>

@@ -1,5 +1,6 @@
-{% extends 'admin/base.html'%}
+{% extends 'admin/bases.html'%}
 {% block content %}
+{% load static %}
 <!--Main layout-->
 <main>
     <!-- Middle Section -->
@@ -12,7 +13,7 @@
     <div class="container">
       <div class="col-lg-12 col-md-12 col-12 col-xxl-12">
           <div class="service_details">
-              <form action="{% url 'adminservicelist' %}" method="post">
+              <form method="post">
                 {% csrf_token %}
                       <div class="form-outline mb-4">
                         <div>
@@ -31,7 +32,7 @@
 
                 <div class="mb-3">
                   <label for="photo" class="form-label">Upload Photo to Update</label>
-                  <input value="{{serv.photo}}" class="form-control" name='photo' type="file" id="photo" >
+                  <input value="/media/{{serv.photo}}" class="form-control" name='photo' type="file" id="photo" >
                 </div> 
 
                       <label>Description</label>

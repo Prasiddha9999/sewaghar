@@ -1,5 +1,6 @@
-{% extends 'admin/base.html'%}
+{% extends 'admin/bases.html'%}
 {% block content %}
+{% load static %}
 <!--Main layout-->
 <main>
    <!-- Middle Section -->
@@ -15,11 +16,11 @@
        <div class="col-lg-5 col-md-5 col-12 col-xxl-5 d-flex flex-column">
         <h5>Profile Picture</h5>      
            <div class="professionals_image">
-               <img src="{{po.photo}}" class="col-8 rounded float-start" alt="Professioanal Image">
+               <img src="/media/{{po.photo}}" class="col-8 rounded float-start" alt="Professioanal Image">
            </div>
            <h5>Citizenship Front</h5>    
            <div class="professionals_image">
-               <img src="{{po.citizenship}}" class="col-8 rounded float-start" alt="Professioanal Image">
+               <img src="/media/{{po.citizenship}}" class="col-8 rounded float-start" alt="Professioanal Image">
            </div>
        </div>
        <div class="col-lg-7 col-md-7 col-12 col-xxl-7">
@@ -38,7 +39,11 @@
             <br>
             <div class="actionbtn">
               <br>
-              <button type="button" class="btn btn-success">Accept</button>
+              {%if po.status %}
+              <button><a href="../activate/{{po.professional_id}}" type="submit" class="btn btn-warning">Deactivate<a></button>
+              {%else%}
+              <button><a href="../activate/{{po.professional_id}}" type="submit" class="btn btn-success">Accept<a></button>
+              {%endif%}
               <button><a href="../deleteserviceman/{{po.professional_id}}" class="btn btn-danger" type="submit">Reject<a></button>
             </div>
           <br><br>

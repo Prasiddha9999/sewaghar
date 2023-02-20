@@ -1,5 +1,6 @@
-{% extends 'admin/base.html'%}
+{% extends 'admin/bases.html'%}
 {% block content %}
+{% load static %}
 <!--Main layout-->
  <main>
 </div>
@@ -30,7 +31,11 @@
            <td>{{i.homeowner_id}}</td>
            <td>{{i.date}}</td>
            <td>{{i.time}}</td>
-           <td>{{i.status}}</td>
+           {% if i.status %}
+           <td>Solved</td>
+           {% else %}
+           <td>Pending</td>
+           {% endif %}
            <td><a href="{%url 'adminorderdetail' ok=i.order_id%}">View More<a></td>
            <td><a href="deleteorder/{{i.order_id}}" type="submit">Delete<a></td>
        </tr>

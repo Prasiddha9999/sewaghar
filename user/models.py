@@ -3,6 +3,7 @@ from django.utils import timezone
 
 class Account_HomeOwner(models.Model):
     homeowner_id = models.AutoField(primary_key=True)
+    username = models.CharField(max_length=100)
     full_name = models.CharField(max_length=100)
     email = models.EmailField(db_index=True, unique=True, max_length=100)
     number = models.CharField(max_length=15)
@@ -27,20 +28,23 @@ GENDER_CHOICES = (
 class Account_Professional(models.Model):
     professional_id = models.AutoField(primary_key=True)
     full_name = models.CharField(max_length=100)
+    username = models.CharField(max_length=100)
     email = models.EmailField(db_index=True, unique=True, max_length=100)
     number = models.CharField(max_length=15)
     address = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
+    age = models.CharField(max_length=100)
     photo = models.ImageField()
     citizenship = models.ImageField()
-    number = models.CharField(max_length=3)
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    number = models.CharField(max_length=100)
+    gender = models.CharField(max_length=100, choices=GENDER_CHOICES)
     register = models.DateTimeField(default=timezone.now)
     service = models.CharField(max_length=100)
     subservice = models.CharField(max_length=100)
     exprience = models.CharField(max_length=100)
     desc = models.TextField(max_length=1000)
     status = models.BooleanField(default=False)
+    rating = models.IntegerField(default=1)
     
     class Meta:
         ordering=('-register',)   
@@ -62,7 +66,6 @@ class Order(models.Model):
     time = models.TimeField((u"Appointment Time"), blank=True)
     subservice = models.CharField(max_length=255)
     status = models.BooleanField(default=False)
-    rating = models.IntegerField()
     rateperhour = models.CharField(max_length=10)
     houseno = models.CharField(max_length=255)
     number = models.CharField(max_length=255)
@@ -75,8 +78,8 @@ class Order(models.Model):
 class Message(models.Model):
     msg_id = models.AutoField(primary_key=True)
     message = models.TextField(max_length=500) 
-    professional_id = models.CharField(max_length=50, null=True, blank=True)
-    homeowner_id = models.CharField(max_length=50, null=True, blank=True)
+    professional_id = models.ForeignKey(Account_Professional, on_delete=models.CASCADE, null=True, blank=True)
+    homeowner_id = models.ForeignKey(Account_HomeOwner, on_delete=models.CASCADE, null=True, blank=True)
     
 class Service_List(models.Model):
     servicelist_id = models.AutoField(primary_key=True)

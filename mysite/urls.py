@@ -1,4 +1,6 @@
 from django.urls import path
+from .views import activate
+from .views import update_my_model
 
 from . import views
 
@@ -10,9 +12,9 @@ urlpatterns = [
     path("termsandcondition",views.termsandcondition, name="termsandcondition"),
     path("service",views.service, name="service"),
     path("subservice/<str:sk>",views.subservice, name="subservice"),
-    path("servicetime",views.servicetime, name="servicetime"),
+    path("servicetime/<str:bk>",views.servicetime, name="servicetime"),
     path("servicemanlist/<str:slk>",views.servicemanlist, name="servicemanlist"),
-    path("book",views.book, name="book"),
+    path("book/<int:sml>",views.book, name="book"),
     path("unbook",views.unbook, name="unbook"),
     path("notification",views.notification, name="notification"),
     path("profile",views.profile, name="profile"),
@@ -58,7 +60,12 @@ urlpatterns = [
     path("deleteserviceman/<str:professional_id>",views.deleteserviceman, name="deleteserviceman"),
     path("deleteorder/<str:order_id>",views.deleteorder, name="deleteorder"),
     path("deletemsg/<str:msg_id>",views.deletemsg, name="deletemsg"),
+
+    path('activate/<str:professional_id>/', views.activate, name='activate'),
+    path('update_my_model/<str:service_id>/', views.update_my_model, name='update_my_model'),
+    path('usermessage/subservice/save', views.usermessage, name='usermessage'),
 ]
+
 
 
 

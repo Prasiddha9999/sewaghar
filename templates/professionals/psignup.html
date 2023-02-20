@@ -60,11 +60,17 @@
                   <h3 class="pt-10 mb-5 pb-1">Create Account For Professionals</h3>
                 </div>
 
-                <form>
+                <form action="psignup" method="post">
+                  {% csrf_token %}
                   <div class="form-outline mb-4">
                     <label class="form-label" for="name">Full Name</label>
                     <input type="text" id="name" class="form-control" name="full_name" placeholder="Enter your Full Name" required/>
                     </div>
+
+                    <div class="form-outline mb-4">
+                      <label class="form-label" for="homeemail">Username</label>
+                      <input type="text" id="username" name = "username" class="form-control" placeholder="Enter your Unique Username" required/>
+                      </div>
 
                   <div class="form-outline mb-4">
                   <label class="form-label" for="homeemail">Email</label>
@@ -88,7 +94,7 @@
 
                         <div class="form-outline mb-4">
                           <label for="gender" class="form-label">Gender</label>
-                          <select class="form-select" id="gender" required>
+                          <select class="form-select" id="gender" name="gender" required>
                             <option selected disabled value="">Choose...</option>
                             <option>Male</option>
                             <option>Female</option>
@@ -129,14 +135,25 @@
                   </div>
 
                   <div class="mb-3">
-                    <label for="citizen" class="form-label">Attached Your Citizenship Card</label>
-                    <input class="form-control" type="file" name="document" id="citizen" >
+                    <label for="citizenship" class="form-label">Attached Your Citizenship Card</label>
+                    <input class="form-control" type="file" name="citizenship" id="citizen" >
                   </div>
 
                   <div class="form-outline mb-4">
-                    <label class="form-label" for="homepassword">Password</label>
-                    <input type="password" id="homepassword" class="form-control" name="password" placeholder="Create your Password" required/>
+                    <label class="form-label" for="password">Password</label>
+                    <input type="password" id="password" class="form-control" name="password" placeholder="Create your Password" required/>
                     </div>
+                    <div class="form-outline mb-4">
+                      <label class="form-label" for="password1">Conform Password</label>
+                      <input type="password" id="password1" class="form-control" name="password1" placeholder="Create your Password" required/>
+                      </div>
+                      
+                  <!-- if some error dispaly message here-->
+                  <div class="errormsg">
+                    {% for message in messages%}
+                    <h5>{{message}}</h5>
+                    {% endfor%}
+                  </div>
 
                   <div class="text-center pt-1 mb-5 pb-1">
                     <button class="btn btn-outline-danger my-5" type="submit">SignUp</button><br>

@@ -1,5 +1,6 @@
-{% extends 'admin/base.html'%}
+{% extends 'admin/bases.html'%}
 {% block content %}
+{% load static %}
 <!--Main layout-->
 <main>
    <!-- Middle Section -->
@@ -15,7 +16,7 @@
        <div class="col-lg-5 col-md-5 col-12 col-xxl-5 d-flex flex-column">
         <h5>Profile Picture</h5>      
            <div class="professionals_image">
-               <img src="{{ho.photo}}" class="col-8 rounded float-start" alt="Professioanal Image">
+               <img src="/media/{{ho.photo}}" class="col-8 rounded float-start" alt="Professioanal Image">
            </div>
        </div>
        <div class="col-lg-7 col-md-7 col-12 col-xxl-7">

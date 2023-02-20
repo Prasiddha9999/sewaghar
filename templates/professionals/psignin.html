@@ -60,19 +60,27 @@
                     <h3 class="pt-10 mb-5 pb-1">Login for Professionals</h3>
                   </div>
   
-                  <form>
+                  <form  action="psignin" method="post">
+                    {% csrf_token %}
                     <div class="form-outline mb-4">
-                    <label class="form-label" for="homeemail">Username</label>
-                    <input type="email" id="homeemail" class="form-control" placeholder="Enter your email address" required/>
-                    </div>
+                      <label class="form-label" for="username">Username</label>
+                      <input type="text" id="username" name = "username" class="form-control" placeholder="Enter the Unique Username " required/>
+                      </div>
   
                     <div class="form-outline mb-4">
-                    <label class="form-label" for="homepassword">Password</label> 
-                    <input type="password" id="homepassword" class="form-control" placeholder="Enter your Password" required/>
+                    <label class="form-label" for="password">Password</label> 
+                    <input type="password" id="password" name = "password" class="form-control" placeholder="Enter your Password" required/>
                     </div>
   
+                     <!-- if user gives wrong data dispaly here -->
+                     <div class="errormsg">
+                      {% for message in messages%}
+                      <h5>{{message}}</h5>
+                      {% endfor%}
+                  </div>
+
                     <div class="text-center pt-1 mb-5 pb-1">
-                      <button class="btn btn-outline-danger my-5" type="button">Login</button><br>
+                      <button class="btn btn-outline-danger my-5" type="Submit">Login</button><br>
                       <a class="text-muted" href="#">Forgot password?</a>
                     </div>
                   </form>

@@ -1,5 +1,6 @@
-{% extends 'admin/base.html'%}
+{% extends 'admin/bases.html'%}
 {% block content %}
+{% load static %}
 <!--Main layout-->
  <main>
   </div>
@@ -31,7 +32,11 @@
              <td>{{i.email}}</td>
              <td>{{i.number}}</td>
              <td>{{i.service}}</td>
-             <td>{{i.status}}</td>
+             {% if i.status %}
+             <td>Accept</td>
+             {%else%}
+             <td>Pending</td>
+             {% endif %}
              <td><a href="{%url 'adminservicemandetail' pok=i.professional_id%}">View More<a></td>
              <td><a href="deleteserviceman/{{i.professional_id}}" type="submit">Delete<a></td>
          </tr>

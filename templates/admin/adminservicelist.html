@@ -1,5 +1,6 @@
-{% extends 'admin/base.html'%}
+{% extends 'admin/bases.html'%}
 {% block content %}
+{% load static %}
 <!--Main layout-->
 <main>
 </div>
@@ -27,7 +28,7 @@
            <th scope="row">{{i.service_id}}</th>
            <td>{{i.service}}</td>
            <td>{{i.subservice}}</td>
-           <td><img src="'{{i.photo}}'" width="70" height="70" alt=""></td> 
+           <td><img src="/media/{{i.photo}}" width="70" height="70" alt=""></td> 
            <td>{{i.desc}}</td>
            
            <td><a href="{%url 'adminservicedetail' pk=i.service_id%}" >View more</a></td>
