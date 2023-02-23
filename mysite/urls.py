@@ -2,6 +2,7 @@ from django.urls import path
 from .views import activate
 from .views import update_my_model
 
+
 from . import views
 
 urlpatterns = [
@@ -11,16 +12,18 @@ urlpatterns = [
     path("privacypolicy",views.privacypolicy, name="privacypolicy"),
     path("termsandcondition",views.termsandcondition, name="termsandcondition"),
     path("service",views.service, name="service"),
+    
+    
     path("subservice/<str:sk>",views.subservice, name="subservice"),
     path("servicetime/<str:bk>",views.servicetime, name="servicetime"),
     path("servicemanlist/<str:slk>",views.servicemanlist, name="servicemanlist"),
     path("book/<int:sml>",views.book, name="book"),
-    path("unbook",views.unbook, name="unbook"),
+    path('unbook/<int:prof_id>/<int:order_id>/', views.unbook, name="unbook"),
     path("notification",views.notification, name="notification"),
     path("profile",views.profile, name="profile"),
     path("bookings",views.bookings, name="bookings"),
-    path("bookingdetails",views.bookingdetails, name="bookingdetails"),
-    path("requestdetails",views.requestdetails, name="requestdetails"),
+    path("bookingdetails/<int:od>",views.bookingdetails, name="bookingdetails"),
+    path("requestdetails<int:rd>",views.requestdetails, name="requestdetails"),
     path("request",views.request, name="request"),
     path("professionalprofile",views.professionalprofile, name="professionalprofile"),
     path("professionalnotification",views.professionalnotification, name="professionalnotification"),
@@ -62,6 +65,8 @@ urlpatterns = [
     path("deletemsg/<str:msg_id>",views.deletemsg, name="deletemsg"),
 
     path('activate/<str:professional_id>/', views.activate, name='activate'),
+    path('activates/<int:order_id>/', views.activates, name='activates'),
+    
     path('update_my_model/<str:service_id>/', views.update_my_model, name='update_my_model'),
     path('usermessage/subservice/save', views.usermessage, name='usermessage'),
 ]

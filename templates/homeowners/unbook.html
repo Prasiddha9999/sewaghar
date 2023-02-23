@@ -1,11 +1,10 @@
 {% extends 'homeowners/hbases.html'%}
 {% block content %}
 {% load static %}
-
     <!-- Middle Section -->
     <br><br>
     <div class="text-center my-5">
-      <h3 class="display-5">SubSystem: <u>Carpenter - SofaRepair</u></h3>
+      <h3 class="display-5">Service: <u>{{sk.service}} - {{sk.subservice}}</u></h3>
       <hr class="w-25 mx-auto"/>
     </div>
     <br>
@@ -13,7 +12,7 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex flex-column">
-          <h3>Carpenter :- SofaRepair</h3>
+          <h3>{{sk.service}} :- {{sk.subservice}}</h3>
           <figure>
             <img src="{% static 'images/whyus.jpg'%}" alt="About Us IMG" class="img-fluid content-img rounded mx-auto">
           </figure>
@@ -29,25 +28,59 @@
         <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
           <!-- appointment date time show -->
 <div class="professionals_image">
-    <img src="{% static 'images/professionals.jpg'%}" class="col-4 rounded float-start" alt="Professioanal Image">
+    <img src="/media/{{sk.photo}}" class="col-4 rounded float-start" alt="Professioanal Image">
 </div>
 <div class="profes_details">
-<h3>Name: Ram Sharma</h3>
-<h5>Age: 25</h5>
-<h5>Location: Balaju</h5>
-<h5>Mobile no: 9863144095</h5>
+<h3>Name: {{sk.full_name}}</h3>
+<h5>Age: {{sk.age}}</h5>
+<h5>Location: {{sk.address}}</h5>
+<h5>Service Charge Perhour : {{sk.rateperhour}}</h5>
+<h5>Rating : {{sk.rating}}</h5>
+<h5>Mobile Number : {{sk.number}}</h5>
 </div>
-<br><br><br><br><br>
-<p>A Carpenter is a someone who builds or repair the thing which is made from woods.</p>
-
-<h5>Service Charge Perhour : 150</h5>
-<h5>Rating : 4/5</h5>
-<br>
+<br><br>
+<p>{{sk.desc}}</p>
 <div class="bookbtn text-center">
-    <textarea class="form-control" placeholder="Message to Unbook" id="exampleFormControlTextarea1" rows="1"></textarea>
-    <br>
-    <button type="button" class="btn btn-danger">UnBook</button>
-  </div>
+  <form method="post" action="{% url 'activates' ord.order_id %}">
+    {% csrf_token %}
+    {% if ord.status == 'book' %}
+    <p>Reason for Cancellation</p>
+    <textarea name="message" class="form-control" required id="exampleFormControlTextarea1" rows="1"></textarea><br>
+    <button type="submit" name="status" value="cancel" class="btn btn-warning">Cancel Request</button>
+    
+    {% elif ord.status == 'cancel' %}
+    <button type="submit" name="status" value="book" disabled="notEditMode" class="btn btn-success">Sucessfully Canceled</button>
+   
+    {% else %}
+    <button type="submit" name="status" value="solve" class="btn btn-info">Solved</button>
+    <br><br>
+         <div class="col-md">
+           <div class="form-floating">
+             <select class="form-select" id="floatingSelectGrid" aria-label="Floating label select example">
+               <option selected>Choose Number</option>
+               <option value="1">1</option>
+               <option value="2">2</option>
+               <option value="3">3</option>
+               <option value="2">4</option>
+               <option value="3">5</option>
+             </select>
+             <label for="floatingSelectGrid">Ratings</label>
+           </div>
+         </div>
+<br>
+<h5>Pay Through Khalti</h5>
+<div class="input-group mb-3">
+   <input type="text" class="form-control" placeholder="Grand Total">
+   <button class="btn btn-outline-success" type="button">Pay</button>
+ </div>
+       </div>
+     </div>
+   </div> 
+       
+    {% endif %}
+</form>
+     
+</div>
 <br>
 
           <div class="nextprevious">

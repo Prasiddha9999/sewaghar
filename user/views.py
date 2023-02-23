@@ -128,7 +128,7 @@ def psignup(request):
      
 def logout(request):
     auth.logout(request)
-    return redirect("/")
+    return redirect("/") 
 
 def adminsignin(request):  
      if request.method=='POST':

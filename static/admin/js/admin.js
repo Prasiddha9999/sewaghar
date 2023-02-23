@@ -50,3 +50,13 @@ $(document).ready(function(){
 		$(".add-new").removeAttr("disabled");
     });
 });
+
+// for show password
+function myFunction() {
+    var x = document.getElementById("password");
+    if (x.type === "password") {
+      x.type = "text";
+    } else {
+      x.type = "password";
+    }
+    }

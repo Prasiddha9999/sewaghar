@@ -8,10 +8,11 @@
         <h3 class="display-5">Services</h3>
         <hr class="w-25 mx-auto"/>
       </div>
-      <div class="input-group px-5 ">
-        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-        <button type="button" class="btn btn-outline-primary">search</button>
+      <form method="GET" class="input-group px-5 ">
+        <input type="search" class="form-control rounded" placeholder="Search" name="q" value="{{ query }}" aria-label="Search" aria-describedby="search-addon" />
+        <button type="submit" class="btn btn-outline-primary">search</button>
       </div>
+    </form>
       <br>
 <!-- Services -->
 <div class="container">
@@ -20,7 +21,18 @@
     <div class="col">
       <a href="{%url 'subservice' sk=i.service%}" class="p-3 border bg-light">{{i.service}}</a>
     </div>
+    {% empty %}
+      <!-- if user gives wrong data dispaly here -->
+      <div class="errormsg">
+        <h5>Sorry! Service Not Found.</h5>
+    </div>
     {%endfor%}
+
+ 
+
+ 
+
+
  
   </div>
 </div>

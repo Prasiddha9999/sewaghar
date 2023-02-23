@@ -65,13 +65,18 @@ class Order(models.Model):
     date = models.DateField((u"Appointment Date"), blank=True)
     time = models.TimeField((u"Appointment Time"), blank=True)
     subservice = models.CharField(max_length=255)
-    status = models.BooleanField(default=False)
+    STATUS_CHOICES = (
+        ('book', 'Book'),
+        ('cancel', 'Cancel'),
+        ('solve', 'Solve'),
+    )
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='book')
     rateperhour = models.CharField(max_length=10)
     houseno = models.CharField(max_length=255)
     number = models.CharField(max_length=255)
     professional_id = models.CharField(max_length=50)
     homeowner_id = models.CharField(max_length=50)
-    message = models.TextField(max_length=500)
+    message = models.TextField( null=True, blank=True, max_length=500)
     address = models.CharField(max_length=255)
     
     

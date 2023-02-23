@@ -22,30 +22,16 @@
             </tr>
           </thead>
           <tbody>
+            {%for i in ord%}
             <tr>
-                <th scope="row">1</th>
-                <td>Ram</td>
-                <td>Carpenter</td>
-                <td>2022/10/15 - 10:45 PM </td>
-                <td><a href="#">viewmore</a></td>
-                <td>Pending</td>
+                <th scope="row">{{i.order_id}}</th>
+                <td>{{i.full_name}}</td>
+                <td>{{i.service}}</td>
+                <td>{{i.date}} - {{i.time}}</td>
+                <td><a href="{%url 'bookingdetails' od=i.order_id%}">viewmore</a></td>
+                <td>{{i.status}}</td>
             </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Shyam</td>
-                <td>Carpenter</td>
-                <td>2022/10/15 - 10:45 PM </td>
-                <td><a href="#">viewmore</a></td>
-                <td>Unbook</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Shyam</td>
-                <td>Carpenter</td>
-                <td>2022/10/15 - 10:45 PM </td>
-                <td><a href="#">viewmore</a></td>
-                <td>Solved</td>
-            </tr>
+            {%endfor%}
           </tbody>
         </table>
       </div>

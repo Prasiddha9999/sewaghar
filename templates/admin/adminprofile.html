@@ -14,30 +14,40 @@
     <div class="row">
       <div class="col-lg-5 col-md-5 col-12 col-xxl-5 d-flex flex-column">
           <div class="professionals_image">
-              <img src="/media/{{user.photo}}" class="col-8 rounded float-start" alt="Professioanal Image">
+              <img src="{% static 'images/admin.png'%}" class="col-8 rounded float-start" alt="Professioanal Image">
           </div>
       </div>
       <div class="col-lg-7 col-md-7 col-12 col-xxl-7">
           <div class="Homeowner_details">
             <div class="form-outline mb-4">
-              <label class="form-label" for="name">Full Name</label>
-              <input type="text" id="name" name = "full_name" class="form-control" placeholder="{{ user.username }}" required/>
+              <label class="form-label" for="name">Username</label>
+              <input type="text" id="name" name = "full_name" class="form-control" disabled="notEditMode" placeholder="{{ user.username }}" required/>
               </div>
 
                 <div class="form-outline mb-4">
                 <label class="form-label" for="homeemail">Email</label>
-                <input type="email" id="homeemail" name = "email" class="form-control" placeholder="{{ user.email }}" required/>
+                <input type="email" id="homeemail" name = "email" class="form-control" disabled="notEditMode" placeholder="{{ user.email }}" required/>
                 </div>
 
                 <div class="form-outline mb-4">
-                <label class="form-label" for="password">Password</label>
-                <input type="password" id="password" name = "password" class="form-control" placeholder="***" required/>
+                  <label class="form-label" for="password">Password</label>
+                  <input type="password" id="password" name = "password" class="form-control"  value="admin@123" required/>
+                  <input type="checkbox" onclick="myFunction()">Show Password
                 </div>
+
+             
       </div>
-      <div class="editbtn text-end">
-          <br>
-          <button type="button" class="btn btn-success">Update</button>
-        </div>
+<script>
+  // for show password
+function myFunction() {
+  var x = document.getElementById("password");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+  }
+</script>
       <br><br>
   </div>
 </div>
