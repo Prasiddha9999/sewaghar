@@ -114,6 +114,14 @@ def unbook(request, prof_id, order_id):
     return render(request, "homeowners/unbook.html",{'sk':sk, 'ord':ord, 'status':status})
 
 
+def KhaltiRequestView(self, request, *args, **kwargs):
+    context = {
+        
+    }    
+    return render(request, "khaltirequest.html",context)
+    
+
+
 @login_required(login_url="hsignin")
 def activates(request, order_id):
     instance = get_object_or_404(Order, order_id=order_id)

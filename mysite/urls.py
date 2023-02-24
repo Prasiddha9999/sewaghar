@@ -19,6 +19,9 @@ urlpatterns = [
     path("servicemanlist/<str:slk>",views.servicemanlist, name="servicemanlist"),
     path("book/<int:sml>",views.book, name="book"),
     path('unbook/<int:prof_id>/<int:order_id>/', views.unbook, name="unbook"),
+    path('khalti-request/', views.KhaltiRequestView, name="khaltirequest"), 
+    
+    
     path("notification",views.notification, name="notification"),
     path("profile",views.profile, name="profile"),
     path("bookings",views.bookings, name="bookings"),

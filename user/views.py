@@ -24,6 +24,7 @@ def hsignin(request):
     else:
         return render(request, "homeowners/hsignin.html")
     
+    
 def hsignup(request):
      if request.method == 'POST':
         full_name = request.POST['full_name']
@@ -76,6 +77,25 @@ def psignin(request):
             return redirect('psignin')
     else:
         return render(request, "professionals/psignin.html")
+    
+# def psignin(request):
+#     if request.method == 'POST':
+#         username = request.POST.get('username')
+#         password = request.POST.get('password')
+#         try:
+#             # return HttpResponse(email)
+#             userdetail = Account_Professional.get(username=username)
+#             # return HttpResponse(userdetail.password)
+#             if password == userdetail.password:
+#                 return redirect('request')
+#             else:
+#                 messages.success(request,"Wrong Password")      
+#             return redirect('psignin')
+#         except:
+#             messages.success(request,"User not found")
+#             return redirect('psignin')
+#     else:
+#         return render(request,"professionals/psignin.html")
     
 def psignup(request):
      if request.method == 'POST':

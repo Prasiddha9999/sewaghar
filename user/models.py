@@ -1,6 +1,11 @@
 from django.db import models
 from django.utils import timezone
 
+# from django.contrib.auth.models import AbstractUser
+
+
+
+
 class Account_HomeOwner(models.Model):
     homeowner_id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=100)
@@ -10,10 +15,17 @@ class Account_HomeOwner(models.Model):
     address = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
     photo = models.ImageField()
+    # is_verified = models.BooleanField(default=False)
+    # email_token = models.CharField(max_length=100, null=True, blank=True)
+    # forget_password = models.CharField(max_length=100, null=True, blank=True)
+    # last_login_time = models.DateTimeField(null=True, blank=True)
+    # last_logout_time = models.DateTimeField(null=True, blank=True)
     register = models.DateTimeField(default=timezone.now)
     
     class Meta:
         ordering=('-register',)
+        
+    # USERNAME_FIELD = 'email'
     
     def __str__(self):
             return self.full_name
