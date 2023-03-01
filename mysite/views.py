@@ -139,7 +139,7 @@ def activates(request, order_id):
         instance.status = 'book'
         instance.message = message
         instance.save()
-    return redirect("unbook")
+    return redirect("home")
 
 @login_required(login_url="hsignin")
 def notification(request):
@@ -341,7 +341,7 @@ def activate(request, professional_id):
     instance = get_object_or_404(Account_Professional, professional_id=professional_id)
     instance.status = not instance.status
     instance.save()
-    return redirect("adminservicemanlist")
+    return redirect("adminservicemandetail")
 
 @login_required(login_url="adminsignin")
 def update_my_model(request, service_id):

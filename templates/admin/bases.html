@@ -25,23 +25,42 @@
  
  <!--Main Navigation-->
 <header>
-  <!-- Sidebar start -->
-  <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
-    <div class="position-sticky">
-      <div class="list-group list-group-flush mx-3 mt-5">       
-        <a href="{% url 'adminhomepage' %}" class="list-group-item list-group-item-action py-2 ripple {% block con %} {% endblock %}" aria-current="true"><i class=""></i><span>Dashboard</span></a>
-        <a href="{% url 'adminservicemanlist' %}" class="list-group-item list-group-item-action py-2 ripple"><i class=""></i><span>Professional</span></a> 
-        <a href="{% url 'adminusermanlist' %}" class="list-group-item list-group-item-action py-2 ripple"><i class=""></i><span>Homeowner</span></a>
-        <a href="{% url 'adminservicelist' %}" class="list-group-item list-group-item-action py-2 ripple"><i class=""></i><span>Services</span></a>
-        <a href="{% url 'admincreateservice' %}" class="list-group-item list-group-item-action py-2 ripple "><i class=""></i><span>Create Service</span></a>
-        <a href="{% url 'admincreatesubservice' %}" class="list-group-item list-group-item-action py-2 ripple "><i class=""></i><span>Create Sub-Service</span></a>
-        <a href="{% url 'adminvieworder' %}" class="list-group-item list-group-item-action py-2 ripple"><i class=""></i><span>ViewOrder</span></a>
-        <a href="{% url 'adminmessage' %}" class="list-group-item list-group-item-action py-2 ripple"><i class=""></i><span>Message</span></a>
-      </div>
+  <div
+      class="side-navbar active-nav d-flex justify-content-between flex-wrap flex-column"
+      id="sidebar"
+    >
+      <ul class="nav flex-column text-white w-100">
+        <div class="nav-links h3 text-white my-2" style="color: black!important;">
+          &nbsp;&nbsp;&nbsp;Admin Pannel
+        </div>
+        <a href="{% url 'adminhomepage' %}" class="nav-link" aria-current="true"> <span class="mx-2">Dashboard</span><a/>
+        <a href="{% url 'adminservicemanlist' %}" class="nav-link "><span class="mx-2">Professional</span><a/>
+        <a href="{% url 'adminusermanlist' %}" class="nav-link "><span class="mx-2">Homeowner</span><a/>
+        <a href="{% url 'adminservicelist' %}" class="nav-link "><span class="mx-2">Services</span><a/>
+        <a href="{% url 'admincreateservice' %}" class="nav-link "><span class="mx-2">Create Service</span><a/>
+        <a href="{% url 'admincreatesubservice' %}" class="nav-link  "><span class="mx-2">Create Sub-Service</span><a/>
+        <a href="{% url 'adminvieworder' %}" class="nav-link "><span class="mx-2">ViewOrder</span><a/>
+        <a href="{% url 'adminmessage' %}" class="nav-link "><span class="mx-2">Message</span><a/>
+       
+      </ul>
     </div>
-  </nav>
-  <!-- Sidebar end-->
-  
+{% comment %} navbar collapse {% endcomment %}
+    <div class=" my-container active-cont px-5">  
+        <a class="btn border-0 px-5" id="menu-btn">-><i class="bx bx-menu"></i></a>
+  {% block content %}
+
+  {% endblock %}
+    </div>
+    <script>
+      var menu_btn = document.querySelector("#menu-btn");
+      var sidebar = document.querySelector("#sidebar");
+      var container = document.querySelector(".my-container");
+      menu_btn.addEventListener("click", () => {
+        sidebar.classList.toggle("active-nav");
+        container.classList.toggle("active-cont");
+      });
+    </script>
+
       <!-- Nav Bar -->
  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top py-0">
   <div class="container">
@@ -54,7 +73,7 @@
       <div class="navbar-collapse collapse" id="navbar">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link px-4" href="{% url 'adminnotification' %}"></li>   
+              <a class="nav-link px-4" href="{% url 'adminnotification' %}">
               <span id="boot-icon" class="bi bi-bell" style="font-size: 25px; -webkit-text-stroke-width: 1.2px;"></span></a>
             </li>    
   
@@ -74,13 +93,6 @@
     </nav>
   <!-- Navbar -->
 </header>
-<!--Main Navigation-->
-
-<!--Main layout-->
-{% block content %}
-
-{% endblock %}
-<!--Main layout-->
   </body>
   
   </html>

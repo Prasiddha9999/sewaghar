@@ -4,6 +4,10 @@ from django.contrib.auth.models import User, auth
 from django.contrib.auth import authenticate, login
 from user.models import Account_HomeOwner
 from user.models import Account_Professional
+from user.models import All_Service
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+
 
 
 
@@ -63,6 +67,7 @@ def hsignup(request):
          return render(request, "homeowners/hsignup.html")
      
 def psignin(request):
+
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -96,8 +101,24 @@ def psignin(request):
 #             return redirect('psignin')
 #     else:
 #         return render(request,"professionals/psignin.html")
-    
+
+   
+
 def psignup(request):
+     service_id = request.GET.get('service',None)
+     if service_id:
+         try:
+             ss = All_Service.objects.get(service_id=service_id) 
+             service = ss.service 
+             if service:
+                 subservice = All_Service.objects.filter(service=service)
+         except All_Service.DoesNotExist:
+             # Handle case where no matching All_Service object was found
+             pass
+     else:
+         # Handle case where no service_id was provided in the GET request
+         pass
+     service = All_Service.objects.all().distinct('service')
      if request.method == 'POST':
         full_name = request.POST['full_name']
         email = request.POST['email']
@@ -144,7 +165,8 @@ def psignup(request):
             messages.info(request,'Sorry! Password not match')
             return redirect('psignup')
      else:
-         return render(request, "professionals/psignup.html")
+         return render(request, "professionals/psignup.html",locals())
+
      
 def logout(request):
     auth.logout(request)

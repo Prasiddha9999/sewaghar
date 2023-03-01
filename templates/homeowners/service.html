@@ -5,7 +5,7 @@
       <!-- Middle Section -->
       <br><br>
       <div class="text-center my-5">
-        <h3 class="display-5">Services</h3>
+        <h3 class="display-5"><b>Services</b></h3>
         <hr class="w-25 mx-auto"/>
       </div>
       <form method="GET" class="input-group px-5 ">
@@ -16,9 +16,9 @@
       <br>
 <!-- Services -->
 <div class="container">
-  <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3 justify-content-center">
+  <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3 d-flex justify-content-evenly">
     {%for i in serv%}
-    <div class="col">
+    <div class="col text-center">
       <a href="{%url 'subservice' sk=i.service%}" class="p-3 border bg-light">{{i.service}}</a>
     </div>
     {% empty %}

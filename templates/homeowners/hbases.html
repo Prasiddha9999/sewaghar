@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{% static 'homeowners/css/others.css' %}">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
     <script src="{% static 'javascript/home.js' %}"></script>
+    <script src="{% static 'homeowners/js/js.js' %}"></script>
     <title>Sewa Ghar</title>
     <link  rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
@@ -127,7 +128,12 @@
     <!-- Copyright -->
     <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">© 2023 Copyright: Sewa Ghar</div>
   </footer>
-  
+  <script>
+    //date picker for apppointment
+var today = new Date().toISOString().split('T')[0];
+document.getElementsByName("setTodaysDate")[0].setAttribute('min', today);
+
+  </script>
   
   </body>
   

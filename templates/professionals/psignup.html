@@ -15,7 +15,7 @@
                   {% csrf_token %}
                   <div class="form-outline mb-4">
                     <label class="form-label" for="name">Full Name</label>
-                    <input type="text" id="name" class="form-control" name="full_name" placeholder="Enter your Full Name" required/>
+                    <input type="text" id="name" class="form-control" minlength="3" name="full_name" placeholder="Enter your Full Name" required/>
                     </div>
 
                     <div class="form-outline mb-4">
@@ -30,17 +30,17 @@
 
                   <div class="form-outline mb-4">
                     <label class="form-label" for="number">Contact Number</label>
-                    <input type="text" id="number" class="form-control" name="number" placeholder="Enter your  Contact Number" required/>
+                    <input type="text" id="number" class="form-control" minlength="10" name="number" placeholder="Enter your  Contact Number" required/>
                     </div>
 
                     <div class="form-outline mb-4">
                       <label class="form-label" for="address">Address</label>
-                      <input type="text" id="name" class="form-control" name="address" placeholder="Enter your Address" required/>
+                      <input type="text" id="name" class="form-control" minlength="2" name="address" placeholder="Enter your Address" required/>
                       </div>
 
                       <div class="form-outline mb-4">
                         <label class="form-label" for="age">Age</label>
-                        <input type="number" id="age" class="form-control" name="age" placeholder="Enter your Age" required/>
+                        <input type="number" id="age" class="form-control" min="16" max="70" name="age" placeholder="Enter your Age" required/>
                         </div>
 
                         <div class="form-outline mb-4">
@@ -55,9 +55,11 @@
 
                         <div class="form-outline mb-4">
                           <label for="service" class="form-label">Service</label>
-                          <select class="form-select" id="service" name="service" required>
+                          <select class="form-select" id="service" name="service" onchange = "servicefield()" required>
                             <option selected disabled value="">Choose...</option>
-                            <option>1</option>
+                            {%for i in service%}
+                            <option value="{{i.service_id}}" {%if request.GET.service == i.service_id|lower%}selected{%endif%}>{{i.service}}</option>
+                            {%endfor%}
 
                           </select>
                         </div>
@@ -65,18 +67,28 @@
                         <div class="form-outline mb-4">
                           <label for="subservice" class="form-label">Sub-Service</label>
                           <select class="form-select" id="subservice" name="subservice" aria-describedby="subservice" required>
-                            <option selected disabled value="">Choose...</option>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
+                              <option selected disabled value="">Choose...</option>
+                
+                                  {% for i in subservice %}
+                                      <option value="i.service_id">{{i.subservice}}</option>
+                                  {% endfor %}
+            
                           </select>
                           <div id="subservice" class="invalid-feedback">
-                            Please select Service First
+                              Please select Service First
                           </div>
-                        </div>
+                      </div>
+      
+
+                        <script>
+                          function servicefield(){
+                            service_id = document.getElementById('service').value;
+                            window.location = "psignup/?service="+service_id;
+                          }
+                        </script>
 
                   <div class="form-outline mb-4">
-                    <label class="form-label" for="exprience">No of Expriences</label>
+                    <label class="form-label" for="exprience">No of Expriences year</label>
                     <input type="number" id="exprience" class="form-control" name="exprience" placeholder="Enter the no of Expriences" required/>
                     </div>
 
@@ -87,7 +99,10 @@
 
                   <div class="mb-3">
                     <label for="citizenship" class="form-label">Attached Your Citizenship Card</label>
+                    <label>Front-Page</label>
                     <input class="form-control" type="file" name="citizenship" id="citizen" >
+                    <label>Back-Page</label>
+                    <input class="form-control" type="file" name="citizenships" id="citizens" >
                   </div>
 
                   <div class="form-outline mb-4">

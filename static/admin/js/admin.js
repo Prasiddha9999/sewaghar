@@ -60,3 +60,5 @@ function myFunction() {
       x.type = "password";
     }
     }
+
+//for sidebar

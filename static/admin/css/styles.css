@@ -3,40 +3,11 @@ body {
 }
 @media (min-width: 991.98px) {
   main {
-    padding-left: 240px;
+    padding-left: 50px;
   }
 }
 
-/* Sidebar */
-.sidebar {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  padding: 58px 0 0; /* Height of navbar */
-  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
-  width: 240px;
-  z-index: 600;
-}
 
-@media (max-width: 991.98px) {
-  .sidebar {
-    width: 100%;
-  }
-}
-.sidebar .active {
-  border-radius: 5px;
-  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
-}
-
-.sidebar-sticky {
-  position: relative;
-  top: 0;
-  height: calc(100vh - 48px);
-  padding-top: 0.5rem;
-  overflow-x: hidden;
-  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-}
 .small-box{
   border-radius: 5%;
   text-align: center;
@@ -138,3 +109,59 @@ table.table td .add {
         color:rgb(250, 31, 31);
         text-align: center;
       }
+
+
+/* sidebar */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background-color: #ffffff;
+}
+
+.side-navbar {
+  width: 250px;
+  height: 100%;
+  position: fixed;
+  margin-left: -300px;
+  background-color: #ffffff;
+  transition: 0.5s;
+}
+
+.nav-link:active,
+.nav-link:focus,
+
+.my-container {
+  transition: 0.4s;
+}
+
+.active-nav {
+  margin-left: 0;
+}
+
+/* for main section */
+.active-cont {
+  margin-left: 180px;
+}
+
+#menu-btn {
+  background-color: #eb8e43;
+  color: #000000;
+  margin-left: -62px;
+}
+
+.my-container input {
+  border-radius: 2rem;
+  padding: 2px 20px;
+}
+.nav-link{
+  color: black!important; 
+}
+.side-navbar .nav-link:hover{
+  background-color: #100901;
+  color: rgb(248, 248, 248)!important;
+}

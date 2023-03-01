@@ -48,6 +48,7 @@ class Account_Professional(models.Model):
     age = models.CharField(max_length=100)
     photo = models.ImageField()
     citizenship = models.ImageField()
+    citizenships = models.ImageField()
     number = models.CharField(max_length=100)
     gender = models.CharField(max_length=100, choices=GENDER_CHOICES)
     register = models.DateTimeField(default=timezone.now)

@@ -13,7 +13,7 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex flex-column">
-          <h3>{%for i in serdis%}{{i.service}}{%endfor%} - {%for i in servs%}{{i.subservice}}{%endfor%}</h3>
+          <h3>{%for i in servs%}{{i.service}}{%endfor%} - {%for i in servs%}{{i.subservice}}{%endfor%}</h3>
           <figure>
             <img src="{% static 'images/whyus.jpg'%}" alt="About Us IMG" class="img-fluid content-img rounded mx-auto">
           </figure>
@@ -23,15 +23,18 @@
             Homeowners can view their history.
             It will be faster and more user-friendly.
             Home Owners can fare for Price in chat.
-            Home Owners can find professionals at the nearest{{serds.service}} Location
+            Home Owners can find professionalss at the nearest{{serds.service}} Location
             
           </p>
         </div>
+        <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
       <form action="{% url 'servicetime' s%}" method="post">
           {% csrf_token %}
-        <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
+
           <label for="Date">Date</label>
-          <input id="Date" name="date" class="form-control" type="date" />
+          <input id="Date" name="setTodaysDate" class="form-control" type="date" />
+
+
           <br>
           <label for="Time">Time</label>
           <input id="Time" name="time" class="form-control" type="time" />
@@ -40,7 +43,7 @@
           <input id="Location" name="address" class="form-control"/>
           <br>
           <label for="Contact Number">Contact Number</label>
-          <input id="number" name="number" class="form-control"/>
+          <input id="number" name="number" minlength="10"   class="form-control"/>
           <br>
           <label for="HouseNumber">Your House Number Optional</label>
           <input id="HouseNumber" name="houseno"  class="form-control"/>
@@ -57,7 +60,6 @@
       </form>
       </div>
     </div>
-    
   <br>
   <hr>
   <br>
