@@ -2,12 +2,12 @@ from django.shortcuts import render, get_list_or_404, get_object_or_404, redirec
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from user.models import Account_HomeOwner
-from user.models import Account_Professional
-from user.models import Order
-from user.models import All_Service
-from user.models import Service_List
-from user.models import Message
+from account.models import Account_HomeOwner
+from account.models import Account_Professional
+from account.models import Order
+from account.models import All_Service
+from account.models import Service_List
+from account.models import Message
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -89,9 +89,6 @@ def servicetime(request,bk):
 def servicemanlist(request,slk):
     servs = Account_Professional.objects.filter(subservice=slk)
     s = slk
-   
-    print(s)
-  
     servs = {'servs': servs}
     so = {'s': s}
     context = {**servs, **so}
@@ -359,19 +356,24 @@ def update_my_model(request, service_id):
 
 
 def usermessage(request):
-    #   professional_id = Account_Professional.objects.get(professional_id = professional_id)
-      if request.method =="POST":
-          message = request.POST.get('message')
-        #   homeowner_id = Account_HomeOwner.objects.get(homeowner_id = request.user.username)
-         
+    if request.method =="POST":
+        message = request.POST.get('message')
+        username = ""
+        try:
+            username = Account_HomeOwner.objects.get(username=request.user.username)
+        except Account_HomeOwner.DoesNotExist:
+            try:
+                username = Account_Professional.objects.get(username=request.user.username)
+            except Account_Professional.DoesNotExist:
+                return HttpResponse("Error: User not found.")
+        
+        messages = Message(
+            homeowner_id=username, 
+            message=message,
+        )
+        messages.save() 
           
-          messages = Message(
-            #  homeowner_id=homeowner_id, 
-             message = message,
-              
-          )
-          messages.save() 
-      return HttpResponseRedirect("")
+    return HttpResponseRedirect("")
   
 
 

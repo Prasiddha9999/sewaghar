@@ -11,7 +11,7 @@
                   <h3 class="pt-10 mb-5 pb-1">Create Account For Professionals</h3>
                 </div>
 
-                <form action="psignup" method="post">
+                <form action="{% url 'psignup' %}" method="post">
                   {% csrf_token %}
                   <div class="form-outline mb-4">
                     <label class="form-label" for="name">Full Name</label>
@@ -70,7 +70,7 @@
                               <option selected disabled value="">Choose...</option>
                 
                                   {% for i in subservice %}
-                                      <option value="i.service_id">{{i.subservice}}</option>
+                                      <option>{{i.subservice}}</option>
                                   {% endfor %}
             
                           </select>
@@ -82,8 +82,11 @@
 
                         <script>
                           function servicefield(){
+                            
                             service_id = document.getElementById('service').value;
-                            window.location = "psignup/?service="+service_id;
+                            window.location = "?service="+service_id;
+                           
+
                           }
                         </script>
 
