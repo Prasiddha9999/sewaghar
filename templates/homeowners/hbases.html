@@ -54,7 +54,7 @@
                 <li class="dropdown-item" aria-disabled="true"></li>{{user.username}}</a></li>
                 <li><a class="dropdown-item" href="{% url 'profile' %}">My Profile</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                <li><a class="dropdown-item" href="{% url 'user_logout' %}">Logout</a></li>
               </ul>
             </li>
           </ul>
@@ -130,8 +130,19 @@
   </footer>
   <script>
     //date picker for apppointment
-var today = new Date().toISOString().split('T')[0];
-document.getElementsByName("setTodaysDate")[0].setAttribute('min', today);
+    <script>
+      $(document).ready(function(){
+        var date_input=$('input[name="date"]'); //our date input has the name "date"
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        var options={
+          format: 'mm/dd/yyyy',
+          container: container,
+          todayHighlight: true,
+          autoclose: true,
+        };
+        date_input.datepicker(options);
+      })
+  </script>
 
   </script>
   

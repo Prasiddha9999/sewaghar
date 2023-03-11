@@ -4,6 +4,9 @@ from account.models import User
 from django.contrib.auth import authenticate, login
 from account.models import Account_HomeOwner, Account_Professional
 from account.models import All_Service
+from django.contrib.auth import logout as auth_logout
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 
 #login function for Homeowners
 def hsignin(request):
@@ -27,12 +30,11 @@ def hsignup(request):
         email = request.POST['email']
         number = request.POST['number']
         address = request.POST['address']
-        photo = request.POST['photo']
+        photo = request.FILES.get('photo')
         homepassword1 = request.POST['homepassword1']
         password = request.POST['password']
         username = request.POST['username']
-       
-        
+         
         if password != homepassword1:
             messages.error(request, "Passwords do not match")
             return redirect('hsignup')
@@ -40,7 +42,7 @@ def hsignup(request):
         # Create user
         try:
             user = User.objects.create_user(username=username, email=email, password=password, is_homeowner=True)
-            data = Account_HomeOwner(
+            data = Account_HomeOwner.objects.create(
             full_name = full_name,
             email = email,
             number = number,
@@ -48,33 +50,42 @@ def hsignup(request):
             photo = photo ,
             password = password,
             username = username,
+            user = user,
             )
-            data.save()
-            # user.first_name = full_name
             user.save()
+            data.save()
             messages.success(request, "User created successfully")
             return redirect('hsignin')
         except Exception as e:
             messages.error(request, str(e))
             return redirect('hsignup')
      return render(request, "homeowners/hsignup.html")
-     
-     
+ 
+def hforgetpassword(request):
+    return render(request, "homeowners/hforgetpassword.html")
+         
 def psignin(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
-        if user is not None and user.is_professional:
-            login(request, user)
-            return redirect('request')
-        else:
+        if user is not None:  # check if user is not None before checking attributes
+            if user.is_active:
+                if user.is_professional:
+                    login(request, user)
+                    return redirect('request')
+                else: 
+                    messages.info(request, 'Login through HomeOwner')
+                    return redirect('psignin')
+            else: 
+                messages.info(request, 'You are going to activated or deactivated by admin')
+                return redirect('psignin')
+        else:  
             messages.info(request, 'Invalid Login Credentials')
             return redirect('psignin')
-    else:
+    else:  # if request method is not POST, render the 'psignin' page
         return render(request, "professionals/psignin.html")
     
-
 def psignup(request):
      service_id = request.GET.get('service',None)
      if service_id:
@@ -98,23 +109,30 @@ def psignup(request):
         age = request.POST['age']
         gender = request.POST['gender']
         service = request.POST['service']
+        service = All_Service.objects.get(service_id=service) 
+        service = service.service 
         subservice = request.POST['subservice']
         exprience = request.POST['exprience']
-        citizenship = request.POST['citizenship']
-        photo = request.POST['photo']
+        rateperhour = request.POST['rate']
+        citizenship = request.FILES.get('citizenship')
+        citizenships = request.FILES.get('citizenships')
+        photo = request.FILES.get('photo')
+        desc = request.POST['desc']
         password1 = request.POST['password1']
         password = request.POST['password']
         username = request.POST['username']
-         
+        print(service)
         
         if password != password1:
             messages.error(request, "Passwords do not match")
             return redirect('psignup')
+        
+        
     
         # Create user
         try:
-            user = User.objects.create_user(username=username, email=email, password=password, is_professional=True)
-            data = Account_Professional(
+            user = User.objects.create_user(username=username, email=email, password=password, is_professional=True, is_active=False)
+            data = Account_Professional.objects.create(
             full_name = full_name,
                     email = email,
                     number = number,
@@ -124,13 +142,18 @@ def psignup(request):
                     service = service,
                     subservice =subservice,
                     exprience = exprience,
+                    rateperhour = rateperhour,
                     photo = photo,
                     citizenship = citizenship,
+                    citizenships = citizenships,
                     password = password,
-                    username = username
+                    username = username,
+                    desc = desc,
+                    user = user
             )
-            data.save()
             user.save()
+            data.save()
+            
             messages.success(request, "User created successfully")
             return redirect('psignin')
         except Exception as e:
@@ -138,17 +161,20 @@ def psignup(request):
             return redirect('psignup')
      else:
          return render(request, "professionals/psignup.html",locals())
+
+
  
-def logout(request):
-    User.auth.logout(request)
-    return redirect("/") 
+def user_logout(request):
+    auth_logout(request)
+    messages.success(request, "You are logged out.")
+    return redirect("/")
 
 def adminsignin(request):  
   if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
-        if user is not None and user.is_admin:
+        if user is not None:
             login(request, user)
             return redirect('adminhomepage')
         else:

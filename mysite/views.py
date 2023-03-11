@@ -41,6 +41,7 @@ def service(request):
 
 
 
+
 @login_required(login_url="hsignin")
 def subservice(request,sk):
     servs = All_Service.objects.filter(service=sk)
@@ -63,20 +64,23 @@ def servicetime(request,bk):
         number = request.POST.get('number')
         houseno = request.POST.get('houseno')
         address = request.POST.get('address')
-       
         
+        # Convert s to an instance of Account_Professional model
+        professional = Account_Professional.objects.get(professional_id=s)
+        current_user = request.user
+        homeowner = get_object_or_404(Account_HomeOwner, username=current_user.username)
+    
         serv = Order(
             date = date,
             time = time,
             number = number,
             houseno = houseno,
             address = address,
-            professional_id = s   
+            professional_id = servs[0],  # Assign the instance to professional_id field
+            homeowner_id = homeowner  # Assign the logged in homeowner to homeowner_id field
         )
         serv.save()
-        # Redirect the user to a new page after submitting the form data,
-        # including the professional ID and order ID as query parameters
-        order_id = serv.order_id  # get the ID of the newly created order
+        order_id = serv.order_id  
         return redirect('unbook', prof_id=s, order_id=order_id)
     
     serdis = {'serdis':serdis}
@@ -84,15 +88,20 @@ def servicetime(request,bk):
     so = {'s': s}
     context = {**servs, **so, **serdis}
     return render(request, "homeowners/servicetime.html",context)
+
     
 @login_required(login_url="hsignin")
-def servicemanlist(request,slk):
-    servs = Account_Professional.objects.filter(subservice=slk)
+def servicemanlist(request, slk):
+    search_query = request.GET.get('q')
+    if search_query:
+        servs = Account_Professional.objects.filter(subservice=slk, address__icontains=search_query)
+    else:
+        servs = Account_Professional.objects.filter(subservice=slk)
     s = slk
     servs = {'servs': servs}
     so = {'s': s}
     context = {**servs, **so}
-    return render(request, "homeowners/servicemanlist.html",context)
+    return render(request, "homeowners/servicemanlist.html", context)
 
 @login_required(login_url="hsignin")
 def book(request,sml):
@@ -217,7 +226,7 @@ def admincreatesubservice(request):
     if request.method =="POST":
         service = request.POST.get('service')
         subservice = request.POST.get('subservice')
-        photo = request.POST.get('photo')
+        photo = request.FILES.get('photo')
         desc = request.POST.get('desc')
         if All_Service.objects.filter(subservice=subservice).exists():
                 messages.info(request,'Sorry! Sub-Service Already Exist')
@@ -264,7 +273,8 @@ def adminservicedetail(request, pk):
         if photo:
             serv.photo = photo
         serv.desc = desc
-        serv.save() 
+        serv.save()
+        messages.info(request,'Sucessfull Update!!!')
         
     return render(request, "admin/adminservicedetail.html", {'serv': serv})
 
@@ -338,7 +348,7 @@ def activate(request, professional_id):
     instance = get_object_or_404(Account_Professional, professional_id=professional_id)
     instance.status = not instance.status
     instance.save()
-    return redirect("adminservicemandetail")
+    return redirect("adminservicemanlist")
 
 @login_required(login_url="adminsignin")
 def update_my_model(request, service_id):
@@ -358,6 +368,7 @@ def update_my_model(request, service_id):
 def usermessage(request):
     if request.method =="POST":
         message = request.POST.get('message')
+        print(message)
         username = ""
         try:
             username = Account_HomeOwner.objects.get(username=request.user.username)

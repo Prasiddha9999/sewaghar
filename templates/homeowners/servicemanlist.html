@@ -37,10 +37,12 @@
 
           <!-- Search Professionals-->
           <p><b>Filter Professionals by location</b></p>
-          <div class="input-group px-0 ">
-            <input type="search" class="form-control rounded" placeholder="Search here......" aria-label="Search" aria-describedby="search-addon" />
-            <button type="button" class="btn btn-outline-primary">Search</button>
-          </div>
+          <form method="GET">
+            <div class="input-group px-0">
+              <input type="search" class="form-control rounded" placeholder="Search here......" aria-label="Search" aria-describedby="search-addon" name="q">
+              <button type="submit" class="btn btn-outline-primary">Search</button>
+            </div>
+          </form>   
 
  <!--List of Professionals-->
  <div class="table-wrapper-scroll-y container mt-3 my-custom-scrollbar">

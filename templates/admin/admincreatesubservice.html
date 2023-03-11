@@ -14,7 +14,7 @@
     <div class="container">
         <div class="col-lg-12 col-md-12 col-12 col-xxl-12">
             <div class="service_details">
-                <form action="{% url 'admincreatesubservice' %}" method="post">
+                <form action="{% url 'admincreatesubservice' %}" method="post" enctype="multipart/form-data">
                   {% csrf_token %}
 
                   <div class="form-outline mb-4">

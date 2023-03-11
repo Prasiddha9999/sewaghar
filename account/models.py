@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 from django.contrib.auth.models import AbstractUser
 
@@ -10,6 +11,7 @@ class User(AbstractUser):
 
 
 class Account_HomeOwner(models.Model):
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
     homeowner_id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=100)
     full_name = models.CharField(max_length=100)
@@ -17,7 +19,7 @@ class Account_HomeOwner(models.Model):
     number = models.CharField(max_length=15)
     address = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
-    photo = models.ImageField()
+    photo = models.ImageField(upload_to='images')
     register = models.DateTimeField(default=timezone.now)
     
     class Meta:
@@ -30,12 +32,13 @@ class Account_HomeOwner(models.Model):
 
 
 GENDER_CHOICES = (
-        ('M', 'Male'),
-        ('F', 'Female'),
-        ('O', 'Others'),
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+        ('Others', 'Others'),
     )  
        
 class Account_Professional(models.Model):
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
     professional_id = models.AutoField(primary_key=True)
     full_name = models.CharField(max_length=100)
     username = models.CharField(max_length=100)
@@ -44,15 +47,16 @@ class Account_Professional(models.Model):
     address = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
     age = models.CharField(max_length=100)
-    photo = models.ImageField()
-    citizenship = models.ImageField()
-    citizenships = models.ImageField()
+    photo = models.ImageField(upload_to='images')
+    citizenship = models.ImageField(upload_to='images')
+    citizenships = models.ImageField(upload_to='images')
     number = models.CharField(max_length=100)
     gender = models.CharField(max_length=100, choices=GENDER_CHOICES)
     register = models.DateTimeField(default=timezone.now)
     service = models.CharField(max_length=100)
     subservice = models.CharField(max_length=100)
     exprience = models.CharField(max_length=100)
+    rateperhour = models.CharField(max_length=10, blank=True, null=True)
     desc = models.TextField(max_length=1000)
     status = models.BooleanField(default=False)
     rating = models.IntegerField(default=1)
@@ -67,26 +71,23 @@ class All_Service(models.Model):
     service_id = models.AutoField(primary_key=True)
     service = models.CharField(max_length=255)
     subservice = models.CharField(max_length=255)
-    photo = models.ImageField(upload_to='images/', default=None)
+    photo = models.ImageField(upload_to='images', default=None)
     desc = models.TextField(max_length=255)
 
 class Order(models.Model):
     order_id = models.AutoField(primary_key=True)
-    service = models.CharField(max_length=255)
     date = models.DateField((u"Appointment Date"), blank=True)
     time = models.TimeField((u"Appointment Time"), blank=True)
-    subservice = models.CharField(max_length=255)
     STATUS_CHOICES = (
         ('book', 'Book'),
         ('cancel', 'Cancel'),
         ('solve', 'Solve'),
     )
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='book')
-    rateperhour = models.CharField(max_length=10)
     houseno = models.CharField(max_length=255)
     number = models.CharField(max_length=255)
-    professional_id = models.CharField(max_length=50)
-    homeowner_id = models.CharField(max_length=50)
+    professional_id = models.ForeignKey(Account_Professional, on_delete=models.CASCADE)
+    homeowner_id = models.ForeignKey(Account_HomeOwner, on_delete=models.CASCADE)
     message = models.TextField( null=True, blank=True, max_length=500)
     address = models.CharField(max_length=255)
     

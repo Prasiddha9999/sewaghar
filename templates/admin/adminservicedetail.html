@@ -43,6 +43,11 @@
               <div class="editbtn text-end">
                 <br>
                 <button type="submit" class="btn btn-success">Update</button>
+                  <!-- if user gives wrong data dispaly here -->
+     <div class="errormsg">
+      {% for message in messages%}
+      <h5>{{message}}</h5>
+      {% endfor%}
               </div>
             <br><br>
               </form>

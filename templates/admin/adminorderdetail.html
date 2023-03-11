@@ -15,7 +15,7 @@
      <div class="row">
        <div class="col-lg-5 col-md-5 col-12 col-xxl-5 d-flex flex-column ">
          <div class="professionals_image">
-          <img src="/media/{{ord.photo}}" class="col-8 rounded float-center" alt="Professioanal Image">
+          <img src="/media/{{ord.professional_id.photo}}" class="col-8 rounded float-center" alt="Professioanal Image">
        </div>
         
        </div>
@@ -24,19 +24,19 @@
 
 <div class="profes_details">
    <div class="row">
-       <div class="col"><h5>{{ord.date}}</h5></div>
-       <div class="col"><h5>{{ord.time}}</h5></div>         
+       <div class="col"><h5>Date: {{ord.date}}</h5></div>
+       <div class="col"><h5>Time: {{ord.time}}</h5></div>         
      </div>
      <hr>
 <h3>Name: {{ord.homeowner_id}}</h3>
 <h5>Location: {{ord.address}}</h5>
 <h5>Mobile no: {{ord.number}}</h5>
 <h5>Home no: {{ord.houseno}}</h5>
-<h5>Service: {{ord.service}}</h5>
-<h5>Sub-Service: {{ord.subservice}}</h5>
+<h5>Service: {{ord.professional_id.service}}</h5>
+<h5>Sub-Service: {{ord.professional_id.subservice}}</h5>
 <h5>Professionals: {{ord.professional_id}}</h5>
 </div>
-<h5>Service Charge Perhour : {{ord.rateperhour}}</h5>
+<h5>Service Charge Perhour : {{ord.professional_id.rateperhour}}</h5>
 <h5>Earned: {{ord.rating}}</h5>  
 <h5>If Unbook Order Message Comes here: {{ord.message}}</h5>  
 

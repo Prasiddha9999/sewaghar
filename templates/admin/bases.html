@@ -64,7 +64,7 @@
       <!-- Nav Bar -->
  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top py-0">
   <div class="container">
-    <a class="navbar-brand" href="{% url 'home' %}">
+    <a class="navbar-brand" href="{% url 'adminhomepage' %}">
       <img src="{% static 'images/logo.png' %}" width="70" height="70" alt="">
     </a>
       <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar">
@@ -84,7 +84,7 @@
                   <li class="dropdown-item" aria-disabled="true"></li>{{user.username}}</a></li>
                   <li><a class="dropdown-item" href="{% url 'adminprofile' %}">My Profile</a></li>
                   <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                  <li><a class="dropdown-item" href="{% url 'user_logout' %}">Logout</a></li>
               </ul>
             </li>
           </ul>

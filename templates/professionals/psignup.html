@@ -11,7 +11,7 @@
                   <h3 class="pt-10 mb-5 pb-1">Create Account For Professionals</h3>
                 </div>
 
-                <form action="{% url 'psignup' %}" method="post">
+                <form method="POST" action="{% url 'psignup' %}" enctype="multipart/form-data">
                   {% csrf_token %}
                   <div class="form-outline mb-4">
                     <label class="form-label" for="name">Full Name</label>
@@ -95,6 +95,11 @@
                     <input type="number" id="exprience" class="form-control" name="exprience" placeholder="Enter the no of Expriences" required/>
                     </div>
 
+                    <div class="form-outline mb-4">
+                      <label class="form-label" for="rate">What is your Rate Per Hour?</label>
+                      <input type="text" id="rate" class="form-control" name="rate" placeholder="Enter your  Rate Per Hour" required/>
+                      </div>
+
                   <div class="mb-3">
                     <label for="photo" class="form-label">Attached Your Photo</label>
                     <input class="form-control" type="file" name="photo" id="photo" >
@@ -107,6 +112,12 @@
                     <label>Back-Page</label>
                     <input class="form-control" type="file" name="citizenships" id="citizens" >
                   </div>
+
+
+                    <div class="form-outline mb-4">
+                      <label class="form-label" for="desc">Description</label>
+                      <textarea class="form-control" id="desc" rows="2"minlength="10" name="desc" placeholder="Write about your exprience." required></textarea>
+                    </div>
 
                   <div class="form-outline mb-4">
                     <label class="form-label" for="password">Password</label>
