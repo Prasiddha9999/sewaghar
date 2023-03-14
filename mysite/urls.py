@@ -72,6 +72,10 @@ urlpatterns = [
     
     path('update_my_model/<str:service_id>/', views.update_my_model, name='update_my_model'),
     path('usermessage/subservice/save', views.usermessage, name='usermessage'),
+    
+    path('rate-professional/<int:prof_id>/', views.rate_professional, name='rate_professional'),
+    
+
 ]
 
 

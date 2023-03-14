@@ -15,15 +15,10 @@
         <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex flex-column">
           <h3>{%for i in servs%}{{i.service}}{%endfor%} - {%for i in servs%}{{i.subservice}}{%endfor%}</h3>
           <figure>
-            <img src="{% static 'images/whyus.jpg'%}" alt="About Us IMG" class="img-fluid content-img rounded mx-auto">
+            <img src="/media/{{servicedata.photo}}" alt="Service Image">
           </figure>
           <p>
-            It gives freedom to choose the best professionals.
-            Easily chat with homeowners and professionals.
-            Homeowners can view their history.
-            It will be faster and more user-friendly.
-            Home Owners can fare for Price in chat.
-            Home Owners can find professionalss at the nearest{{serds.service}} Location
+       {{servicedata.desc}}
             
           </p>
         </div>

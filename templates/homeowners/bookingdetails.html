@@ -4,75 +4,71 @@
     <!-- Middle Section -->
     <br><br>
     <div class="text-center my-5">
-      <h3 class="display-5">Service: <u>{{ord.service}} - {{ord.subservice}}</u></h3>
+      <h3 class="display-5">Service: <u>{{servicedata.service}} - {{servicedata.subservice}}</u></h3>
       <hr class="w-25 mx-auto"/>
     </div>
     <br>
     
     <div class="container">
       <div class="row">
-        <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex flex-column">
-          <h3>{{ord.service}} :- {{ord.subservice}}</h3>
+        <div class="col-lg-6 col-md-6 col-12 d-flex flex-column">
+          <h3>{{servicedata.service}} :- {{servicedata.subservice}}</h3>
           <figure>
-            <img src="{% static 'images/whyus.jpg'%}" alt="About Us IMG" class="img-fluid content-img rounded mx-auto">
+            <img src="/media/{{servicedata.photo}}" class="img-fluid" alt="Service Image">
           </figure>
           <p>
-            It gives freedom to choose the best professionals.
-            Easily chat with homeowners and professionals.
-            Homeowners can view their history.
-            It will be faster and more user-friendly.
-            Home Owners can fare for Price in chat.
-            Home Owners can find professionals at the nearest Location
+            {{servicedata.desc}}
           </p>
         </div>
-        <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
+        <div class="col-lg-6 col-md-6 col-12">
           <!-- appointment date time show -->
-<div class="professionals_image">
-    <img src="/media/{{ord.photo}}" class="col-4 rounded float-start" alt="Professioanal Image">
-</div>
-<div class="profes_details">
-  <div class="row">
-    <div class="col"><h5>Date: {{ord.date}}</h5></div>
-    <div class="col"><h5>Time: {{ord.time}}</h5></div>         
-</div>
-  <hr>
-<h3>Name: {{ord.professional_id}}</h3>
-<h5>Age: {{ord.age}}</h5>
-<h5>Location: {{ord.address}}</h5>
-<h5>Service Charge Perhour : {{ord.rateperhour}}</h5>
-<h5>Rating : {{ord.rating}}</h5>
-<h5>Mobile Number : {{ord.number}}</h5>
-</div>
-<br><br>
-<p>{{ord.desc}}</p>
-<div class="bookbtn text-center">
-  <form method="post" action="{% url 'activates' ord.order_id %}">
-    {% csrf_token %}
-    {% if ord.status == 'book' %}
-    <p>Reason for Cancellation</p>
-    <textarea name="message" class="form-control" required id="exampleFormControlTextarea1" rows="1"></textarea><br>
-    <button type="submit" name="status" value="cancel" class="btn btn-warning">Cancel Request</button>
-    
-    {% elif ord.status == 'cancel' %}
-    <button type="submit" name="status" value="book" disabled="notEditMode" class="btn btn-success">Sucessfully Canceled</button>
-   
-    {% else %}
-    <button type="submit" name="status" value="solve" disabled="notEditMode" class="btn btn-info">Solved</button>
-    <br><br>
-         <div class="col-md">
-           <div class="form-floating">
-             <select class="form-select" id="floatingSelectGrid" aria-label="Floating label select example">
-               <option selected>Choose Number</option>
-               <option value="1">1</option>
-               <option value="2">2</option>
-               <option value="3">3</option>
-               <option value="2">4</option>
-               <option value="3">5</option>
-             </select>
-             <label for="floatingSelectGrid">Ratings</label>
-           </div>
-         </div>
-<br>
+          <div class="professionals_image">
+            <img src="/media/{{ord.professional_id.photo}}"  width="200" height="200" class="rounded float-start" alt="Professional Image">
+          </div>
+          <div class="profes_details">
+            <h3>Name: {{ord.professional_id}}</h3>
+            <h5>Age: {{ord.professional_id.age}}</h5>
+            <h5>Location: {{ord.professional_id.address}}</h5>
+            <h5>Service Charge Per Hour: {{ord.professional_id.rateperhour}}</h5>
+            <h5>Rating: {{ord.professional_id.ratings}} out of 5</h5>
+            <h5>Mobile Number: {{ord.number}}</h5>
+          </div>
+          <br><br>
+          <p>{{ord.desc}}</p>
+          <div class="bookbtn text-center">
+            <form method="post" action="{% url 'activates' ord.order_id %}">
+              {% csrf_token %}
+              {% if ord.status == 'book' %}
+              <p>Reason for Cancellation</p>
+              <textarea name="message" class="form-control" required id="exampleFormControlTextarea1" rows="1"></textarea><br>
+              <button type="submit" name="status" value="cancel" class="btn btn-warning">Cancel Request</button>
+              
+              {% elif ord.status == 'cancel' %}
+              <button type="submit" name="status" value="book" disabled="notEditMode" class="btn btn-success">Successfully Canceled</button>
+             
+              {% else %}
+              <button type="submit" name="status" value="solve" disabled="notEditMode" class="btn btn-info">Solved</button>
+              <br><br>
+              </form>
+              <div class="col-md">
+                <form method="POST" action="{% url 'rate_professional' prof_id=ord.professional_id.professional_id   %}">
+                  {% csrf_token %}
+                  <div class="form-floating">
+                      <select class="form-select" type="integer" id="rating" name="rating" aria-label="Floating label select example">
+                          <option value="" selected>Choose Rating</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                      </select>
+                      <label for="rating">Rate this professional:</label>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit Rating</button>
+              </form>
+              
+              </div>
+              <br>
 <h5>Pay Through Khalti</h5>
 <div class="input-group mb-3">
    <input type="text" class="form-control" placeholder="Grand Total">
@@ -83,13 +79,13 @@
    </div> 
        
     {% endif %}
-</form>
+
      
 </div>
 <br>
 
           <div class="nextprevious">
-            <button type="button" class="btn btn-danger back">--Back</button>
+            <a button type="button" class="btn btn-danger back" href="{{request.META.HTTP_REFERER}}">--Back</button></a>
           </div>
 
         </div>

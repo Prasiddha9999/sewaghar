@@ -59,13 +59,21 @@ class Account_Professional(models.Model):
     rateperhour = models.CharField(max_length=10, blank=True, null=True)
     desc = models.TextField(max_length=1000)
     status = models.BooleanField(default=False)
-    rating = models.IntegerField(default=1)
+    ratings = models.IntegerField(default=0)
+    total_rating = models.IntegerField(default=0)
+    num_ratings = models.IntegerField(default=0)
     
     class Meta:
         ordering=('-register',)   
      
     def __str__(self):
-            return self.full_name
+        return self.full_name
+
+    def average_rating(self):
+        if self.num_ratings > 0:
+            return self.total_rating / self.num_ratings
+        else:
+            return 0
          
 class All_Service(models.Model):
     service_id = models.AutoField(primary_key=True)

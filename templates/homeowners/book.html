@@ -14,15 +14,10 @@
         <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex flex-column">
           <h3>{{sk.service}} :- {{sk.subservice}}</h3>
           <figure>
-            <img src="{% static 'images/whyus.jpg'%}" alt="About Us IMG" class="img-fluid content-img rounded mx-auto">
+            <img src="/media/{{servicedata.photo}}" alt="Service Image">
           </figure>
           <p>
-            It gives freedom to choose the best professionals.
-            Easily chat with homeowners and professionals.
-            Homeowners can view their history.
-            It will be faster and more user-friendly.
-            Home Owners can fare for Price in chat.
-            Home Owners can find professionals at the nearest Location
+       {{servicedata.desc}}
           </p>
         </div>
         <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
@@ -35,7 +30,7 @@
 <h5>Age: {{sk.age}}</h5>
 <h5>Location: {{sk.address}}</h5>
 <h5>Service Charge Perhour : {{sk.rateperhour}}</h5>
-<h5>Rating : {{sk.rating}}</h5>
+<h5>Rating : {{sk.ratings}} out of 5</h5>
 </div>
 <br><br>
 <p>{{sk.desc}}</p>

@@ -11,6 +11,8 @@ from account.models import Message
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseBadRequest
+
 
 
 # Create your views here.
@@ -54,6 +56,10 @@ def subservice(request,sk):
 
 @login_required(login_url="hsignin")
 def servicetime(request,bk):
+    
+    sk = Account_Professional.objects.get(professional_id=bk)
+    sk_service = sk.subservice
+    servicedata = All_Service.objects.get(subservice=sk_service)
     servs = Account_Professional.objects.filter(professional_id=bk)
     serdis = All_Service.objects.filter(subservice__in=servs.values('subservice')).values('service_id')
     print(serdis.values("service"))
@@ -85,28 +91,35 @@ def servicetime(request,bk):
     
     serdis = {'serdis':serdis}
     servs = {'servs': servs} 
+    servicedata = {'servicedata': servicedata} 
     so = {'s': s}
-    context = {**servs, **so, **serdis}
+    context = {**servs, **so, **serdis, **servicedata}
     return render(request, "homeowners/servicetime.html",context)
 
     
 @login_required(login_url="hsignin")
 def servicemanlist(request, slk):
+    servicedata = All_Service.objects.get(subservice=slk)
+    print(servicedata)
     search_query = request.GET.get('q')
     if search_query:
         servs = Account_Professional.objects.filter(subservice=slk, address__icontains=search_query)
     else:
         servs = Account_Professional.objects.filter(subservice=slk)
-    s = slk
     servs = {'servs': servs}
-    so = {'s': s}
-    context = {**servs, **so}
+    servicedata = {'servicedata': servicedata}
+    context = {**servs, **servicedata}
     return render(request, "homeowners/servicemanlist.html", context)
 
 @login_required(login_url="hsignin")
 def book(request,sml):
     sk = Account_Professional.objects.get(professional_id=sml)
-    return render(request, "homeowners/book.html",{'sk':sk})
+    sk_service = sk.subservice
+    servicedata = All_Service.objects.get(subservice=sk_service)
+    print(servicedata)
+    print(sk)
+    print(sml)
+    return render(request, "homeowners/book.html",{'sk':sk, 'servicedata':servicedata})
 
 def unbook(request, prof_id, order_id):
     sk = Account_Professional.objects.get(professional_id=prof_id)
@@ -145,7 +158,7 @@ def activates(request, order_id):
         instance.status = 'book'
         instance.message = message
         instance.save()
-    return redirect("home")
+    return redirect("service")
 
 @login_required(login_url="hsignin")
 def notification(request):
@@ -153,7 +166,36 @@ def notification(request):
 
 @login_required(login_url="hsignin")
 def profile(request):
+    if request.method == 'POST':
+        full_name = request.POST.get('full_name')
+        email = request.POST.get('email')
+        number = request.POST.get('number')
+        address = request.POST.get('address')
+        photo = request.FILES.get('photo')
+        password = request.POST.get('password')
+        username = request.POST.get('username')
+
+        # Retrieve the user's Account_HomeOwner object and update its fields
+        user_account = request.user.account_homeowner
+        user_account.full_name = full_name
+        user_account.email = email
+        user_account.number = number
+        user_account.address = address
+        user_account.password = password
+        user_account.username = username
+
+        # Check if a new photo has been uploaded and update it if it has
+        if photo:
+            user_account.photo = photo
+        
+        # Save the changes to the user's Account_HomeOwner object
+        user_account.save()
+        
+        messages.success(request, "Profile updated successfully")
+        return redirect('profile')
+    
     return render(request, "homeowners/profile.html")
+
 
 @login_required(login_url="hsignin")
 def bookings(request):
@@ -163,13 +205,15 @@ def bookings(request):
 @login_required(login_url="hsignin")
 def bookingdetails(request,od):
     ord = Order.objects.get(order_id=od)
+    sk_service = ord.professional_id.subservice
+    servicedata = All_Service.objects.get(subservice=sk_service)
     if ord.status == 'cancel':
         status = 'Cancel'
     elif ord.status == 'solve':
         status = 'Solve'
     else:
         status = 'Book'
-    return render(request, "homeowners/bookingdetails.html",{'ord':ord, 'status':status})
+    return render(request, "homeowners/bookingdetails.html",{'ord':ord, 'status':status, 'servicedata': servicedata})
 
 
 def requestdetails(request,rd):
@@ -343,11 +387,15 @@ def deletemsg(request, msg_id):
     msg = Message.objects.filter(msg_id = msg_id).delete() 
     return redirect("adminmessage")
 
+from account.models import User
 @login_required(login_url="adminsignin")
 def activate(request, professional_id):
-    instance = get_object_or_404(Account_Professional, professional_id=professional_id)
+    instance = get_object_or_404(Account_Professional, pk=professional_id)
+    ins = get_object_or_404(User, pk=instance.user.pk)
     instance.status = not instance.status
+    ins.is_active = not ins.is_active
     instance.save()
+    ins.save()
     return redirect("adminservicemanlist")
 
 @login_required(login_url="adminsignin")
@@ -385,6 +433,32 @@ def usermessage(request):
         messages.save() 
           
     return HttpResponseRedirect("")
+
+def rate_professional(request, prof_id):
+    print(prof_id)
+    if request.method == 'POST':
+        rating = int(request.POST.get('rating'))
+        if rating:
+            try:
+                prof = Account_Professional.objects.get(professional_id=prof_id)
+                # check if the user has already rated the professional
+                if prof.ratings==0:
+                    prof.ratings = rating
+                    prof.num_ratings += 1
+                    prof.save()
+                    messages.success(request, 'Your rating has been submitted successfully.')
+                else:
+                    prof.ratings = (prof.ratings + rating)/2
+                    prof.save()
+                    messages.success(request, 'Your rating has been submitted successfully.')
+                prof.save()
+                return redirect('bookingdetails', pk=prof_id)
+            except Account_Professional.DoesNotExist:
+                return HttpResponseBadRequest('Invalid professional id.')
+        else:
+            messages.error(request, 'Please select a rating.')
+    else:
+        return HttpResponseBadRequest('Invalid request method.')
   
 
 

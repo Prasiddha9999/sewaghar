@@ -32,9 +32,9 @@
            <td>{{i.date}}</td>
            <td>{{i.time}}</td>
            {% if i.status %}
-           <td>Solved</td>
-           {% else %}
            <td>Pending</td>
+           {% else %}
+           <td>Solved</td>
            {% endif %}
            <td><a href="{%url 'adminorderdetail' ok=i.order_id%}">View More<a></td>
            <td><a href="deleteorder/{{i.order_id}}" type="submit">Delete<a></td>

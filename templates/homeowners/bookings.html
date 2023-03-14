@@ -25,8 +25,8 @@
             {%for i in ord%}
             <tr>
                 <th scope="row">{{i.order_id}}</th>
-                <td>{{i.full_name}}</td>
-                <td>{{i.service}}</td>
+                <td>{{i.professional_id}}</td>
+                <td>{{i.professional_id.service}}-{{i.professional_id.subservice}}</td>
                 <td>{{i.date}} - {{i.time}}</td>
                 <td><a href="{%url 'bookingdetails' od=i.order_id%}">viewmore</a></td>
                 <td>{{i.status}}</td>
