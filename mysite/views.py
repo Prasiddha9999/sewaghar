@@ -452,7 +452,7 @@ def rate_professional(request, prof_id):
                     prof.save()
                     messages.success(request, 'Your rating has been submitted successfully.')
                 prof.save()
-                return redirect('bookingdetails', pk=prof_id)
+                return redirect('bookingdetails', pk="21")
             except Account_Professional.DoesNotExist:
                 return HttpResponseBadRequest('Invalid professional id.')
         else:

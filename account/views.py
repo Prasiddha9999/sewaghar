@@ -9,21 +9,40 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
 #login function for Homeowners
+from django.shortcuts import redirect
+from django.urls import reverse
+from django.contrib.auth.decorators import login_required, user_passes_test
+from mysite.urls import redirect_to_service
+
+#register Function for HomeOwner   
+
 def hsignin(request):
+    if redirect_to_service(request)['Location'] == '/request':
+        return redirect('request')
+    # import ipdb;ipdb.set_trace()
+    if redirect_to_service(request)['Location'] == '/service':
+        return redirect('service')
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
         if user is not None and user.is_homeowner:
             login(request, user)
-            return redirect('service')
+            if request.user.is_authenticated or not request.session.get_expiry_date():
+                # Redirect to the service page if user is already logged in or session has not expired
+                return redirect('service')
+            else:
+                # Redirect to the dashboard page if user is not logged in or session has expired
+                return redirect('hsignin')
         else:
             messages.info(request, 'Invalid Login Credentials')
             return redirect('hsignin')
     else:
         return render(request, "homeowners/hsignin.html")
     
-#register Function for HomeOwner   
+    
+    
+
 def hsignup(request):
      if request.method == 'POST':
         full_name = request.POST['full_name']
@@ -64,7 +83,13 @@ def hsignup(request):
 def hforgetpassword(request):
     return render(request, "homeowners/hforgetpassword.html")
          
+
+
 def psignin(request):
+    if redirect_to_service(request)['Location'] == '/request':
+        return redirect('request')
+    if redirect_to_service(request)['Location'] == '/service':
+        return redirect('service')
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -169,7 +194,10 @@ def user_logout(request):
     messages.success(request, "You are logged out.")
     return redirect("/")
 
-def adminsignin(request):  
+def adminsignin(request): 
+  if redirect_to_service(request)['Location'] == '/adminhomepage':
+    return redirect('adminhomepage')  
+     
   if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']

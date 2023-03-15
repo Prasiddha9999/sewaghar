@@ -1,12 +1,29 @@
 from django.urls import path
 from .views import activate
 from .views import update_my_model
-
-
 from . import views
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+
+def redirect_to_service(request):
+    if request.user.is_authenticated:
+        if request.user.is_professional:
+            # Redirect to the request page if professional is already logged in
+            return redirect(reverse_lazy('request'))
+        elif request.user.is_homeowner:
+            # Redirect to the service page if homeowner is already logged in
+            return redirect(reverse_lazy('service'))
+        elif request.user.is_admin:
+            # Redirect to the admin homepage if admin is already logged in
+            return redirect(reverse_lazy('adminhomepage'))
+    # Redirect to the login page if user is not logged in
+    return redirect(reverse_lazy('home'))
+
 
 urlpatterns = [
-    path('',views.home, name="home"),
+    path('', redirect_to_service), # Add this line
+    path('service/', views.service, name='service'),
+    path('home',views.home, name="home"),
     path("blog",views.blog, name="blog"),
     path("aboutus",views.aboutus, name="aboutus"),
     path("privacypolicy",views.privacypolicy, name="privacypolicy"),
@@ -26,6 +43,7 @@ urlpatterns = [
     path("profile",views.profile, name="profile"),
     path("bookings",views.bookings, name="bookings"),
     path("bookingdetails/<int:od>",views.bookingdetails, name="bookingdetails"),
+    path('bookingdetails/<int:pk>', views.bookingdetails, name='bookingdetails'),
     path("requestdetails<int:rd>",views.requestdetails, name="requestdetails"),
     path("request",views.request, name="request"),
     path("professionalprofile",views.professionalprofile, name="professionalprofile"),
@@ -77,6 +95,7 @@ urlpatterns = [
     
 
 ]
+
 
 
 
