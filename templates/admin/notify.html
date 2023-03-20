@@ -1,0 +1,87 @@
+{% extends 'admin/bases.html'%}
+{% block content %}
+{% load static %}
+<!--Main layout-->
+<main>
+    <!-- Middle Section -->
+    <br>
+    <div class="text-center my-5">
+      <h3 class="display-5">Notify to Others</h3>
+      <hr class="w-25 mx-auto">
+    </div>
+ 
+    
+    <div class="container">
+        <div class="col-lg-12 col-md-12 col-12 col-xxl-12">
+            <div class="notify">
+                <form action="{% url 'notify' %}" method="post">
+                  {% csrf_token %}
+
+                  <div class="form-outline mb-4">
+                    <div>
+                      <label>Notification</label>
+                      <input type="text" class="form-control" name='notification' id="exampleFormControlTextarea1" ></textarea>
+                    </div>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <div>
+                      <label>Choose Classification</label>
+                      <select class="form-select" id="classification" name="classification" aria-describedby="classification">
+                        <option selected disabled value="">Choose...</option>
+                        {% for i in classificationss %}
+                        <option>{{i}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div class="form-outline mb-4">
+                    <div>
+                      <label>Choose HomeOwner</label>
+                      <select class="form-select select2" id="choosehomeowner" name="homeowner" aria-describedby="homeowner" optional="true">
+                        <option selected disabled value="">Choose...</option>
+                        {% for i in homeownerss %}
+                          {% if i.homeowner_id %}
+                          <option>{{ i.homeowner_id }}</option>
+                          {% endif %}
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  
+                  
+                  <div class="form-outline mb-4">
+                    <div>
+                      <label>Choose Professional</label>
+                      <select class="form-select" id="chooseprofessional" name="professional" aria-describedby="professional" optional="true">
+                        <option selected disabled value="">Choose...</option>
+                        {% for i in professionalss %}
+                          {% if i.professional_id %}
+                          <option>{{ i.professional_id }}</option>
+                          {% endif %}
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+
+     <!-- if user gives wrong data dispaly here -->
+     <div class="errormsg">
+      {% for message in messages%}
+      <h5>{{message}}</h5>
+      {% endfor%}
+  </div>
+                <div class="editbtn text-end">
+                  <br>
+                  <button type="submit" class="btn btn-success">Create</button>
+                </div>
+              <br><br>
+                </form>
+            </div>
+        </div>
+       
+    </div>
+</div>
+</main>
+<!--Main layout-->
+{% endblock %}

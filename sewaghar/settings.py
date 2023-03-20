@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'mysite.apps.MysiteConfig',
+    'khaltiapp.apps.KhaltiappConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'account.apps.AccountConfig',
+    'rest_framework',
+    'khalti',
+    
     
 ]
 
@@ -134,3 +138,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'account.User'
+
+# KHALTI_SECRET_KEY = "test_secret_key_736d8be761e4405e9d5a9155c7667305"
+# KHALTI_VERIFY_URL = "https://khalti.com/api/v2/payment/verify/"

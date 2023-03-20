@@ -23,6 +23,10 @@ urlpatterns = [
     path('',include('mysite.urls')),
     path('admin/', admin.site.urls),
     path('',include('account.urls')),
+    path('khalti/', include('khaltiapp.urls')),
+ 
+    
 ]
+
 
 urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

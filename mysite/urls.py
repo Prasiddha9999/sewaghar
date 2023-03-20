@@ -36,7 +36,7 @@ urlpatterns = [
     path("servicemanlist/<str:slk>",views.servicemanlist, name="servicemanlist"),
     path("book/<int:sml>",views.book, name="book"),
     path('unbook/<int:prof_id>/<int:order_id>/', views.unbook, name="unbook"),
-    path('khalti-request/', views.KhaltiRequestView, name="khaltirequest"), 
+
     
     
     path("notification",views.notification, name="notification"),
@@ -74,8 +74,7 @@ urlpatterns = [
     path("adminorderdetail/<int:ok>",views.adminorderdetail, name="adminorderdetail"),
     
     path("adminnotification",views.adminnotification, name="adminnotification"),
-    
-    
+    path("notify",views.notify, name="notify"),
     
     
     path("deleteservice/<str:service_id>",views.deleteservice, name="deleteservice"),
@@ -91,10 +90,17 @@ urlpatterns = [
     path('update_my_model/<str:service_id>/', views.update_my_model, name='update_my_model'),
     path('usermessage/subservice/save', views.usermessage, name='usermessage'),
     
-    path('rate-professional/<int:prof_id>/', views.rate_professional, name='rate_professional'),
+    path('rate-professional/<int:prof_id>/<int:ord_id>/', views.rate_professional, name='rate_professional'),
+    
+    
+    path("404",views.entry_not_found, name="404"),
     
 
 ]
+
+handler404 = 'mysite.views.entry_not_found'
+
+
 
 
 

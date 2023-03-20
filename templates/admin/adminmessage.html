@@ -26,9 +26,9 @@
        <tr>
            <th scope="row">{{i.msg_id}}</th>
            {% if i.homeowner_id %}
-           <td>{{i.homeowner_id}}</td>
+           <td>{{i.homeowner_id.full_name}}</td>
            {% else %}
-           <td>{{i.professional_id}}</td>
+           <td>{{i.professional_id.full_name}}</td>
            {%endif%}
 
            {% if i.homeowner_id %}

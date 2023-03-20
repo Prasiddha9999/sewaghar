@@ -7,11 +7,14 @@ from account.models import Account_Professional
 from account.models import Order
 from account.models import All_Service
 from account.models import Service_List
+from account.models import Notification
 from account.models import Message
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseBadRequest
+from django.utils import timezone
+from django.db.models import Q
 
 
 
@@ -86,6 +89,23 @@ def servicetime(request,bk):
             homeowner_id = homeowner  # Assign the logged in homeowner to homeowner_id field
         )
         serv.save()
+        notification = Notification.objects.create(
+                notification= f"Hey {professional.full_name}, you have received a new Request from {homeowner.full_name}.",
+                classification="Professional",
+                professional_id = professional 
+            )
+        notification.save()
+        notifications = Notification.objects.create(
+                notification= f"Hey {homeowner.full_name}, You have booked Professionals {professional.full_name}.",
+                classification="HomeOwner",
+                homeowner_id = homeowner 
+            )
+        notifications.save()
+        notificationss = Notification.objects.create(
+                notification= f"{homeowner.full_name}, book Professionals '{professional.full_name}' for service {servicedata.service}-{servicedata.subservice}.",
+                classification="Admin",
+            )
+        notificationss.save()
         order_id = serv.order_id  
         return redirect('unbook', prof_id=s, order_id=order_id)
     
@@ -116,14 +136,12 @@ def book(request,sml):
     sk = Account_Professional.objects.get(professional_id=sml)
     sk_service = sk.subservice
     servicedata = All_Service.objects.get(subservice=sk_service)
-    print(servicedata)
-    print(sk)
-    print(sml)
     return render(request, "homeowners/book.html",{'sk':sk, 'servicedata':servicedata})
 
 def unbook(request, prof_id, order_id):
     sk = Account_Professional.objects.get(professional_id=prof_id)
     ord = Order.objects.get(order_id=order_id)
+
     if ord.status == 'cancel':
         status = 'Cancel'
     elif ord.status == 'solve':
@@ -131,15 +149,6 @@ def unbook(request, prof_id, order_id):
     else:
         status = 'Book'
     return render(request, "homeowners/unbook.html",{'sk':sk, 'ord':ord, 'status':status})
-
-
-def KhaltiRequestView(self, request, *args, **kwargs):
-    context = {
-        
-    }    
-    return render(request, "khaltirequest.html",context)
-    
-
 
 @login_required(login_url="hsignin")
 def activates(request, order_id):
@@ -158,11 +167,17 @@ def activates(request, order_id):
         instance.status = 'book'
         instance.message = message
         instance.save()
-    return redirect("service")
+    previous_url = request.META.get('HTTP_REFERER')
+    return redirect(previous_url)
 
 @login_required(login_url="hsignin")
 def notification(request):
-    return render(request, "homeowners/notification.html")
+    username = request.user.username
+    if username:
+            homeowner_id = Account_HomeOwner.objects.get(username=username)
+            print(homeowner_id)
+    msg = Notification.objects.filter(Q(classification="All") | Q(classification="All_HomeOwner") | Q(classification="HomeOwner", homeowner_id=homeowner_id)).order_by('-time')
+    return render(request, "homeowners/notification.html", {'msg':msg})
 
 @login_required(login_url="hsignin")
 def profile(request):
@@ -207,21 +222,61 @@ def bookingdetails(request,od):
     ord = Order.objects.get(order_id=od)
     sk_service = ord.professional_id.subservice
     servicedata = All_Service.objects.get(subservice=sk_service)
+    username = request.user.username
+    if username:
+            homeowner = Account_HomeOwner.objects.get(username=username)
+    professional = Account_Professional.objects.get(professional_id=ord.professional_id.professional_id)
     if ord.status == 'cancel':
         status = 'Cancel'
     elif ord.status == 'solve':
         status = 'Solve'
     else:
         status = 'Book'
+        notification = Notification.objects.create(
+            notification= f"Hey {professional.full_name}, your Request id {ord.order_id} has been Cancelled by {homeowner.full_name}.",
+            classification="Professional",
+            professional_id =  professional
+            )
+        notification.save()
+        notifications = Notification.objects.create(
+            notification= f"Hey {homeowner.full_name}, You Cancelled the Booking id {ord.order_id}.",
+            classification="HomeOwner",
+            homeowner_id = homeowner
+            )
+        notifications.save()
+        notificationss = Notification.objects.create(
+            notification= f"{homeowner.full_name}, cancel the Bookings id {ord.order_id} for service.",
+            classification="Admin",
+            )
+        notificationss.save()
     return render(request, "homeowners/bookingdetails.html",{'ord':ord, 'status':status, 'servicedata': servicedata})
 
 
 def requestdetails(request,rd):
     ord = Order.objects.get(order_id=rd)
+    homeowner = Account_HomeOwner.objects.get(homeowner_id=ord.homeowner_id.homeowner_id)
+    professional = Account_Professional.objects.get(professional_id=ord.professional_id.professional_id)
     if ord.status == 'cancel':
         status = 'Cancel'
     elif ord.status == 'solve':
         status = 'Solve'
+        notification = Notification.objects.create(
+            notification= f"Hey {professional.full_name}, Thankyou for Solving request id {ord.order_id} request by {homeowner.full_name}.",
+            classification="Professional",
+            professional_id =  professional
+            )
+        notification.save()
+        notifications = Notification.objects.create(
+                    notification= f"Hey {homeowner.full_name}, Your Problem has been solved by {professional.full_name}.",
+                    classification="HomeOwner",
+                    homeowner_id = homeowner
+                    )
+        notifications.save()
+        notificationss = Notification.objects.create(
+            notification= f"{homeowner.full_name}, problem has been solved by {professional.full_name} having booking id {ord.order_id}",
+            classification="Admin",
+            )
+        notificationss.save()
     else:
         status = 'Book'
     return render(request, "professionals/requestdetails.html",{'ord':ord, 'status':status})
@@ -234,8 +289,15 @@ def request(request):
 def professionalprofile(request):
     return render(request, "professionals/professionalprofile.html")
 
+@login_required(login_url="psignin")
 def professionalnotification(request):
-    return render(request, "professionals/professionalnotification.html")
+    username = request.user.username
+    print(username)
+    if username:
+            professional_id = Account_Professional.objects.get(username=username)        
+    msg = Notification.objects.filter(Q(classification="All") | Q(classification="All_Professional") | Q(classification="Professional", professional_id=professional_id)).order_by('-time')
+    return render(request, "professionals/professionalnotification.html",{'msg':msg})
+
 
 @login_required(login_url="adminsignin")
 def adminhomepage(request):
@@ -353,9 +415,50 @@ def adminvieworder(request):
     ord = Order.objects.all()
     return render(request, "admin/adminvieworder.html",{'ord':ord})
 
+
 @login_required(login_url="adminsignin")
 def adminnotification(request):
-    return render(request, "admin/adminnotification.html")
+    msg = Notification.objects.filter(Q(classification="All") | Q(classification="Admin")).order_by('-time')
+    return render(request, "admin/adminnotification.html",{'msg':msg})
+
+@login_required(login_url="adminsignin")
+def notify(request):
+    classificationss = [choice[1] for choice in Notification.CLASSIFICATION_CHOICES]
+    print(classificationss)
+    homeownerss = Notification.objects.all().distinct('homeowner_id')
+    professionalss = Notification.objects.all().distinct('professional_id')
+    
+    if request.method == "POST":
+        notification = request.POST.get('notification')
+        classification = request.POST.get('classification')
+        homeowner_username = request.POST.get('homeowner')
+        professional_username = request.POST.get('professional')
+        
+        homeowner = None
+        if homeowner_username:
+            homeowner = Account_HomeOwner.objects.get(username=homeowner_username)
+            print(homeowner)
+        
+        professional = None
+        if professional_username:
+            professional = Account_Professional.objects.get(username=professional_username)
+            print(professional)
+
+        # Create a new notification instance
+        notification = Notification.objects.create(
+            notification=notification,
+            classification=classification,
+            homeowner_id=homeowner,
+            professional_id=professional,
+        )
+        messages.info(request, 'Notification created successfully!')
+        return redirect('notify')
+    
+    return render(request, "admin/notify.html", locals())
+
+
+
+
 
 @login_required(login_url="adminsignin")
 def deleteservice(request, service_id):
@@ -387,6 +490,8 @@ def deletemsg(request, msg_id):
     msg = Message.objects.filter(msg_id = msg_id).delete() 
     return redirect("adminmessage")
 
+
+
 from account.models import User
 @login_required(login_url="adminsignin")
 def activate(request, professional_id):
@@ -396,25 +501,27 @@ def activate(request, professional_id):
     ins.is_active = not ins.is_active
     instance.save()
     ins.save()
-    return redirect("adminservicemanlist")
+    previous_url = request.META.get('HTTP_REFERER')
+    return redirect(previous_url)
 
 @login_required(login_url="adminsignin")
 def update_my_model(request, service_id):
     servs = Account_Professional.objects.filter(service_id = service_id)
     if request.method =="POST":       
+        
         serv = All_Service(request.POST, servs=servs)         
         if serv.is_valid():
             serv.save()
             return redirect('update_my_model')
     else:
         serv = All_Service(servs=servs) 
+        messages.info(request, 'Please Send Again.')
+        
     return render(request, 'adminservicedetail', {'serv': serv})
 
-
-
-
+from django.contrib import messages as django_messages
 def usermessage(request):
-    if request.method =="POST":
+    if request.method == "POST":
         message = request.POST.get('message')
         print(message)
         username = ""
@@ -424,17 +531,20 @@ def usermessage(request):
             try:
                 username = Account_Professional.objects.get(username=request.user.username)
             except Account_Professional.DoesNotExist:
-                return HttpResponse("Error: User not found.")
+                django_messages.info(request, 'Please Send Again.')
+                return redirect(request.META['HTTP_REFERER'])
         
-        messages = Message(
+        message_instance = Message(
             homeowner_id=username, 
             message=message,
         )
-        messages.save() 
-          
-    return HttpResponseRedirect("")
+        message_instance.save() 
+        django_messages.info(request, 'Thank-you for your valuable feedback.')
+  
+    return redirect(request.META['HTTP_REFERER'])
 
-def rate_professional(request, prof_id):
+
+def rate_professional(request, prof_id, ord_id):
     print(prof_id)
     if request.method == 'POST':
         rating = int(request.POST.get('rating'))
@@ -452,13 +562,40 @@ def rate_professional(request, prof_id):
                     prof.save()
                     messages.success(request, 'Your rating has been submitted successfully.')
                 prof.save()
-                return redirect('bookingdetails', pk="21")
+                username = request.user.username
+                if username:
+                    homeowner = Account_HomeOwner.objects.get(username=username)   
+                notification = Notification.objects.create(
+                    notification= f"Hey {prof.full_name}, Yo have got rating {rating} by {homeowner.full_name}.",
+                    classification="Professional",
+                    professional_id = prof
+                    )
+                notification.save()
+                notifications = Notification.objects.create(
+                    notification= f"Hey {homeowner.full_name}, Thankyou for rating {rating} to {prof.full_name}.",
+                    classification="HomeOwner",
+                    homeowner_id = homeowner
+                    )
+                notifications.save()
+                notificationss = Notification.objects.create(
+                    notification= f"{homeowner.full_name}, gives the rating {rating} to {prof.full_name}",
+                    classification="Admin",
+                    )
+                notificationss.save()                
+                return redirect('bookingdetails', pk=ord_id)
             except Account_Professional.DoesNotExist:
                 return HttpResponseBadRequest('Invalid professional id.')
         else:
             messages.error(request, 'Please select a rating.')
     else:
         return HttpResponseBadRequest('Invalid request method.')
+    
+
+
+def entry_not_found(request, exception='1', template_name='404.html'):
+    return render(request, template_name)
+    
+
   
 
 

@@ -28,7 +28,7 @@ class Account_HomeOwner(models.Model):
     # USERNAME_FIELD = 'email'
     
     def __str__(self):
-            return self.full_name
+            return self.username
 
 
 GENDER_CHOICES = (
@@ -67,7 +67,7 @@ class Account_Professional(models.Model):
         ordering=('-register',)   
      
     def __str__(self):
-        return self.full_name
+        return self.username
 
     def average_rating(self):
         if self.num_ratings > 0:
@@ -109,4 +109,21 @@ class Message(models.Model):
 class Service_List(models.Model):
     servicelist_id = models.AutoField(primary_key=True)
     service_list = models.CharField(max_length=255)
+    
+class Notification(models.Model):
+    not_id = models.AutoField(primary_key=True)
+    professional_id = models.ForeignKey(Account_Professional, on_delete=models.CASCADE, null=True, blank=True)
+    homeowner_id = models.ForeignKey(Account_HomeOwner, on_delete=models.CASCADE, null=True, blank=True)
+    notification = models.CharField(max_length=255)
+    CLASSIFICATION_CHOICES = (
+        ('HomeOwner', 'HomeOwner'),
+        ('Professional', 'Professional'),
+        ('Admin', 'Admin'),
+        ('All_HomeOwner', 'All_HomeOwner'),
+        ('All_Professional', 'All_Professional'),
+        ('All', 'All'),
+    )
+    classification = models.CharField(max_length=50, choices=CLASSIFICATION_CHOICES)
+    time = models.DateTimeField(auto_now_add=True)
+
        

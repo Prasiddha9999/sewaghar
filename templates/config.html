@@ -1,20 +1,16 @@
+{% load static %}
 <html>
 <head>
     <script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
 </head>
 <body>
-    ...
-    <!-- Place this where you need payment button -->
-    <button id="payment-button">Pay with Khalti</button>
-    <!-- Place this where you need payment button -->
-    <!-- Paste this code anywhere in you body tag -->
     <script>
         var config = {
             // replace the publicKey with yours
-            "publicKey": "test_public_key_dc74e0fd57cb46cd93832aee0a390234",
+            "publicKey": "test_public_key_eb79320089ec458c81a9346c77028152",
             "productIdentity": "1234567890",
-            "productName": "Dragon",
-            "productUrl": "http://gameofthrones.wikia.com/wiki/Dragons",
+            "productName": "SewaGhar",
+            "productUrl": "http://sewagharservice.com",
             "paymentPreference": [
                 "KHALTI",
                 "EBANKING",
@@ -37,13 +33,8 @@
         };
 
         var checkout = new KhaltiCheckout(config);
-        var btn = document.getElementById("payment-button");
-        btn.onclick = function () {
-            // minimum transaction amount must be 10, i.e 1000 in paisa.
-            checkout.show({amount: 1000});
-        }
+        checkout.show({amount: {{amount}}});
     </script>
-    <!-- Paste this code anywhere in you body tag -->
-    ...
+  
 </body>
 </html>

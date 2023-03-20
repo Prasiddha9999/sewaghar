@@ -55,7 +55,7 @@
 
                         <div class="form-outline mb-4">
                           <label for="service" class="form-label">Service</label>
-                          <select class="form-select" id="service" name="service" onchange = "servicefield()" required>
+                          <select class="form-select" id="service" name="service" onchange = "servicefield() " required>
                             <option selected disabled value="">Choose...</option>
                             {%for i in service%}
                             <option value="{{i.service_id}}" {%if request.GET.service == i.service_id|lower%}selected{%endif%}>{{i.service}}</option>

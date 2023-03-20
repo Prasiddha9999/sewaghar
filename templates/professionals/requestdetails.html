@@ -4,7 +4,7 @@
     <!-- Middle Section -->
     <br><br>
     <div class="text-center my-5">
-      <h3 class="display-5">Details</u></h3>
+      <h3 class="display-5">Request Details</u></h3>
       <hr class="w-25 mx-auto"/>
     </div>
     <br>
@@ -24,31 +24,34 @@
                 <div class="col"><h5>Time: {{ord.time}}</h5></div>         
             </div>
               <hr>
-        <h3>Name: {{ord.professional_id}}</h3>
+        <h3>Name: {{ord.professional_id.full_name}}</h3>
         <h5>Location: {{ord.address}}</h5>
         <h5>Home no: {{ord.houseno}}</h5>
         <h5>Mobile no: {{ord.number}}</h5>
-        <h5>Service: {{ord.service}} - {{ord.subservice}}</h5>
+        <h5>Service: {{ord.professional_id.service}} - {{ord.professional_id.subservice}}</h5>
         </div>
-        <br><br>
-       <p><b>Note: Please do best work for increaseing your rating</b></p>
         <br>
-        <p>After Completing your work please click the solve button.</p>
         <div class="bookbtn text-center">
           <form method="post" action="{% url 'activates' ord.order_id %}">
             {% csrf_token %}
             {% if ord.status == 'book' %}
+            <br>
+       <p><b>Note: Please do best work for increasing your rating</b></p>
+        <p>After Completing your work, please click the solve button.</p>
             <button type="submit" name="status" value="solve" class="btn btn-warning">Solve</button>
             
             {% elif ord.status == 'cancel' %}
+            <p>Due to : <b>{{ord.message}}<b></p>
             <button type="submit" name="status" value="cancel" disabled="notEditMode" class="btn btn-danger">Order Cancelled</button>
             {%else%}
+            <p>Thankyou for your valuable work.</p>
             <button type="submit" name="status" value="book" disabled="notEditMode" class="btn btn-success">Solved</button>
           </form>
           {%endif%}
         </div>
        </div>
     </div>
+  </div>
 
   <br>
   <hr>

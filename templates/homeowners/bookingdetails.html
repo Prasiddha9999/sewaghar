@@ -51,7 +51,8 @@
               <br><br>
               </form>
               <div class="col-md">
-                <form method="POST" action="{% url 'rate_professional' prof_id=ord.professional_id.professional_id   %}">
+                
+                <form method="POST" action="{% url 'rate_professional' prof_id=ord.professional_id.professional_id ord_id=ord.order_id  %}">
                   {% csrf_token %}
                   <div class="form-floating">
                       <select class="form-select" type="integer" id="rating" name="rating" aria-label="Floating label select example">
@@ -70,10 +71,15 @@
               </div>
               <br>
 <h5>Pay Through Khalti</h5>
+<form action="/khalti/config" method="POST">
+  {% csrf_token %}
 <div class="input-group mb-3">
-   <input type="text" class="form-control" placeholder="Grand Total">
-   <button class="btn btn-outline-success" type="button">Pay</button>
+  
+  <input type="text" class='form-control' id="amount" name="amount">
+  <button class="btn btn-outline-success" type="submit">Pay Through Khalti</button>
+
  </div>
+</form>
        </div>
      </div>
    </div> 

@@ -27,8 +27,8 @@
       {%for i in ord%}
        <tr>
            <th scope="row">{{i.order_id}}</th>
-           <td>{{i.professional_id}}</td>
-           <td>{{i.homeowner_id}}</td>
+           <td>{{i.professional_id.full_name}}</td>
+           <td>{{i.homeowner_id.full_name}}</td>
            <td>{{i.date}}</td>
            <td>{{i.time}}</td>
            {% if i.status %}

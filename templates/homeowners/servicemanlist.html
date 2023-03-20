@@ -57,7 +57,7 @@
                 <th scope="row">{{i.professional_id}}</th>
                 <td>{{i.full_name}}</td>
                 <td>{{i.address}}</td>
-                <td>{{i.rating}}</td>
+                <td>{{i.ratings}} out of 5</td>
                 <td><a href="{%url 'book' sml=i.professional_id%}">View More<a></td>
               </tr>
              {%endfor%}
