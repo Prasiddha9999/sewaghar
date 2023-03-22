@@ -9,4 +9,5 @@ urlpatterns = [
     path("psignup/",views.psignup, name="psignup"),
     path("user_logout",views.user_logout, name="user_logout"),
     path("adminsignin",views.adminsignin, name="adminsignin"),
+    path("subservice",views.loadSubService,name="loadSubService")
 ]

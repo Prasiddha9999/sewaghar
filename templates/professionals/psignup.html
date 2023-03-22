@@ -15,7 +15,7 @@
                   {% csrf_token %}
                   <div class="form-outline mb-4">
                     <label class="form-label" for="name">Full Name</label>
-                    <input type="text" id="name" class="form-control" minlength="3" name="full_name" placeholder="Enter your Full Name" required/>
+                    <input type="text" id="name" class="form-control" minlength="3" value="{{request.GET.name}}" name="full_name"  placeholder="Enter your Full Name" onChange="onDataChange(event,'full_name')" required/>
                     </div>
 
                     <div class="form-outline mb-4">
@@ -55,7 +55,7 @@
 
                         <div class="form-outline mb-4">
                           <label for="service" class="form-label">Service</label>
-                          <select class="form-select" id="service" name="service" onchange = "servicefield() " required>
+                          <select class="form-select" id="service" name="service" onchange = "servicefield() "  required>
                             <option selected disabled value="">Choose...</option>
                             {%for i in service%}
                             <option value="{{i.service_id}}" {%if request.GET.service == i.service_id|lower%}selected{%endif%}>{{i.service}}</option>
@@ -78,17 +78,16 @@
                               Please select Service First
                           </div>
                       </div>
-      
 
                         <script>
                           function servicefield(){
-                            
                             service_id = document.getElementById('service').value;
-                            window.location = "?service="+service_id;
-                           
-
+                            fetch(`http://127.0.0.1:8000/subservice?service=${service_id}`).then(async(response) => {
+                              const responseData = await response.json();
+                              document.getElementById('subservice').innerHTML = `<option selected disabled value="">Choose...</option>${responseData.map(data => `<option value='${data.pk}'>${data.fields.subservice}</option>`).join('')}`
+                            })
                           }
-                        </script>
+                        </script> 
 
                   <div class="form-outline mb-4">
                     <label class="form-label" for="exprience">No of Expriences year</label>

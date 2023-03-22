@@ -14,6 +14,10 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required, user_passes_test
 from mysite.urls import redirect_to_service
+from django.views.decorators.csrf import csrf_exempt
+from django.core import serializers
+from django.http import JsonResponse
+import json
 
 #register Function for HomeOwner   
 
@@ -135,19 +139,6 @@ def psignin(request):
         return render(request, "professionals/psignin.html")
     
 def psignup(request):
-     service_id = request.GET.get('service',None)
-     if service_id:
-         try:
-             ss = All_Service.objects.get(service_id=service_id) 
-             service = ss.service 
-             if service:
-                 subservice = All_Service.objects.filter(service=service)
-         except All_Service.DoesNotExist:
-             # Handle case where no matching All_Service object was found
-             pass
-     else:
-         # Handle case where no service_id was provided in the GET request
-         pass
      service = All_Service.objects.all().distinct('service')
      if request.method == 'POST':
         full_name = request.POST['full_name']
@@ -229,7 +220,25 @@ def psignup(request):
      else:
          return render(request, "professionals/psignup.html",locals())
 
-
+@csrf_exempt ## To exempt from default requirement for CSRF tokens to use postman
+def loadSubService(request):
+     if (request.method == "GET"):
+        service_id = request.GET.get("service",None) 
+        if service_id:
+            try:
+                ss = All_Service.objects.get(service_id=service_id) 
+                service = ss.service 
+                if service:
+                    subservice = All_Service.objects.filter(service=service)
+                    #Serialize the data into json
+                    data = serializers.serialize("json", subservice)
+                    # Turn the JSON data into a dict and send as JSON response
+                    return JsonResponse(json.loads(data), safe=False)
+                    
+            except All_Service.DoesNotExist:
+                # Handle case where no matching All_Service object was found
+                pass
+        #  service_id = request.GET.
  
 def user_logout(request):
     auth_logout(request)
