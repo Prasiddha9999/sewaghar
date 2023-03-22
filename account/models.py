@@ -98,6 +98,12 @@ class Order(models.Model):
     homeowner_id = models.ForeignKey(Account_HomeOwner, on_delete=models.CASCADE)
     message = models.TextField( null=True, blank=True, max_length=500)
     address = models.CharField(max_length=255)
+    payment_amount = models.CharField(max_length=255,  null=True, blank=True)
+    payment_idx = models.CharField(max_length=255,  null=True, blank=True)
+    payment_token = models.CharField(max_length=255,  null=True, blank=True)
+    payment_date = models.DateTimeField(null=True, blank=True)
+    payment_method = models.CharField(max_length=255, null=True, blank=True)
+    totaltimehour = models.IntegerField(null=True, blank=True)
     
     
 class Message(models.Model):

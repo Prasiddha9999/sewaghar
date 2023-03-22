@@ -15,6 +15,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseBadRequest
 from django.utils import timezone
 from django.db.models import Q
+from datetime import datetime
 
 
 
@@ -155,17 +156,23 @@ def activates(request, order_id):
     instance = get_object_or_404(Order, order_id=order_id)
     status = request.POST.get('status')
     message = request.POST.get('message')
+    totalhour = request.POST.get('totalhour')
+    print(totalhour)
+    
     if status == 'cancel':
         instance.status = 'cancel'
         instance.message = message
+        instance.totaltimehour = totalhour
         instance.save()
     elif status == 'solve':
         instance.status = 'solve'
         instance.message = message
+        instance.totaltimehour = totalhour
         instance.save()
     else:
         instance.status = 'book'
         instance.message = message
+        instance.totaltimehour = totalhour
         instance.save()
     previous_url = request.META.get('HTTP_REFERER')
     return redirect(previous_url)
@@ -249,6 +256,22 @@ def bookingdetails(request,od):
             classification="Admin",
             )
         notificationss.save()
+    if request.method == 'POST':
+        amount = int(request.POST['amount'])
+        if amount:
+            orderid = request.POST['orderid']
+
+        try:
+            order = Order.objects.get(order_id=orderid)
+        except Order.DoesNotExist:
+            # Handle the case where the order ID doesn't exist
+            return HttpResponse("TryAgain")
+
+        order.payment_amount = amount
+        order.payment_date = datetime.now()
+        order.payment_method = "Cash"
+        order.save()
+        return redirect(request.path)
     return render(request, "homeowners/bookingdetails.html",{'ord':ord, 'status':status, 'servicedata': servicedata})
 
 
@@ -589,8 +612,9 @@ def rate_professional(request, prof_id, ord_id):
             messages.error(request, 'Please select a rating.')
     else:
         return HttpResponseBadRequest('Invalid request method.')
-    
 
+
+from django.core.exceptions import ObjectDoesNotExist
 
 def entry_not_found(request, exception='1', template_name='404.html'):
     return render(request, template_name)

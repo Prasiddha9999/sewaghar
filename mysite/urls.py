@@ -95,6 +95,9 @@ urlpatterns = [
     
     path("404",views.entry_not_found, name="404"),
     
+  
+
+    
 
 ]
 

@@ -26,7 +26,7 @@
             <img src="/media/{{ord.professional_id.photo}}"  width="200" height="200" class="rounded float-start" alt="Professional Image">
           </div>
           <div class="profes_details">
-            <h3>Name: {{ord.professional_id}}</h3>
+            <h3>Name: {{ord.professional_id.full_name}}</h3>
             <h5>Age: {{ord.professional_id.age}}</h5>
             <h5>Location: {{ord.professional_id.address}}</h5>
             <h5>Service Charge Per Hour: {{ord.professional_id.rateperhour}}</h5>
@@ -43,9 +43,13 @@
               <textarea name="message" class="form-control" required id="exampleFormControlTextarea1" rows="1"></textarea><br>
               <button type="submit" name="status" value="cancel" class="btn btn-warning">Cancel Request</button>
               
+
+
               {% elif ord.status == 'cancel' %}
               <button type="submit" name="status" value="book" disabled="notEditMode" class="btn btn-success">Successfully Canceled</button>
              
+
+
               {% else %}
               <button type="submit" name="status" value="solve" disabled="notEditMode" class="btn btn-info">Solved</button>
               <br><br>
@@ -70,16 +74,34 @@
               
               </div>
               <br>
-<h5>Pay Through Khalti</h5>
-<form action="/khalti/config" method="POST">
-  {% csrf_token %}
-<div class="input-group mb-3">
-  
-  <input type="text" class='form-control' id="amount" name="amount">
-  <button class="btn btn-outline-success" type="submit">Pay Through Khalti</button>
 
- </div>
-</form>
+
+              {% if ord.payment_amount is none %}
+              <p>Total Time taken to solve problem: {{ord.totaltimehour}}</p>
+              <p> Total Amount to pay: {{ord.totaltimehour}}
+
+              <h3>Payment Method</h3>
+              <form action="/khalti/config" method="POST">
+                {% csrf_token %}
+                  <input type="hidden" name="orderid" value="{{ ord.order_id }}">
+                  <input type="hidden"  id="amount" name="amount" value="10">
+                  <button class="btn btn-outline-success" id="payment-button" type="submit">Pay Via Khalti</button>
+            
+              </form>
+              <br>
+              <form method="post" action="{% url 'bookingdetails' od=ord.order_id %}">
+                {% csrf_token %}
+                <input type="hidden" name="orderid" value="{{ ord.order_id }}">
+                <input type="hidden"  id="amount" name="amount" value="10">
+                <button class="btn btn-outline-success" type="submit">Pay Via Cash</button>
+              </form>
+              
+
+              {% elif ord.payment_amount is not None %}
+              <h5>Thank You for your Payment amount: Rs.{{ ord.payment_amount }} via {{ord.payment_method}}</h5>
+              {% endif %}
+             
+
        </div>
      </div>
    </div> 

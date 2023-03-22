@@ -1,6 +1,7 @@
 {% extends 'professionals/pbases.html'%}
 {% block content %}
 {% load static %}
+
     <!-- Middle Section -->
     <br><br>
     <div class="text-center my-5">
@@ -38,15 +39,29 @@
             <br>
        <p><b>Note: Please do best work for increasing your rating</b></p>
         <p>After Completing your work, please click the solve button.</p>
+        <br>
+        <input type="number" id="totalhour" class="form-control" min="1" step="any" name="totalhour" placeholder="Enter the total time taken to solve the problem" required />
             <button type="submit" name="status" value="solve" class="btn btn-warning">Solve</button>
             
             {% elif ord.status == 'cancel' %}
             <p>Due to : <b>{{ord.message}}<b></p>
             <button type="submit" name="status" value="cancel" disabled="notEditMode" class="btn btn-danger">Order Cancelled</button>
             {%else%}
-            <p>Thankyou for your valuable work.</p>
+
+            <p>Thankyou for your valuable work</p>
+            {% if ord.payment_amount is null %}
+            <p>Total Time-taken: {{ord.totaltimehour}} hour</p>
             <button type="submit" name="status" value="book" disabled="notEditMode" class="btn btn-success">Solved</button>
-          </form>
+            <p>Pending for Payment..</p>
+        </form>
+        {% else %}
+            <p>Payment Sucessfull via {% if ord.payment_method == 'Cash' %}Cash{% else %}Khalti{% endif %}</p>
+            <p>Total Time-taken: {{ord.totaltimehour}} hour</p>
+            <p>Total Payable amount: Rs.{{ord.payment_amount}}</p>
+        {% endif %}
+
+
+
           {%endif%}
         </div>
        </div>

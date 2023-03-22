@@ -18,5 +18,10 @@ from django.urls import path
 from khaltiapp import views
 
 urlpatterns = [
-     path('config',views.config, name="config"),   
+    path('verify', views.verify, name='verify'),
+    path('config', views.config, name='config'),
+    # other URL patterns here
 ]
+
+
+
