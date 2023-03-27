@@ -17,11 +17,7 @@ def config(request):
 
 
 
-from django.http import JsonResponse, HttpResponse
-
-def verify(request):
-    print(request)
-   
+def verify(request):   
     if request.method == 'POST':
         payload = json.loads(request.body)
         orderid = payload['product_identity']

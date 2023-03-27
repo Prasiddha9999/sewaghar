@@ -8,32 +8,30 @@
         <h3 class="display-5"><b>Services</b></h3>
         <hr class="w-25 mx-auto"/>
       </div>
-      <form method="GET" class="input-group px-5 ">
-        <input type="search" class="form-control rounded" placeholder="Search" name="q" value="{{ query }}" aria-label="Search" aria-describedby="search-addon" />
-        <button type="submit" class="btn btn-outline-primary">search</button>
-      </div>
-    </form>
-      <br>
+<!-- Search bar -->
+<form class="input-group px-3 py-2">
+  <input type="search" class="form-control rounded" placeholder="Search" id="searchBar" aria-label="Search" aria-describedby="search-addon" />
+  <button type="button" class="btn btn-outline-primary" onclick="searchServices()">Search</button>
+</form>
+
 <!-- Services -->
-<div class="container">
-  <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3 d-flex justify-content-evenly">
-    {%for i in serv%}
-    <div class="col text-center">
-      <a href="{%url 'subservice' sk=i.service%}" class="p-3 border bg-light">{{i.service}}</a>
+<div class="container-fluid px-3 py-2">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-2">
+    {% for i in serv %}
+    <div class="col">
+      <div class="card h-100">
+        <a href="{% url 'subservice' sk=i.service %}" class="card-body text-center">
+          <h5 class="card-title">{{ i.service }}</h5>
+        </a>
+      </div>
     </div>
     {% empty %}
-      <!-- if user gives wrong data dispaly here -->
-      <div class="errormsg">
-        <h5>Sorry! Service Not Found.</h5>
+    <div class="errormsg">
+      <h5>Sorry! Service Not Found.</h5>
     </div>
-    {%endfor%}
-
- 
-
- 
-
-
- 
+    {% endfor %}
+  </div>
+</div>
   </div>
 </div>
 <br><br>

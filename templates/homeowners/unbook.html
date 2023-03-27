@@ -4,7 +4,7 @@
     <!-- Middle Section -->
     <br><br>
     <div class="text-center my-5">
-      <h3 class="display-5">Service: <u>{{sk.service}} - {{sk.subservice}}</u></h3>
+      <h3 class="display-5"><b>Service: <u>{{sk.service}} - {{sk.subservice}}</b></u></h3>
       <hr class="w-25 mx-auto"/>
     </div>
     <br>
@@ -12,34 +12,32 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex flex-column">
-          <h3>{{sk.service}} :- {{sk.subservice}}</h3>
-          <figure>
-            <img src="{% static 'images/whyus.jpg'%}" alt="About Us IMG" class="img-fluid content-img rounded mx-auto">
-          </figure>
-          <p>
-            It gives freedom to choose the best professionals.
-            Easily chat with homeowners and professionals.
-            Homeowners can view their history.
-            It will be faster and more user-friendly.
-            Home Owners can fare for Price in chat.
-            Home Owners can find professionals at the nearest Location
-          </p>
+          <div class="card h-100">
+            <div class="card-body text-center text-decoration-none d-flex flex-column justify-content-between">
+              <h3>{{sk.service}} : {{sk.subservice}}</h3>
+              <figure><img src="/media/{{servicedata.photo}}"  style="max-width:50%; height:auto;" class="img-fluid" alt="Service Image"></figure>
+              <h5 class="card-title"><span style="color: #808080">{{ servicedata.desc }}</span></h5>
+            </div>
+          </div>
+          <div class="nextprevious">
+            <a href="{{request.META.HTTP_REFERER}}" class="btn btn-danger back" role="button">--Back</a>
+          </div>
         </div>
         <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
-          <!-- appointment date time show -->
-<div class="professionals_image">
-    <img src="/media/{{sk.photo}}" class="col-4 rounded float-start" alt="Professioanal Image">
-</div>
-<div class="profes_details">
-<h3>Name: {{sk.full_name}}</h3>
-<h5>Age: {{sk.age}}</h5>
-<h5>Location: {{sk.address}}</h5>
-<h5>Service Charge Perhour : {{sk.rateperhour}}</h5>
-<h5>Rating : {{sk.ratings}} out of 5</h5>
-<h5>Mobile Number : {{sk.number}}</h5>
-</div>
-<br><br>
-<p>{{sk.desc}}</p>
+          <div class="professionals_image">
+            <img src="/media/{{sk.photo}}" class="col-4 rounded float-start" alt="Professioanal Image">
+          </div>
+          <div class="profes_details" style="display: inline-block; margin-left: 1rem;">
+            <h3>Name: {{sk.full_name}}</h3>
+            <h5>Age: {{sk.age}}</h5>
+            <h5>Location: {{sk.address}}</h5>
+            <h5>Service Charge Perhour : {{sk.rateperhour}}</h5>
+            <h5>Rating : {{sk.ratings}} out of 5</h5>
+            <h5>Mobile Number : {{sk.number}}</h5>
+          </div>
+          <br><br><br><br>
+          <p>{{sk.desc}}</p>
+     
 <div class="bookbtn text-center">
   <form method="post" action="{% url 'activates' ord.order_id %}">
     {% csrf_token %}
@@ -83,9 +81,6 @@
 </div>
 <br>
 
-          <div class="nextprevious">
-            <button type="button" class="btn btn-danger back">--Back</button>
-          </div>
 
         </div>
       </div>

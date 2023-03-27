@@ -5,7 +5,7 @@
     <!-- Middle Section -->
     <br><br>
     <div class="text-center my-5">
-      <h3 class="display-5">SubSystem: <u>{%for i in servs%}{{i.service}}{%endfor%} - {%for i in servs%}{{i.subservice}}{%endfor%}</u></h3>
+      <h3 class="display-5"><b>Service: <u>{{sk.service}} - {{sk.subservice}}</b></u></h3>
       <hr class="w-25 mx-auto"/>
     </div>
     <br>
@@ -13,15 +13,18 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex flex-column">
-          <h3>{%for i in servs%}{{i.service}}{%endfor%} - {%for i in servs%}{{i.subservice}}{%endfor%}</h3>
-          <figure>
-            <img src="/media/{{servicedata.photo}}" alt="Service Image">
-          </figure>
-          <p>
-       {{servicedata.desc}}
-            
-          </p>
+          <div class="card h-100">
+            <div class="card-body text-center text-decoration-none d-flex flex-column justify-content-between">
+              <h3>{{sk.service}} : {{sk.subservice}}</h3>
+              <figure><img src="/media/{{servicedata.photo}}"  style="max-width:50%; height:auto;" class="img-fluid" alt="Service Image"></figure>
+              <h5 class="card-title"><span style="color: #808080">{{ servicedata.desc }}</span></h5>
+            </div>
+          </div>
+          <div class="nextprevious">
+            <a href="{{request.META.HTTP_REFERER}}" class="btn btn-danger back" role="button">--Back</a>
+          </div>
         </div>
+
         <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
       <form action="{% url 'servicetime' s%}" method="post">
           {% csrf_token %}
@@ -43,7 +46,6 @@
           <br>
 
           <div class="nextprevious">
-            <a button type="button" class="btn btn-danger back"  href="{{request.META.HTTP_REFERER}}">--Back</button></a>
             <button type="submit"  class="btn btn-success next">Book</button>
           </div>
 

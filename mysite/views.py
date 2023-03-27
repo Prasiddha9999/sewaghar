@@ -114,23 +114,19 @@ def servicetime(request,bk):
     servs = {'servs': servs} 
     servicedata = {'servicedata': servicedata} 
     so = {'s': s}
-    context = {**servs, **so, **serdis, **servicedata}
+    sk = {'sk':sk}
+    context = {**servs, **so, **serdis, **servicedata, **sk}
     return render(request, "homeowners/servicetime.html",context)
 
     
 @login_required(login_url="hsignin")
 def servicemanlist(request, slk):
     servicedata = All_Service.objects.get(subservice=slk)
-    print(servicedata)
-    search_query = request.GET.get('q')
-    if search_query:
-        servs = Account_Professional.objects.filter(subservice=slk, address__icontains=search_query)
-    else:
-        servs = Account_Professional.objects.filter(subservice=slk)
-    servs = {'servs': servs}
-    servicedata = {'servicedata': servicedata}
-    context = {**servs, **servicedata}
+    servs = Account_Professional.objects.filter(subservice=slk).order_by('-ratings')
+    context = {'servs': servs, 'servicedata': servicedata}
     return render(request, "homeowners/servicemanlist.html", context)
+
+
 
 @login_required(login_url="hsignin")
 def book(request,sml):
@@ -141,6 +137,8 @@ def book(request,sml):
 
 def unbook(request, prof_id, order_id):
     sk = Account_Professional.objects.get(professional_id=prof_id)
+    sk_service = sk.subservice
+    servicedata = All_Service.objects.get(subservice=sk_service)
     ord = Order.objects.get(order_id=order_id)
 
     if ord.status == 'cancel':
@@ -149,7 +147,7 @@ def unbook(request, prof_id, order_id):
         status = 'Solve'
     else:
         status = 'Book'
-    return render(request, "homeowners/unbook.html",{'sk':sk, 'ord':ord, 'status':status})
+    return render(request, "homeowners/unbook.html",{'sk':sk, 'ord':ord, 'status':status, 'servicedata':servicedata})
 
 @login_required(login_url="hsignin")
 def activates(request, order_id):
@@ -188,6 +186,8 @@ def notification(request):
 
 @login_required(login_url="hsignin")
 def profile(request):
+    username = request.user.username
+    hprofile = Account_HomeOwner.objects.get(username=username)
     if request.method == 'POST':
         full_name = request.POST.get('full_name')
         email = request.POST.get('email')
@@ -216,7 +216,7 @@ def profile(request):
         messages.success(request, "Profile updated successfully")
         return redirect('profile')
     
-    return render(request, "homeowners/profile.html")
+    return render(request, "homeowners/profile.html",{'hprofile':hprofile})
 
 
 @login_required(login_url="hsignin")
@@ -579,11 +579,11 @@ def rate_professional(request, prof_id, ord_id):
                     prof.ratings = rating
                     prof.num_ratings += 1
                     prof.save()
-                    messages.success(request, 'Your rating has been submitted successfully.')
+                    messages.success(request, 'Your rating has been submitted successfully.', extra_tags='rating')
                 else:
                     prof.ratings = (prof.ratings + rating)/2
                     prof.save()
-                    messages.success(request, 'Your rating has been submitted successfully.')
+                    messages.success(request, 'Your rating has been submitted successfully.', extra_tags='rating')
                 prof.save()
                 username = request.user.username
                 if username:
@@ -609,7 +609,7 @@ def rate_professional(request, prof_id, ord_id):
             except Account_Professional.DoesNotExist:
                 return HttpResponseBadRequest('Invalid professional id.')
         else:
-            messages.error(request, 'Please select a rating.')
+            messages.error(request, 'Please select a rating.', extra_tags='rating')
     else:
         return HttpResponseBadRequest('Invalid request method.')
 

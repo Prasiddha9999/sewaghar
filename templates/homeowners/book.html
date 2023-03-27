@@ -4,7 +4,7 @@
     <!-- Middle Section -->
     <br><br>
     <div class="text-center my-5">
-      <h3 class="display-5">Service: <u>{{sk.service}} - {{sk.subservice}}</u></h3>
+      <h3 class="display-5"><b>Service: <u>{{sk.service}} - {{sk.subservice}}</b></u></h3>
       <hr class="w-25 mx-auto"/>
     </div>
     <br>
@@ -12,41 +12,41 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex flex-column">
-          <h3>{{sk.service}} :- {{sk.subservice}}</h3>
-          <figure>
-            <img src="/media/{{servicedata.photo}}" alt="Service Image">
-          </figure>
-          <p>
-       {{servicedata.desc}}
-          </p>
+          <div class="card h-100">
+            <div class="card-body text-center text-decoration-none d-flex flex-column justify-content-between">
+              <h3>{{sk.service}} : {{sk.subservice}}</h3>
+              <figure><img src="/media/{{servicedata.photo}}"  style="max-width:50%; height:auto;" class="img-fluid" alt="Service Image"></figure>
+              <h5 class="card-title"><span style="color: #808080">{{ servicedata.desc }}</span></h5>
+            </div>
+          </div>
+          <div class="nextprevious">
+            <a href="{{request.META.HTTP_REFERER}}" class="btn btn-danger back" role="button">--Back</a>
+          </div>
         </div>
         <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
-          <!-- appointment date time show -->
-<div class="professionals_image">
-    <img src="/media/{{sk.photo}}" class="col-4 rounded float-start" alt="Professioanal Image">
-</div><br>
-<div class="profes_details">
-<h3>Name: {{sk.full_name}}</h3>
-<h5>Age: {{sk.age}}</h5>
-<h5>Location: {{sk.address}}</h5>
-<h5>Service Charge Perhour : {{sk.rateperhour}}</h5>
-<h5>Rating : {{sk.ratings}} out of 5</h5>
-</div>
-<br><br>
-<p>{{sk.desc}}</p>
-
-
-
-<br>
-<div class="bookbtn text-center">
-    <a button type="button" class="btn btn-success" href="{%url 'servicetime' bk=sk.professional_id%}">Select and Choose Time</button></a>
-  </div>
-<br><br>
-
-          <div class="nextprevious">
-            <a button type="button" class="btn btn-danger back" href="{{request.META.HTTP_REFERER}}">--Back</button></a>
+          <div class="professionals_image">
+            <img src="/media/{{sk.photo}}" class="col-4 rounded float-start" alt="Professioanal Image">
           </div>
+          <div class="profes_details" style="display: inline-block; margin-left: 1rem;">
+            <h3>Name: {{sk.full_name}}</h3>
+            <h5>Age: {{sk.age}}</h5>
+            <h5>Location: {{sk.address}}</h5>
+            <h5>Service Charge Perhour : {{sk.rateperhour}}</h5>
+            <h5>Rating : {{sk.ratings}} out of 5</h5>
+          </div>
+          <br><br><br><br>
+          <p>{{sk.desc}}</p>
+          <br>
+          <div class="bookbtn text-center">
+          <a button type="button" class="btn btn-success" href="{%url 'servicetime' bk=sk.professional_id%}">Select and Choose Time</button></a>
+          </div>
+        </div>
+        
 
+
+
+
+<br><br>
         </div>
       </div>
     </div>
@@ -54,6 +54,7 @@
   <br>
   <hr>
   <br>
+ 
   {% include 'homeowners/comment.html' %} 
   {% endblock %}
  

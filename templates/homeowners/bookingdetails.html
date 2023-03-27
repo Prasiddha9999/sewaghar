@@ -4,28 +4,31 @@
     <!-- Middle Section -->
     <br><br>
     <div class="text-center my-5">
-      <h3 class="display-5">Service: <u>{{servicedata.service}} - {{servicedata.subservice}}</u></h3>
+      <h3 class="display-5"><b>Service: <u>{{servicedata.service}} - {{servicedata.subservice}}</b></u></h3>
       <hr class="w-25 mx-auto"/>
     </div>
     <br>
     
     <div class="container">
       <div class="row">
-        <div class="col-lg-6 col-md-6 col-12 d-flex flex-column">
-          <h3>{{servicedata.service}} :- {{servicedata.subservice}}</h3>
-          <figure>
-            <img src="/media/{{servicedata.photo}}" class="img-fluid" alt="Service Image">
-          </figure>
-          <p>
-            {{servicedata.desc}}
-          </p>
-        </div>
-        <div class="col-lg-6 col-md-6 col-12">
-          <!-- appointment date time show -->
-          <div class="professionals_image">
-            <img src="/media/{{ord.professional_id.photo}}"  width="200" height="200" class="rounded float-start" alt="Professional Image">
+        <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex flex-column">
+          <div class="card h-100">
+            <div class="card-body text-center text-decoration-none d-flex flex-column justify-content-between">
+              <h3>{{servicedata.service}} : {{servicedata.subservice}}</h3>
+              <figure><img src="/media/{{servicedata.photo}}"  style="max-width:50%; height:auto;" class="img-fluid" alt="Service Image"></figure>
+              <h5 class="card-title"><span style="color: #808080">{{ servicedata.desc }}</span></h5>
+            </div>
           </div>
-          <div class="profes_details">
+          <div class="nextprevious">
+            <a href="{{request.META.HTTP_REFERER}}" class="btn btn-danger back" role="button">--Back</a>
+          </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
+          <div class="professionals_image">
+            <img src="/media/{{ord.professional_id.photo}}" class="col-4 rounded float-start" alt="Professioanal Image">
+          </div>
+          <div class="profes_details" style="display: inline-block; margin-left: 1rem;">
             <h3>Name: {{ord.professional_id.full_name}}</h3>
             <h5>Age: {{ord.professional_id.age}}</h5>
             <h5>Location: {{ord.professional_id.address}}</h5>
@@ -33,8 +36,8 @@
             <h5>Rating: {{ord.professional_id.ratings}} out of 5</h5>
             <h5>Mobile Number: {{ord.number}}</h5>
           </div>
-          <br><br>
-          <p>{{ord.desc}}</p>
+          <br><br><br><br>
+          <p>{{ord.professional_id.desc}}</p>
           <div class="bookbtn text-center">
             <form method="post" action="{% url 'activates' ord.order_id %}">
               {% csrf_token %}
@@ -59,7 +62,7 @@
                 <form method="POST" action="{% url 'rate_professional' prof_id=ord.professional_id.professional_id ord_id=ord.order_id  %}">
                   {% csrf_token %}
                   <div class="form-floating">
-                      <select class="form-select" type="integer" id="rating" name="rating" aria-label="Floating label select example">
+                      <select class="form-select" type="integer" id="rating" name="rating" aria-label="Floating label select example" required>
                           <option value="" selected>Choose Rating</option>
                           <option value="1">1</option>
                           <option value="2">2</option>
@@ -69,6 +72,17 @@
                       </select>
                       <label for="rating">Rate this professional:</label>
                   </div>
+                  <!-- Messages for rating form -->
+                  {% if messages %}
+                  <div class="errormsg">
+                    {% for message in messages %}
+                      {% if 'rating' in message.tags %}
+                      <h5>{{ message }}</h5>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                  {% endif %}
+          
                   <button type="submit" class="btn btn-primary">Submit Rating</button>
               </form>
               
@@ -112,9 +126,7 @@
 </div>
 <br>
 
-          <div class="nextprevious">
-            <a button type="button" class="btn btn-danger back" href="{{request.META.HTTP_REFERER}}">--Back</button></a>
-          </div>
+       
 
         </div>
       </div>

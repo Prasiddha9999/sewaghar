@@ -8,11 +8,16 @@
       <label for="exampleFormControlTextarea1" class="form-label"><b>Comment</b></label>
       <textarea class="form-control" name="message" id="exampleFormControlTextarea1" rows="3"></textarea>
       <br>
+      {% if messages %}
       <div class="errormsg">
-        {% for message in messages%}
-        <h5>{{message}}</h5>
-        {% endfor%}
-    </div>
+        {% for message in messages %}
+          {% if 'rating' in message.tags %}
+          {%else%}
+          <h5>{{ message }}</h5>
+          {% endif %}
+        {% endfor %}
+      </div>
+      {% endif %}
       <button class="btn btn-primary" type="submit">Post</button>
     </div>
   </form>

@@ -4,19 +4,31 @@
 
     <!-- Middle Section -->
     <br><br>
-    <div class="text-center my-5">
-      <h3 class="display-5">SubSystem: <u>{{s}}</u></h3>
-      <hr class="w-25 mx-auto"/>
-    </div>
-    <br>
+ <div class="text-center my-5">
+        <h3 class="display-5"><b>SubSystem: <u>{{s}}</u></b></h3>
+        <hr class="w-25 mx-auto"/>
+      </div>
 <!-- Services -->
-<div class="container">
-<div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3 d-flex justify-content-evenly">
-  {%for subservice in servs%}
-  <div class="col text-center">
-    <a href="{%url 'servicemanlist' slk=subservice.subservice%}" class="p-3 border bg-light">{{subservice.subservice}}</a>
+<div class="container-fluid px-3 py-2">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-2">
+    {% for subservice in servs %}
+    <div class="col">
+      <div class="card h-100">
+        <a href="{% url 'servicemanlist' slk=subservice.subservice %}" class="card-body text-center text-decoration-none d-flex flex-column justify-content-between">
+          <h5 class="card-title"><span style="color: blue"><u>{{ subservice.subservice }}</u></span></h5>
+          <figure><img src="/media/{{subservice.photo}}" style="max-width:50%; height:auto;" alt="Service Image"></figure>
+          <h5 class="card-title"><span style="color: #808080">{{ subservice.desc }}</span></h5>
+        </a>
+      </div>
+    </div>
+    {% empty %}
+    <div class="errormsg">
+      <h5>Sorry! Service Not Found.</h5>
+    </div>
+    {% endfor %}
   </div>
-  {%endfor%}
+</div>
+
 
 
 </div>
@@ -24,15 +36,10 @@
 <br><br>
 <hr>
 <br><br>
-<div class="text-center">
-<h3>Some Important Facts</h3>
-<hr class="w-25 mx-auto"/>
-</div>
-
-
-
-<div class="container mp-5">
-
+  <div class="text-center">
+    <h3>Some Important Facts</h3>
+    <hr class="w-25 mx-auto"/>
+  </div>
 <div class="container">
   <div class="row">
     <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
@@ -90,7 +97,7 @@
     <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
       <p>
         Home Owners can fare for Price.Home Owners can fare for Price.
-    </p>
+      </p>
     </div>
     <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
       <!-- No field -->
@@ -106,12 +113,11 @@
     <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
       <p>
         Home Owners can find professionals at the nearest Location. Home Owners can find professionals at the nearest Location
-     </p>
+      </p>
     </div>
   </div>
 </div>
-</em></u>
-</div>
+
   <br>
   <hr>
   <br>

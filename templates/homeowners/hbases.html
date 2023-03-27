@@ -130,20 +130,32 @@
     <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">© 2023 Copyright: Sewa Ghar</div>
   </footer>
   <script>
-    //date picker for apppointment
-      $(document).ready(function(){
-        var date_input=$('input[name="date"]'); //our date input has the name "date"
-        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-        var options={
-          format: 'mm/dd/yyyy',
-          container: container,
-          todayHighlight: true,
-          autoclose: true,
-        };
-        date_input.datepicker(options);
-      })
   </script>
-  
   </body>
-  
+  <script>
+     //date picker for apppointment
+     $(document).ready(function(){
+      var date_input=$('input[name="date"]'); //our date input has the name "date"
+      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+      var options={
+        format: 'mm/dd/yyyy',
+        container: container,
+        todayHighlight: true,
+        autoclose: true,
+      };
+      date_input.datepicker(options);
+    })
+    
+    function togglePassword() {
+      var passwordInput = document.getElementById("password");
+      var passwordIcon = document.getElementById("password-icon");
+      if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+          passwordIcon.className = "bi bi-eye";
+      } else {
+          passwordInput.type = "password";
+          passwordIcon.className = "bi bi-eye-slash";
+      }
+    }
+  </script>
   </html>

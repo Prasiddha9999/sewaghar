@@ -2,79 +2,104 @@
 {% block content %}
 {% load static %}
 
-    <!-- Middle Section -->
-    <br><br>
-    <div class="text-center my-5">
-      <h3 class="display-5">SubSystem :- <u> {{servicedata.service}}: {{servicedata.subservice}}</u></h3>
-      <hr class="w-25 mx-auto"/>
-    </div>
-    <br>
-    
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex flex-column">
+<!-- Middle Section -->
+<br><br>
+<div class="text-center my-5">
+  <h3 class="display-5"><b>SubSystem :- <u> {{servicedata.service}}: {{servicedata.subservice}}</u></b></h3>
+  <hr class="w-25 mx-auto"/>
+</div>
+<br>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex flex-column">
+      <div class="card h-100">
+        <div class="card-body text-center text-decoration-none d-flex flex-column justify-content-between">
           <h3>{{servicedata.service}}: {{servicedata.subservice}}</h3>
-          <figure>
-            <img src="/media/{{servicedata.photo}}"  alt="Service Image">
-          </figure>
-          <p>
-          {{servicedata.desc}}
-          </p>
-        </div>
-        <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
-          {% comment %} <!-- appointment date time show -->
-          <div class="container">
-            <div class="row">
-              <div class="col"><h5>Date: 2022/10/15</h5></div>
-              <div class="col"><h5>Time: 10:45 PM</h5></div>         
-            </div>
-            <hr> {% endcomment %}
-
-          <!-- Search Professionals-->
-          <p><b>Filter Professionals by location</b></p>
-          <form method="GET">
-            <div class="input-group px-0">
-              <input type="search" class="form-control rounded" placeholder="Search here......" aria-label="Search" aria-describedby="search-addon" name="q">
-              <button type="submit" class="btn btn-outline-primary">Search</button>
-            </div>
-          </form>   
-
- <!--List of Professionals-->
- <div class="table-wrapper-scroll-y container mt-3 my-custom-scrollbar">
-          <table class="table border table-hover">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Location</th>
-                <th scope="col">Rating</th>
-                <th scope="col">More</th>
-              </tr>
-            </thead>
-            <tbody>
-              {%for i in servs%}
-              <tr>
-                <th scope="row">{{i.professional_id}}</th>
-                <td>{{i.full_name}}</td>
-                <td>{{i.address}}</td>
-                <td>{{i.ratings}} out of 5</td>
-                <td><a href="{%url 'book' sml=i.professional_id%}">View More<a></td>
-              </tr>
-             {%endfor%}
-              
-            </tbody>
-          </table>
-        </div>
-
-          </div>
-
-          <div class="nextprevious">
-            <a button type="button" class="btn btn-danger back" href="{{request.META.HTTP_REFERER}}">--Back</button></a>
-          </div>
-
+          <figure><img src="/media/{{servicedata.photo}}"  style="max-width:50%; height:auto;" class="img-fluid" alt="Service Image"></figure>
+          <h5 class="card-title"><span style="color: #808080">{{ servicedata.desc }}</span></h5>
         </div>
       </div>
+      <div class="nextprevious">
+        <a href="{{request.META.HTTP_REFERER}}" class="btn btn-danger back" role="button">--Back</a>
+      </div>
     </div>
+    
+    <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
+     <!-- Filter form -->
+  <p><b>Filter Professionals by location</b></p>
+  <form method="GET">
+    <div class="input-group px-0">
+      <input type="search" class="form-control rounded" placeholder="Search here......" aria-label="Search" aria-describedby="search-addon" name="city">
+      <button type="submit" class="btn btn-outline-primary">Search</button>
+    </div>
+  </form>
+
+<!--List of Professionals-->
+<div class="table-responsive container mt-3 my-custom-scrollbar">
+  <table class="table border table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Location</th>
+        <th scope="col">Rating</th>
+        <th scope="col">More</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in servs %}
+      <tr>
+        <th scope="row">{{i.professional_id}}</th>
+        <td>{{i.full_name}}</td>
+        <td>{{i.address}}</td>
+        <td>{{i.ratings}} out of 5</td>
+        <td><a href="{% url 'book' sml=i.professional_id %}">View More</a></td>
+      </tr>
+      {% empty %}
+      <div class="errormsg">
+        <h5>Sorry! No Professionals Found.</h5>
+      </div>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Get the search query from the URL parameter
+  const searchQuery = new URLSearchParams(window.location.search).get('city');
+
+  // Populate the search form with the search query
+  const searchBar = document.querySelector('input[name="city"]');
+  searchBar.value = searchQuery;
+
+  // Filter the professionals based on the search query
+  const professionalsList = document.querySelector('tbody');
+  Array.from(professionalsList.children).forEach(professional => {
+    const location = professional.querySelector('td:nth-child(3)').textContent.toLowerCase();
+    if (!location.includes(searchQuery.toLowerCase())) {
+      professional.style.display = 'none';
+    }
+  });
+
+  // Filter the professionals as you type in the search box
+  searchBar.addEventListener('input', () => {
+    const searchValue = searchBar.value.toLowerCase();
+    Array.from(professionalsList.children).forEach(professional => {
+      const location = professional.querySelector('td:nth-child(3)').textContent.toLowerCase();
+      if (!location.includes(searchValue)) {
+        professional.style.display = 'none';
+      } else {
+        professional.style.display = '';
+      }
+    });
+  });
+</script>
+
+
+
     
   <br>
   <hr>
