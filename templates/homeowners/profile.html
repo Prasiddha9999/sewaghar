@@ -22,69 +22,34 @@
                 {% csrf_token %}
                 <div class="form-outline mb-4">
                     <label class="form-label" for="name">Full Name</label>
-                    {% if edit %}
                         <input type="text" id="name" name="full_name" class="form-control" value="{{hprofile.full_name}}" required/>
-                    {% else %}
-                        <input type="text" id="name" name="full_name" class="form-control" placeholder="{{hprofile.full_name}}" required/>
-                    {% endif %}
                 </div>
             
                 <div class="form-outline mb-4">
                     <label class="form-label" for="username">Username</label>
-                    {% if edit %}
                         <input type="text" id="username" name="username" class="form-control" value="{{hprofile.username}}" required/>
-                    {% else %}
-                        <input type="text" id="username" name="username" class="form-control" placeholder="{{hprofile.username}}" required/>
-                    {% endif %}
                 </div>
             
                 <div class="form-outline mb-4">
-                    <label class="form-label" for="homeemail">Email</label>
-                    {% if edit %}
-                        <input type="email" id="homeemail" name="email" class="form-control" value="{{hprofile.email}}" required/>
-                    {% else %}
-                        <input type="email" id="homeemail" name="email" class="form-control" placeholder="{{hprofile.email}}" required/>
-                    {% endif %}
+                    <label class="form-label" for="homeemail">Email</label>      
+                        <input type="email" id="homeemail" name="email" class="form-control" value="{{hprofile.email}}" required/>  
                 </div>
             
                 <div class="form-outline mb-4">
                     <label class="form-label" for="number">Contact Number</label>
-                    {% if edit %}
                         <input type="text" id="number" name="number" class="form-control" value="{{hprofile.number}}" required/>
-                    {% else %}
-                        <input type="text" id="number" name="number" class="form-control" placeholder="{{hprofile.number}}" required/>
-                    {% endif %}
                 </div>
             
                 <div class="form-outline mb-4">
                     <label class="form-label" for="address">Address</label>
-                    {% if edit %}
                         <input type="text" id="address" name="address" class="form-control" value="{{hprofile.address}}" required/>
-                    {% else %}
-                        <input type="text" id="address" name="address" class="form-control" placeholder="{{hprofile.address}}" required/>
-                    {% endif %}
-                </div>
-            
-                <div class="form-outline mb-4">
-                    <label class="form-label" for="password">Password</label>
-                    {% if edit %}
-                        <div class="input-group">
-                            <input type="password" id="password" name="password" class="form-control" value="{{hprofile.password}}" required />
-                            <button class="btn btn-outline-secondary" type="button" onclick="togglePassword()">
-                                <i id="password-icon" class="bi bi-eye-slash"></i>
-                            </button>
-                        </div>
-                    {% else %}
-                        <input type="password" id="password" name="password" class="form-control" placeholder="{{hprofile.password}}" required />
-                    {% endif %}
                 </div>
             
                 <div class="mb-3">
                   <label for="photo" class="form-label">Attached Your Photo</label>
-                  <input class="form-control" name="photo" type="file" id="photo" accept="image/*" required>
+                  <input class="form-control" name="photo" type="file" id="photo" accept="image/*">
                 </div>
-                
-              
+
               <!-- if some error dispaly message here-->
               <div class="errormsg">
                 {% for message in messages%}

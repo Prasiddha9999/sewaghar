@@ -127,7 +127,18 @@
   <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">© 2023 Copyright: Sewa Ghar</div>
 </footer>
 
-<script src="{% static 'Javascript/loadServiceData.js' %}"></script>  
 </body>
-
+<script>
+  function togglePassword() {
+    var passwordInput = document.getElementById("homepassword");
+    var passwordIcon = document.getElementById("password-icon");
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        passwordIcon.className = "bi bi-eye";
+    } else {
+        passwordInput.type = "password";
+        passwordIcon.className = "bi bi-eye-slash";
+    }
+  }
+</script>
 </html>

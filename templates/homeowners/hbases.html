@@ -53,7 +53,8 @@
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <li class="dropdown-item" aria-disabled="true"></li>{{user.username}}</a></li>
-                <li><a class="dropdown-item" href="{% url 'profile' %}">My Profile</a></li>
+                <li><a class="dropdown-item" href="{% url 'viewprofile' %}">My Profile</a></li>
+                <li><a class="dropdown-item" href="{% url 'changepassword' %}">Change Password</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="{% url 'user_logout' %}">Logout</a></li>
               </ul>
@@ -133,19 +134,6 @@
   </script>
   </body>
   <script>
-     //date picker for apppointment
-     $(document).ready(function(){
-      var date_input=$('input[name="date"]'); //our date input has the name "date"
-      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-      var options={
-        format: 'mm/dd/yyyy',
-        container: container,
-        todayHighlight: true,
-        autoclose: true,
-      };
-      date_input.datepicker(options);
-    })
-    
     function togglePassword() {
       var passwordInput = document.getElementById("password");
       var passwordIcon = document.getElementById("password-icon");

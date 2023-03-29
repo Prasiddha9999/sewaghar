@@ -20,8 +20,8 @@
     {% for i in serv %}
     <div class="col">
       <div class="card h-100">
-        <a href="{% url 'subservice' sk=i.service %}" class="card-body text-center">
-          <h5 class="card-title">{{ i.service }}</h5>
+        <a href="{% url 'subservice' sk=i.service %}" class="card-body text-center text-decoration-none">
+          <h5 class="card-title"><span style="color: blue">{{ i.service }}</span></h5>
         </a>
       </div>
     </div>

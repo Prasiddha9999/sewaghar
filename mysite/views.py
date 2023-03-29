@@ -188,40 +188,60 @@ def notification(request):
 def profile(request):
     username = request.user.username
     hprofile = Account_HomeOwner.objects.get(username=username)
+    mainhprofile = User.objects.get(username=username)
     if request.method == 'POST':
         full_name = request.POST.get('full_name')
         email = request.POST.get('email')
         number = request.POST.get('number')
         address = request.POST.get('address')
         photo = request.FILES.get('photo')
-        password = request.POST.get('password')
         username = request.POST.get('username')
 
         # Retrieve the user's Account_HomeOwner object and update its fields
-        user_account = request.user.account_homeowner
-        user_account.full_name = full_name
-        user_account.email = email
-        user_account.number = number
-        user_account.address = address
-        user_account.password = password
-        user_account.username = username
-
-        # Check if a new photo has been uploaded and update it if it has
+        mainhprofile.username = username
+        mainhprofile.email = email
+        mainhprofile.save()
+        
+        hprofile.full_name = full_name
+        hprofile.email = email
+        hprofile.number = number
+        hprofile.address = address
         if photo:
-            user_account.photo = photo
-        
-        # Save the changes to the user's Account_HomeOwner object
-        user_account.save()
-        
+            hprofile.photo = photo
+        hprofile.username = username
+        hprofile.save() 
         messages.success(request, "Profile updated successfully")
-        return redirect('profile')
     
     return render(request, "homeowners/profile.html",{'hprofile':hprofile})
+
+from django.contrib.auth.hashers import make_password
+@login_required(login_url="hsignin")
+def changepassword(request):
+    username = request.user.username
+    hprofile = Account_HomeOwner.objects.get(username=username)
+    mainhprofile = User.objects.get(username=username)
+    if request.method == 'POST':
+        password = request.POST.get('password')
+
+        # Retrieve the user's Account_HomeOwner object and update its fields
+        mainhprofile.password = make_password(password)
+        mainhprofile.save()
+        hprofile.password = make_password(password)
+        hprofile.save() 
+        messages.success(request, "Password updated successfully")
+    
+    return render(request, "homeowners/changepassword.html",{'hprofile':hprofile})
+
+@login_required(login_url="hsignin")
+def viewprofile(request):
+    username = request.user.username
+    hprofile = Account_HomeOwner.objects.get(username=username)
+    return render(request, "homeowners/viewprofile.html",{'hprofile':hprofile})
 
 
 @login_required(login_url="hsignin")
 def bookings(request):
-    ord = Order.objects.all()
+    ord = Order.objects.order_by('-date')
     return render(request, "homeowners/bookings.html",{'ord':ord})
 
 @login_required(login_url="hsignin")
@@ -235,10 +255,6 @@ def bookingdetails(request,od):
     professional = Account_Professional.objects.get(professional_id=ord.professional_id.professional_id)
     if ord.status == 'cancel':
         status = 'Cancel'
-    elif ord.status == 'solve':
-        status = 'Solve'
-    else:
-        status = 'Book'
         notification = Notification.objects.create(
             notification= f"Hey {professional.full_name}, your Request id {ord.order_id} has been Cancelled by {homeowner.full_name}.",
             classification="Professional",
@@ -256,6 +272,11 @@ def bookingdetails(request,od):
             classification="Admin",
             )
         notificationss.save()
+    elif ord.status == 'solve':
+        status = 'Solve'
+    else:
+        status = 'Book'
+        
     if request.method == 'POST':
         amount = int(request.POST['amount'])
         if amount:
@@ -284,7 +305,7 @@ def requestdetails(request,rd):
     elif ord.status == 'solve':
         status = 'Solve'
         notification = Notification.objects.create(
-            notification= f"Hey {professional.full_name}, Thankyou for Solving request id {ord.order_id} request by {homeowner.full_name}.",
+            notification= f"Hey {professional.full_name}, Thankyou for Solving request id {ord.order_id} requested by {homeowner.full_name}.",
             classification="Professional",
             professional_id =  professional
             )

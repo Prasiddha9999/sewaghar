@@ -41,6 +41,9 @@ urlpatterns = [
     
     path("notification",views.notification, name="notification"),
     path("profile",views.profile, name="profile"),
+    path("viewprofile",views.viewprofile, name="viewprofile"),
+    
+    path("changepassword",views.changepassword, name="changepassword"),
     path("bookings",views.bookings, name="bookings"),
     path("bookingdetails/<int:od>",views.bookingdetails, name="bookingdetails"),
     path('bookingdetails/<int:pk>', views.bookingdetails, name='bookingdetails'),
