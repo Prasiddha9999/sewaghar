@@ -1,7 +1,5 @@
 from django.shortcuts import render, get_list_or_404, get_object_or_404, redirect
-from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
-from django.http import HttpResponseRedirect
 from account.models import Account_HomeOwner
 from account.models import Account_Professional
 from account.models import Order
@@ -10,12 +8,11 @@ from account.models import Service_List
 from account.models import Notification
 from account.models import Message
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseBadRequest
-from django.utils import timezone
 from django.db.models import Q
 from datetime import datetime
+from django.contrib import messages as django_messages
 
 
 
@@ -187,6 +184,8 @@ def notification(request):
 @login_required(login_url="hsignin")
 def profile(request):
     username = request.user.username
+    checkuser = request.user.username
+    checkemail = request.user.email
     hprofile = Account_HomeOwner.objects.get(username=username)
     mainhprofile = User.objects.get(username=username)
     if request.method == 'POST':
@@ -197,6 +196,14 @@ def profile(request):
         photo = request.FILES.get('photo')
         username = request.POST.get('username')
 
+        if User.objects.filter(username=username).exclude(username=request.user.username).exists():
+            messages.info(request, "Username already exists")
+            return redirect('profile')
+        
+        if User.objects.filter(email=email, is_professional=True).exclude(email=request.user.email).exists():
+            messages.info(request, "Email already exists")
+            return redirect('profile')
+        
         # Retrieve the user's Account_HomeOwner object and update its fields
         mainhprofile.username = username
         mainhprofile.email = email
@@ -241,7 +248,9 @@ def viewprofile(request):
 
 @login_required(login_url="hsignin")
 def bookings(request):
-    ord = Order.objects.order_by('-date')
+    username = request.user.username
+    alldata = Account_HomeOwner.objects.get(username=username)
+    ord = Order.objects.filter(homeowner_id=alldata.homeowner_id).order_by('-date')
     return render(request, "homeowners/bookings.html",{'ord':ord})
 
 @login_required(login_url="hsignin")
@@ -295,7 +304,7 @@ def bookingdetails(request,od):
         return redirect(request.path)
     return render(request, "homeowners/bookingdetails.html",{'ord':ord, 'status':status, 'servicedata': servicedata})
 
-
+@login_required(login_url="psignin")
 def requestdetails(request,rd):
     ord = Order.objects.get(order_id=rd)
     homeowner = Account_HomeOwner.objects.get(homeowner_id=ord.homeowner_id.homeowner_id)
@@ -325,13 +334,82 @@ def requestdetails(request,rd):
         status = 'Book'
     return render(request, "professionals/requestdetails.html",{'ord':ord, 'status':status})
 
-
+@login_required(login_url="psignin")
 def request(request):
+    username = request.user.username
     ord = Order.objects.all()
+    alldata = Account_Professional.objects.get(username=username)
+    ord = Order.objects.filter(professional_id=alldata.professional_id).order_by('-date')
     return render(request, "professionals/request.html",{'ord':ord})
 
+@login_required(login_url="psignin")
 def professionalprofile(request):
-    return render(request, "professionals/professionalprofile.html")
+    username = request.user.username
+    po = Account_Professional.objects.get(username=username)
+    mainpprofile = User.objects.get(username=username)
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        full_name = request.POST.get('full_name')
+        email = request.POST.get('email')
+        number = request.POST.get('number')
+        address = request.POST.get('address')
+        age = request.POST.get('age')
+        gender = request.POST.get('gender')
+        exprience = request.POST.get('exprience')
+        rateperhour = request.POST.get('rateperhour')
+        photo = request.FILES.get('photo')
+        desc = request.POST.get('desc')
+        
+        if User.objects.filter(username=username).exclude(username=request.user.username).exists():
+            messages.info(request, "Username already exists")
+            return redirect('professionalprofile')
+               
+        if User.objects.filter(email=email, is_professional=True).exclude(email=request.user.email).exists():
+            messages.info(request, "Email already exists")
+            return redirect('professionalprofile')
+        
+        # Retrieve the user's Account_HomeOwner object and update its fields
+        mainpprofile.username = username
+        mainpprofile.email = email
+        mainpprofile.save()
+        
+        po.full_name = full_name
+        po.email = email
+        po.number = number
+        po.username = username
+        po.address = address
+        po.age = age
+        po.gender = gender
+        po.exprience = exprience
+        po.rateperhour = rateperhour
+        if photo:
+            po.photo = photo
+        po.desc = desc
+        po.save() 
+        messages.success(request, "Profile updated successfully")
+    return render(request, "professionals/professionalprofile.html",{'po':po})
+
+@login_required(login_url="psignin")
+def professionalchangepassword(request):
+    username = request.user.username
+    po = Account_Professional.objects.get(username=username)
+    mainpprofile = User.objects.get(username=username)
+    if request.method == 'POST':
+        password = request.POST.get('password')
+
+        # Retrieve the user's Account_HomeOwner object and update its fields
+        mainpprofile.password = make_password(password)
+        mainpprofile.save()
+        po.password = make_password(password)
+        po.save() 
+        messages.success(request, "Password updated successfully")
+    return render(request, "professionals/professionalchangepassword.html",{'po':po})
+
+def professionalviewprofile(request):
+    username = request.user.username
+    po = Account_Professional.objects.get(username=username)
+    return render(request, "professionals/professionalviewprofile.html",{'po':po})
+  
 
 @login_required(login_url="psignin")
 def professionalnotification(request):
@@ -563,7 +641,8 @@ def update_my_model(request, service_id):
         
     return render(request, 'adminservicedetail', {'serv': serv})
 
-from django.contrib import messages as django_messages
+
+@login_required(login_url=["hsignin", "psignin"])
 def usermessage(request):
     if request.method == "POST":
         message = request.POST.get('message')
@@ -587,7 +666,7 @@ def usermessage(request):
   
     return redirect(request.META['HTTP_REFERER'])
 
-
+@login_required(login_url=["hsignin", "psignin"])
 def rate_professional(request, prof_id, ord_id):
     print(prof_id)
     if request.method == 'POST':

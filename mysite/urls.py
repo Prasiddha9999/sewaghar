@@ -49,7 +49,12 @@ urlpatterns = [
     path('bookingdetails/<int:pk>', views.bookingdetails, name='bookingdetails'),
     path("requestdetails<int:rd>",views.requestdetails, name="requestdetails"),
     path("request",views.request, name="request"),
+    
     path("professionalprofile",views.professionalprofile, name="professionalprofile"),
+    path("professionalviewprofile",views.professionalviewprofile, name="professionalviewprofile"),
+    path("professionalchangepassword",views.professionalchangepassword, name="professionalchangepassword"),
+    
+    
     path("professionalnotification",views.professionalnotification, name="professionalnotification"),
     path("adminhomepage",views.adminhomepage, name="adminhomepage"),
     path("admincreateservice",views.admincreateservice, name="admincreateservice"),

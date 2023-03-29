@@ -1,0 +1,43 @@
+{% extends 'professionals/pbases.html'%}
+{% block content %}
+{% load static %}
+    <!-- Middle Section -->
+    <br><br>
+    <div class="text-center my-5">
+      <h3 class="display-5">My Profile</h3>
+      <hr class="w-25 mx-auto">
+    </div>
+    <br>
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-5 col-md-5 col-12 col-xxl-5 d-flex flex-column">
+            <div class="professionals_image">
+                <img src="{% static 'images/professionals.jpg'%}" class="col-8 rounded float-start" alt="Professioanal Image">
+            </div>
+        </div>
+        <div class="col-lg-7 col-md-7 col-12 col-xxl-7">
+          <div class="Professional_details">
+            <br>
+            <h5>Name: {{po.full_name}}</h5>
+            <h5>Username: {{po.username}}</h5>
+            <h5>Email: {{po.email}}</h5>
+            <h5>Mobile Number: {{po.number}}</h5>
+            <h5>Address: {{po.address}}</h5>
+            <h5>Age: {{po.age}}</h5>
+            <h5>Gender: {{po.gender}}</h5>
+            <h5>Service: {{po.service}}</h5>
+            <h5>Sub-service: {{po.subservice}}</h5>
+            <h5>Exprience: {{po.exprience}} -year</h5>
+            <h5>Description: {{po.desc}}</h5>
+            <h5>Ratting: {{po.ratings}} out of 5</h5>
+            <br>
+        </div>
+          <div class="text-center pt-1 mb-5 pb-1">
+          <a href="{% url 'professionalprofile' %}" class="btn btn-outline-success">Edit Profile</button><br></a>
+          </div>
+        </div>
+        <br><br>
+    </div>
+</div>
+{% endblock %}
