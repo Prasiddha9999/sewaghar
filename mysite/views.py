@@ -286,6 +286,7 @@ def bookingdetails(request,od):
     else:
         status = 'Book'
         
+    #cash Payment
     if request.method == 'POST':
         amount = int(request.POST['amount'])
         if amount:
@@ -493,7 +494,7 @@ def adminservicedetail(request, pk):
     serv = All_Service.objects.get(service_id=pk)
     if request.method == "POST":
         subservice = request.POST.get('subservice')
-        photo = request.POST.get('photo')
+        photo = request.FILES.get('photo')
         desc = request.POST.get('desc')
         
         # Update the existing instance with the new values
@@ -647,20 +648,18 @@ def usermessage(request):
     if request.method == "POST":
         message = request.POST.get('message')
         print(message)
-        username = ""
+        usernamea = ""
+        usernameb = ""
         try:
-            username = Account_HomeOwner.objects.get(username=request.user.username)
+            usernamea = Account_HomeOwner.objects.get(username=request.user.username)
         except Account_HomeOwner.DoesNotExist:
             try:
-                username = Account_Professional.objects.get(username=request.user.username)
+                usernameb = Account_Professional.objects.get(username=request.user.username)
             except Account_Professional.DoesNotExist:
                 django_messages.info(request, 'Please Send Again.')
                 return redirect(request.META['HTTP_REFERER'])
         
-        message_instance = Message(
-            homeowner_id=username, 
-            message=message,
-        )
+        message_instance = Message(homeowner_id=usernamea if usernamea else None, professional_id=usernameb if usernameb else None, message=message)
         message_instance.save() 
         django_messages.info(request, 'Thank-you for your valuable feedback.')
   

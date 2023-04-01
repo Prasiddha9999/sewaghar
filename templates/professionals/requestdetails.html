@@ -14,7 +14,7 @@
       <div class="row">
         <div class="col-lg-5 col-md-5 col-12 col-xxl-5 d-flex flex-column">
             <div class="professionals_image">
-                <img src="{% static 'images/professionals.jpg'%}" class="col-8 rounded float-start" alt="Professioanal Image">
+                <img src="/media/{{ord.professional_id.photo}}" class="col-8 rounded float-start" alt="Professioanal Image">
             </div>
         </div>
         <div class="col-lg-7 col-md-7 col-12 col-xxl-7">
@@ -25,7 +25,7 @@
                 <div class="col"><h5>Time: {{ord.time}}</h5></div>         
             </div>
               <hr>
-        <h3>Name: {{ord.professional_id.full_name}}</h3>
+        <h3>Name: {{ord.homeowner_id.full_name}}</h3>
         <h5>Location: {{ord.address}}</h5>
         <h5>Home no: {{ord.houseno}}</h5>
         <h5>Mobile no: {{ord.number}}</h5>
@@ -51,6 +51,13 @@
             <p>Thankyou for your valuable work</p>
             {% if ord.payment_amount is null %}
             <p>Total Time-taken: {{ord.totaltimehour}} hour</p>
+            <script>
+              let x = {{ ord.totaltimehour }};
+              let y = {{ ord.professional_id.rateperhour }};
+              let z = x * y;
+              console.log(z);
+            </script>
+          <p>Total Amount to pay: Rs. <script>document.write(z)</script></p> 
             <button type="submit" name="status" value="book" disabled="notEditMode" class="btn btn-success">Solved</button>
             <p>Pending for Payment..</p>
         </form>

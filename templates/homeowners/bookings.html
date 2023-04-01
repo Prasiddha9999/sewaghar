@@ -13,7 +13,7 @@
         <table class="table border table-hover">
           <thead>
             <tr>
-                <th scope="col">#</th>
+                <th scope="col">Id</th>
                 <th scope="col">Name</th>
                 <th scope="col">Service</th>
                 <th scope="col">Date & Time</th>
@@ -25,7 +25,7 @@
             {%for i in ord%}
             <tr>
                 <th scope="row">{{i.order_id}}</th>
-                <td>{{i.professional_id}}</td>
+                <td>{{i.professional_id.full_name}}</td>
                 <td>{{i.professional_id.service}}-{{i.professional_id.subservice}}</td>
                 <td>{{i.date}} - {{i.time}}</td>
                 <td><a href="{%url 'bookingdetails' od=i.order_id%}">viewmore</a></td>

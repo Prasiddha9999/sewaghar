@@ -28,7 +28,8 @@
 </head>
 <body>
     <!-- Nav Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top py-0">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top py-0" style="background: rgb(2,0,36);
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,53,121,0.1517857142857143) 0%, rgba(0,212,255,0.1517857142857143) 100%);">
         <div class="container">
           
           <a class="navbar-brand" href="{% url 'home' %}">
@@ -43,10 +44,10 @@
                 <a class="nav-link" href="{% url 'hsignin' %}">Book the Service</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'aboutus' %}" target="_blank">AboutUs</a>
+                <a class="nav-link" href="{% url 'aboutus' %}">AboutUs</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'blog' %}" target="_blank">Blog</a>
+                <a class="nav-link" href="{% url 'blog' %}">Blog</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'hsignin' %}">For Home Owner</a>
@@ -59,7 +60,14 @@
       </div>
       </nav>
 
-
+      <style>
+        body {
+          background-image: url({% static 'images/back1.jpg' %});
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-position: center center;
+        }
+      </style>
 <!--Main layout-->
 {% block content %}
 
@@ -67,70 +75,60 @@
 <!--Main layout-->
 
       <!-- footer -->
-<footer class="text-center text-lg-start text-white mt-5" style="background-color: #323742">
-  <div class="container p-4 pb-0">
-    <section class="">
-      <div class="row">
-        
-      <!-- Grid column -->
-      <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
-        <h6 class="text-uppercase mb-4 font-weight-bold">---About---</h6>
-        <p><a class="text-white" href="{% url 'blog' %}" target="_blank">BLOG</a></p>
-        <p><a class="text-white" href="{% url 'aboutus' %}" target="_blank">ABOUT US</a></p>
-        <p><a class="text-white" href="{% url 'privacypolicy' %}" target="_blank">PRIVACY POLICY</a></p>
-        <p><a class="text-white" href="{% url 'termsandcondition' %}" target="_blank">TERMS AND CONDITION</a></p>
-      </div>
-
-        <!-- Grid column -->
-        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
-          <h6 class="text-uppercase mb-4 font-weight-bold">---Service---</h6>
-          <p class="text-white">- Home Repairs</p>
-          <p class="text-white">- Carpenter</p>
-          <p class="text-white">- Painter</p>
-          <p class="text-white">- Computer Repair</p>
-          <p class="text-white">- Electrician</p>
-          <p class="text-white">- Plumber</p>
-       
+      <footer class="text-center text-lg-start text-white" style="background-color: #323742">
+        <div class="container p-4 pb-0">
+          <div class="row">
+            <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+              <h6 class="text-uppercase mb-4 font-weight-bold">---About---</h6>
+              <p><a class="text-white" href="{% url 'blog' %} ">BLOG</a></p>
+              <p><a class="text-white" href="{% url 'aboutus' %}">ABOUT US</a></p>
+              <p><a class="text-white" href="{% url 'privacypolicy' %}">PRIVACY POLICY</a></p>
+              <p><a class="text-white" href="{% url 'termsandcondition' %}">TERMS AND CONDITION</a></p>
+            </div>
+            <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+              <h6 class="text-uppercase mb-4 font-weight-bold">---Service---</h6>
+              <p class="text-white">- Home Repairs</p>
+              <p class="text-white">- Carpenter</p>
+              <p class="text-white">- Painter</p>
+              <p class="text-white">- Computer Repair</p>
+              <p class="text-white">- Electrician</p>
+              <p class="text-white">- Plumber</p>
+            </div>
+            <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
+              <h6 class="text-uppercase mb-4 font-weight-bold">Contact</h6>
+              <p><i class="fa fa-home mr-3"></i> Balaju "8" Kathmandu</p>
+              <p><i class="fa fa-envelope mr-3"></i> sajilosewa@gmail.com</p>
+              <p><i class="fa fa-phone mr-3"></i> 9863144095</p>
+            </div>
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+              <h6 class="text-uppercase mb-4 font-weight-bold text-center" style="color: #e9724a">Sewa Ghar</h6>
+              <img src="{% static 'images/map.png'%}" class="d-block w-100 mb-2" alt="Map of Sewa Ghar">
+              <div class="icon">
+                <a class="btn btn-primary btn-floating m-1" style="background-color: #3b5998" href="https://www.facebook.com/profile.php?id=100091409652130&is_tour_dismissed=true" role="button"><i class="fa fa-facebook"></i></a>
+                <a class="btn btn-primary btn-floating m-1" style="background-color: #0082ca" href="https://mail.google.com/mail/?view=cm&fs=1&to=sewagharservice@gmail.com&su=SUBJECT&body=BODY" role="button"><i class="fa fa-envelope"></i></a>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <!-- Grid column -->
-        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
-          <h6 class="text-uppercase mb-4 font-weight-bold">Contact</h6>
-          <p><i class="fa fa-home mr-3"></i> Balaju "8" Kathmandu</p>
-          <p><i class="fa fa-envelope mr-3"></i> sajilosewa@gmail.com</p>
-          <p><i class="fa fa-phone mr-3"></i> 9863144095</p>
-        
-          
-        </div>
-
-        <!-- Grid column -->
-        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
-          <h6 class="text-uppercase mb-4 font-weight-bold text-center" style="color: #e9724a">Sewa Ghar</h6>
-          
-          <!-- map -->
-          <img src="{% static 'images/map.png'%}" class="d-block w-100 mb-2" alt="Map of Sewa Ghar">
-          <!-- Icon -->
-          <div class="icon">
-            <!-- Facebook -->
-
-         <a class="btn btn-primary btn-floating m-1" style="background-color: #3b5998" href="www.facebook.com" role="button"><i class="fa fa-facebook"></i></a>
-        <a class="btn btn-primary btn-floating m-1" style="background-color: #55acee" href="www.twitter.com" role="button"><i class="fa fa-twitter"></i></a>
-         <a class="btn btn-primary btn-floating m-1" style="background-color: #e1496f" href="www.instagram.com" role="button"><i class="fa fa-instagram"></i></a>
-         <a class="btn btn-primary btn-floating m-1" style="background-color: #0082ca" href="www.linkedin.com" role="button"><i class="fa fa-linkedin"></i></a>
-        </div>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <!-- Copyright -->
-  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">© 2023 Copyright: Sewa Ghar</div>
-</footer>
+        <div class="text-center py-3" style="background-color: rgba(0, 0, 0, 0.2)">© 2023 Copyright: Sewa Ghar</div>
+  </footer>
 
 </body>
 <script>
   function togglePassword() {
     var passwordInput = document.getElementById("homepassword");
+    var passwordIcon = document.getElementById("password-icon");
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        passwordIcon.className = "bi bi-eye";
+    } else {
+        passwordInput.type = "password";
+        passwordIcon.className = "bi bi-eye-slash";
+    }
+  }
+
+  function togglePassword1() {
+    var passwordInput = document.getElementById("homepassword1");
     var passwordIcon = document.getElementById("password-icon");
     if (passwordInput.type === "password") {
         passwordInput.type = "text";

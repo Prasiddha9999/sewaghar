@@ -33,12 +33,13 @@
                 <div class="mb-3">
                   <div><img src="/media/{{serv.photo}}" width="150" height="150" alt=""></div> 
                   <label for="photo" class="form-label">Upload Photo to Update</label>
-                  <input value="/media/{{serv.photo}}" class="form-control" name='photo' type="file" id="photo" >
+                    <input class="form-control" name="photo" type="file" id="photo" accept="image/*">
                 </div> 
-
+                <div>
                       <label>Description</label>
                       <input value="{{serv.desc}}" type="textarea" class="form-control" name='desc' id="exampleFormControlTextarea1" rows="1"></input>
-                  </div>
+                </div>
+                    </div>
 
               <div class="editbtn text-end">
                 <br>

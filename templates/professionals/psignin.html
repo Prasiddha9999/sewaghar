@@ -19,8 +19,13 @@
   
                     <div class="form-outline mb-4">
                     <label class="form-label" for="password">Password</label> 
-                    <input type="password" id="password" name = "password" class="form-control" placeholder="Enter your Password" required/>
+                    <div class="input-group">
+                    <input type="password" id="homepassword" name = "password" class="form-control" placeholder="Enter your Password" required/>
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePassword()"><i id="password-icon" class="bi bi-eye-slash"></i></button>
                     </div>
+                    </div>
+
+                   
   
                      <!-- if user gives wrong data dispaly here -->
                      <div class="errormsg">

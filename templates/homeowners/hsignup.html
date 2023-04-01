@@ -39,15 +39,23 @@
                         <input type="text" id="name" name = "address" class="form-control" placeholder="Enter your Address" required/>
                         </div>
   
-                    <div class="form-outline mb-4">
-                    <label class="form-label" for="homepassword1">Password</label>
-                    <input type="password" id="password" name = "password" class="form-control" placeholder="Enter your Password" required/>
-                    </div>
+                        <div class="form-outline mb-4">
+                          <label class="form-label" for="homepassword1">Password</label>
+                          <div class="input-group">
+                          <input type="password" id="homepassword" name = "password" class="form-control" placeholder="Enter the Password" required/>
+                          <button class="btn btn-outline-secondary" type="button" onclick="togglePassword()"><i id="password-icon" class="bi bi-eye-slash"></i></button>
+                          </div>
 
-                    <div class="form-outline mb-4">
-                      <label class="form-label" for="homepassword2">Conform Password</label>
-                      <input type="password" id="homepassword1" name = "homepassword1" class="form-control" placeholder="Enter your Password" required/>
-                      </div> 
+                          <label class="form-label" for="homepassword2">Conform Password</label>
+                          <div class="input-group">
+                          <input type="password" id="homepassword1" name = "homepassword1" class="form-control" placeholder="Enter the onform Password" required/>
+                          <button class="btn btn-outline-secondary" type="button" onclick="togglePassword1()"><i id="password-icon" class="bi bi-eye-slash"></i></button>
+                          </div>
+                        </div>
+
+                        <script>
+                          
+                        </script>
 
                     <div class="mb-3">
                       <label for="photo" class="form-label">Attached Your Photo</label>

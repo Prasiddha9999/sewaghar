@@ -118,14 +118,22 @@
                       <textarea class="form-control" id="desc" rows="2"minlength="10" name="desc" placeholder="Write about your exprience." required></textarea>
                     </div>
 
-                  <div class="form-outline mb-4">
-                    <label class="form-label" for="password">Password</label>
-                    <input type="password" id="password" class="form-control" name="password" placeholder="Create your Password" required/>
-                    </div>
                     <div class="form-outline mb-4">
-                      <label class="form-label" for="password1">Conform Password</label>
-                      <input type="password" id="password1" class="form-control" name="password1" placeholder="Create your Password" required/>
+                      <label class="form-label" for="password">Password</label> 
+                      <div class="input-group">
+                      <input type="password" id="homepassword" name = "password" class="form-control" placeholder="Enter your Password" required/>
+                      <button class="btn btn-outline-secondary" type="button" onclick="togglePassword()"><i id="password-icon" class="bi bi-eye-slash"></i></button>
                       </div>
+                      </div>
+
+
+                      <div class="form-outline mb-4">
+                        <label class="form-label" for="password">Conform Password</label> 
+                        <div class="input-group">
+                        <input type="password" id="homepassword1" name = "password1" class="form-control" placeholder="Conform your Password" required/>
+                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword1()"><i id="password-icon" class="bi bi-eye-slash"></i></button>
+                        </div>
+                        </div>
                       
                   <!-- if some error dispaly message here-->
                   <div class="errormsg">

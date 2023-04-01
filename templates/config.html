@@ -49,12 +49,15 @@
                           // hit merchant api for initiating verfication
                           //console.log(payload);
                           paymentpass(payload);
+                          window.location.replace(`/bookingdetails/{{orderid}}`);
                       },
                       onError (error) {
                           console.log(error);
+                          window.location.replace(`/bookingdetails/{{orderid}}`);
                       },
                       onClose () {
                           console.log('widget is closing');
+                          window.location.replace(`/bookingdetails/{{orderid}}`);
                       }
                   }
               };
