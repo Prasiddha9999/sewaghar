@@ -102,11 +102,10 @@ urlpatterns = [
     
     
     path("404",views.entry_not_found, name="404"),
-    
-  
-
-    
-
+    path("hforgetpassword",views.hforgetpassword, name="hforgetpassword"),
+    path("send_otp",views.send_otp, name="send_otp"),
+    path("enter_otp",views.enter_otp, name="enter_otp"),
+    path("password_reset",views.password_reset, name="password_reset"),
 ]
 
 handler404 = 'mysite.views.entry_not_found'

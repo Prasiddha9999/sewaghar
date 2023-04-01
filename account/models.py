@@ -20,6 +20,7 @@ class Account_HomeOwner(models.Model):
     address = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
     photo = models.ImageField(upload_to='images')
+    otp = models.CharField(max_length=6, default="00000")
     register = models.DateTimeField(default=timezone.now)
     
     class Meta:
@@ -62,6 +63,7 @@ class Account_Professional(models.Model):
     ratings = models.IntegerField(default=0)
     total_rating = models.IntegerField(default=0)
     num_ratings = models.IntegerField(default=0)
+    otp = models.CharField(max_length=6, default="00000")
     
     class Meta:
         ordering=('-register',)   

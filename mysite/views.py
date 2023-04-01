@@ -13,6 +13,9 @@ from django.http import HttpResponseBadRequest
 from django.db.models import Q
 from datetime import datetime
 from django.contrib import messages as django_messages
+from  django.conf import settings
+from django.core.mail import EmailMessage
+from django.contrib.auth.hashers import make_password
 
 
 
@@ -221,7 +224,6 @@ def profile(request):
     
     return render(request, "homeowners/profile.html",{'hprofile':hprofile})
 
-from django.contrib.auth.hashers import make_password
 @login_required(login_url="hsignin")
 def changepassword(request):
     username = request.user.username
@@ -717,13 +719,98 @@ from django.core.exceptions import ObjectDoesNotExist
 
 def entry_not_found(request, exception='1', template_name='404.html'):
     return render(request, template_name)
+
+
+
     
+def hforgetpassword(request):
+    return render(request, "homeowners/hforgetpassword.html")
 
-  
+import random
+def send_otp(request):
+    messages.error(request, '') 
+    otp = random.randint(11111,99999)
+    username = request.POST.get('username')
+    user_username = Account_HomeOwner.objects.filter(username=username)
+    if user_username:
+        getuser = Account_HomeOwner.objects.get(username=username)
+        email=getuser.email
+        user = Account_HomeOwner.objects.get(email=email)
+        user.otp = otp
+        user.save()
+        print(email)
+        request.session['email'] = email
+        html_message = "Your One Time Password : - "+"" + str(otp)
+        subject = "OTP Conformation"
+        email_from = settings.EMAIL_HOST_USER
+        email_to= [email]
+        message = EmailMessage(subject, html_message, email_from, email_to)
+        message.send()
+        messages.success(request, 'One Time Password send to your Email')
+        return redirect('enter_otp')
+    else:
+        messages.error(request, 'Please Enter Correct Username') 
+    return render(request, "homeowners/hforgetpassword.html")
 
+def enter_otp(request):
+    messages.error(request, '') 
+    if request.session.has_key('email'):
+        email = request.session['email']
+        user = Account_HomeOwner.objects.filter(email=email)
+        for u in user:
+            user_otp = u.otp
+        if request.method =="POST":
+            otp = request.POST.get('otp')
+            if not otp:
+                messages.error(request, 'OTP Code is required') 
+            elif not user_otp == otp:
+                messages.error(request, 'OTP Code is not matched') 
+            elif otp==user_otp:
+                return redirect("password_reset")
+        return render(request,'homeowners/enter_otp.html')
+    return render(request, "homeowners/hforgetpassword.html")
 
+from django.contrib.auth.hashers import check_password
 
+def password_reset(request):
+    messages.error(request, '')
+    if request.session.has_key('email'):
+        email = request.session['email']
+        user = Account_HomeOwner.objects.get(email=email)
+        username = user.username
+        mainuser = User.objects.get(username=username)
+        
+        if request.method == "POST":
+            newpassword = request.POST.get('newpassword')
+            conformnewpassword = request.POST.get('conformnewpassword')
 
+            if not newpassword:
+                messages.error(request, 'Enter New Password')
+            elif not conformnewpassword:
+                messages.error(request, 'Enter New Conform Password')
+            elif newpassword != conformnewpassword:
+                messages.error(request, 'Password Not Match')
+            else:
+                # Generate new password hash
+                new_password_hash = make_password(newpassword)
+
+                # Compare new password hash with existing password hash
+                if check_password(newpassword, user.password):
+                    messages.error(request, 'The Password Already Exists. Please try a new password.')
+                else:
+                    # Update password for both user and mainuser objects
+                    user.password = new_password_hash
+                    user.save()
+                    mainuser.password = new_password_hash
+                    mainuser.save()
+                    messages.success(request, 'Password Changed Successfully')
+                    return redirect("hsignin")
+    return render(request, "homeowners/password_reset.html")
+
+                
+                
+                
+    
 
 
 

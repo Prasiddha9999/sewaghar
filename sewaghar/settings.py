@@ -141,3 +141,16 @@ AUTH_USER_MODEL = 'account.User'
 
 # KHALTI_SECRET_KEY = "test_secret_key_736d8be761e4405e9d5a9155c7667305"
 # KHALTI_VERIFY_URL = "https://khalti.com/api/v2/payment/verify/"
+
+# settings.py
+
+# Email_settings 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'sewagharservice@gmail.com'
+EMAIL_HOST_PASSWORD = 'paznievrzfscdoit'
+EMAIL_USE_TLS = True 
+#ACCOUNT_EMAIL_VERIFICATION = 'none'
+#DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+#EMAIL_USE_SSL = True
