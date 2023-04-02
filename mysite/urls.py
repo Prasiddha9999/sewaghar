@@ -102,10 +102,18 @@ urlpatterns = [
     
     
     path("404",views.entry_not_found, name="404"),
+    
+    #homeowner reset password
     path("hforgetpassword",views.hforgetpassword, name="hforgetpassword"),
     path("send_otp",views.send_otp, name="send_otp"),
     path("enter_otp",views.enter_otp, name="enter_otp"),
     path("password_reset",views.password_reset, name="password_reset"),
+    
+    #professionals reset password
+    path("pforgetpassword",views.pforgetpassword, name="pforgetpassword"),
+    path("psend_otp",views.psend_otp, name="psend_otp"),
+    path("penter_otp",views.penter_otp, name="penter_otp"),
+    path("ppassword_reset",views.ppassword_reset, name="ppassword_reset"),
 ]
 
 handler404 = 'mysite.views.entry_not_found'
