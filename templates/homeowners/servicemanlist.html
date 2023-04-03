@@ -68,34 +68,36 @@
 </div>
 </div>
 <script>
-  // Get the search query from the URL parameter
-  const searchQuery = new URLSearchParams(window.location.search).get('city');
+// Get the search query from the URL parameter, or use an empty string if it's not defined
+const searchQuery = new URLSearchParams(window.location.search).get('city') || '';
 
-  // Populate the search form with the search query
-  const searchBar = document.querySelector('input[name="city"]');
-  searchBar.value = searchQuery;
+// Populate the search form with the search query
+const searchBar = document.querySelector('input[name="city"]');
+searchBar.value = searchQuery;
 
-  // Filter the professionals based on the search query
-  const professionalsList = document.querySelector('tbody');
+// Filter the professionals based on the search query
+const professionalsList = document.querySelector('tbody');
+Array.from(professionalsList.children).forEach(professional => {
+  const location = professional.querySelector('td:nth-child(3)').textContent.toLowerCase();
+  if (!location.includes(searchQuery.toLowerCase())) {
+    professional.style.display = 'none';
+  }
+});
+
+// Filter the professionals as you type in the search box
+searchBar.addEventListener('input', () => {
+  const searchValue = searchBar.value.toLowerCase();
   Array.from(professionalsList.children).forEach(professional => {
     const location = professional.querySelector('td:nth-child(3)').textContent.toLowerCase();
-    if (!location.includes(searchQuery.toLowerCase())) {
+    if (!location.includes(searchValue)) {
       professional.style.display = 'none';
+    } else {
+      professional.style.display = '';
     }
   });
+});
 
-  // Filter the professionals as you type in the search box
-  searchBar.addEventListener('input', () => {
-    const searchValue = searchBar.value.toLowerCase();
-    Array.from(professionalsList.children).forEach(professional => {
-      const location = professional.querySelector('td:nth-child(3)').textContent.toLowerCase();
-      if (!location.includes(searchValue)) {
-        professional.style.display = 'none';
-      } else {
-        professional.style.display = '';
-      }
-    });
-  });
+
 </script>
 
 

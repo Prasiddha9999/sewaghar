@@ -61,7 +61,6 @@ class Account_Professional(models.Model):
     desc = models.TextField(max_length=1000)
     status = models.BooleanField(default=False)
     ratings = models.IntegerField(default=0)
-    total_rating = models.IntegerField(default=0)
     num_ratings = models.IntegerField(default=0)
     otp = models.CharField(max_length=6, default="00000")
     
@@ -106,6 +105,7 @@ class Order(models.Model):
     payment_date = models.DateTimeField(null=True, blank=True)
     payment_method = models.CharField(max_length=255, null=True, blank=True)
     totaltimehour = models.IntegerField(null=True, blank=True)
+    ratingcheck = models.BooleanField(default=False)
     
     
 class Message(models.Model):
