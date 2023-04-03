@@ -156,10 +156,8 @@ def unbook(request, prof_id, order_id):
 def activates(request, order_id):
     instance = get_object_or_404(Order, order_id=order_id)
     status = request.POST.get('status')
-    message = request.POST.get('message')
+    message = request.POST.get('messagess')
     totalhour = request.POST.get('totalhour')
-    print(message)
-    print("DSfsdf")
     
     if status == 'cancel':
         instance.status = 'cancel'

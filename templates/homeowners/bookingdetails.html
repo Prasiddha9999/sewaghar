@@ -43,16 +43,13 @@
               {% csrf_token %}
               {% if ord.status == 'book' %}
               <p>Reason for Cancellation</p>
-              <textarea  class="form-control" name="message" required id="exampleFormControlTextarea1" rows="1"></textarea><br>
+              {% comment %} <textarea type="text"  class="form-control" name="message" required id="exampleFormControlTextarea1" rows="1"></textarea><br> {% endcomment %}
+              <input type="text" id="messagess" class="form-control" name="messagess" required />
               <button type="submit" name="status" value="cancel" class="btn btn-warning">Cancel Request</button>
-              
-
 
               {% elif ord.status == 'cancel' %}
               <button type="submit" name="status" value="book" disabled="notEditMode" class="btn btn-success">Successfully Canceled</button>
              
-
-
               {% else %}
               <button type="submit" name="status" value="solve" disabled="notEditMode" class="btn btn-info">Solved</button>
               <br><br>
