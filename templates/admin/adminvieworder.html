@@ -31,11 +31,7 @@
            <td>{{i.homeowner_id.full_name}}</td>
            <td>{{i.date}}</td>
            <td>{{i.time}}</td>
-           {% if i.status %}
-           <td>Pending</td>
-           {% else %}
-           <td>Solved</td>
-           {% endif %}
+           <td>{{i.status}}</td>
            <td><a href="{%url 'adminorderdetail' ok=i.order_id%}">View More<a></td>
            <td><a href="deleteorder/{{i.order_id}}" type="submit">Delete<a></td>
        </tr>

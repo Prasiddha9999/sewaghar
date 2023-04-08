@@ -33,16 +33,16 @@
           <input id="date-picker" type="date"  name="date" class="form-control" autocomplete="off" />
           <br>
           <label for="Time">Time</label>
-          <input id="Time" name="time" class="form-control" type="time" />
+          <input id="Time" name="time" type="time" class="form-control" />
           <br>
           <label for="Location">Location</label>
-          <input id="Location" name="address" class="form-control"/>
+          <input id="Location" name="address" type="text" class="form-control"/>
           <br>
           <label for="Contact Number">Contact Number</label>
-          <input id="number" name="number" minlength="10"   class="form-control"/>
+          <input id="number" name="number" type="number" minlength="10"   class="form-control"/>
           <br>
           <label for="HouseNumber">Your House Number Optional</label>
-          <input id="HouseNumber" name="houseno"  class="form-control"/>
+          <input id="HouseNumber" name="houseno"  type="text" class="form-control"/>
           <br>
 
           <div class="nextprevious">
@@ -71,6 +71,20 @@
               date = new Date(date.getTime() - (offset*60*1000));
           
               return date.toISOString().split("T")[0];
+          }
+        </script>
+
+        <script>
+          const timePicker = document.getElementById("Time");
+          setTimeMaxToCurrentTime(timePicker);
+
+
+          function setTimeMaxToCurrentTime(timeInput) {
+            const currentDate = new Date();
+            const currentDateTime = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), currentDate.getHours(), currentDate.getMinutes(), 0, 0);
+            const currentTime = currentDateTime.toTimeString().substr(0, 5);
+          
+            timeInput.max = currentTime;
           }
         </script>
 

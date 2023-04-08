@@ -24,10 +24,22 @@
                         </div>
     
 
-                    <div class="form-outline mb-4">
-                    <label class="form-label" for="homeemail">Email</label>
-                    <input type="email" id="homeemail" name = "email" class="form-control" placeholder="Enter your email address" required/>
-                    </div>
+                        <div class="form-outline mb-4">
+                          <label class="form-label" for="homeemail">Email</label>
+                          <input type="email" id="homeemail" name="email" class="form-control" placeholder="Enter your email address" required/>
+                        </div>
+                        
+                        <script>
+                          const emailInput = document.getElementById("homeemail");
+                        
+                          emailInput.addEventListener("blur", () => {
+                            const email = emailInput.value;
+                            if (email && !/@gmail\.com$/.test(email)) {
+                              emailInput.value = email + "@gmail.com";
+                            }
+                          });
+                        </script>
+                        
 
                     <div class="form-outline mb-4">
                       <label class="form-label" for="number">Contact Number</label>

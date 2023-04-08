@@ -51,6 +51,16 @@
 {% comment %} navbar collapse {% endcomment %}
     <div class=" my-container active-cont px-5">  
         <a class="btn border-0 px-5" id="menu-btn">-><i class="bx bx-menu"></i></a>
+        <style>
+          body {
+            background-image: url({% static 'images/back1.jpg' %});
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+          }
+        </style>
+
+        
   {% block content %}
 
   {% endblock %}
@@ -66,7 +76,8 @@
     </script>
 
       <!-- Nav Bar -->
- <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top py-0">
+ <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top py-0" style="background: rgb(2,0,36);
+ background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,53,121,0.1517857142857143) 0%, rgba(0,212,255,0.1517857142857143) 100%);">
   <div class="container">
     <a class="navbar-brand" href="{% url 'adminhomepage' %}">
       <img src="{% static 'images/logo.png' %}" width="70" height="70" alt="">
@@ -85,7 +96,7 @@
                 <a class=" bi bi-person nav-link dropdown-toggle" style="font-size: 25px; -webkit-text-stroke-width: 1.2px;"  id="navbarDropdown"  data-bs-toggle="dropdown" aria-expanded="false">
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li class="dropdown-item" aria-disabled="true"></li>{{user.username}}</a></li>
+                  <li class="dropdown-item" aria-disabled="true">{{user.username}}</a></li>
                   <li><a class="dropdown-item" href="{% url 'adminprofile' %}">My Profile</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" href="{% url 'user_logout' %}">Logout</a></li>
