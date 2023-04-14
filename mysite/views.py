@@ -70,12 +70,28 @@ def servicetime(request,bk):
     serdis = All_Service.objects.filter(subservice__in=servs.values('subservice')).values('service_id')
     print(serdis.values("service"))
     s = bk  
+    
+    current_datetime = datetime.now()
+    if request.method == 'POST':
+        selected_date = datetime.strptime(request.POST.get('date'), '%Y-%m-%d').date()
+        selected_time = datetime.strptime(request.POST.get('time'), '%H:%M').time()
+
+        if selected_date == current_datetime.date() and selected_time < current_datetime.time():
+            error_message = "Selected time cannot be before current time"
+            return render(request, 'homeowners/servicetime.html', {'error_message': error_message, 's':s, 'sk':sk, 'servicedata':servicedata})
+
+        else:
+            pass
+    
+    
     if request.method =="POST":
         date = request.POST.get('date')
         time = request.POST.get('time')
         number = request.POST.get('number')
         houseno = request.POST.get('houseno')
         address = request.POST.get('address')
+        
+        
         
         # Convert s to an instance of Account_Professional model
         professional = Account_Professional.objects.get(professional_id=s)
@@ -309,7 +325,9 @@ def bookingdetails(request,od):
         
     #cash Payment
     if request.method == 'POST':
-        amount = int(request.POST['amount'])
+        print("DSfsdf")
+        amount = request.POST['amount']
+        print(amount)
         if amount:
             orderid = request.POST['orderid']
 

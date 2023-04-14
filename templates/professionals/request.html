@@ -17,6 +17,7 @@
                 <th scope="col">Name</th>
                 <th scope="col">Location</th>
                 <th scope="col">Date & Time</th>
+                <th scope="col">Earned</th>
                 <th scope="col">More</th>
                 <th scope="col">Status</th>
             </tr>
@@ -28,6 +29,7 @@
                 <td>{{i.homeowner_id.full_name}}</td>
                 <td>{{i.address}}</td>
                 <td>{{i.date}} - {{i.time}}</td>
+                <td>{% if i.payment_amount %}{{i.payment_amount}}{% endif %}</td>
                 <td><a href="{%url 'requestdetails' rd=i.order_id%}">viewmore</a></td>
                 <td>{{i.status}}</td>
             </tr>

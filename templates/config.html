@@ -13,7 +13,7 @@
             const csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
             fetch("{% url 'verify' %}", {
                 method: "POST",
-                
+  
                 headers: {
                     "Content-Type": "application/json",
                     "X-CSRFToken": csrf_token,

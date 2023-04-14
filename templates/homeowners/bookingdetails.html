@@ -89,23 +89,13 @@
 
               {% if ord.payment_amount is none %}
               <p>Total Time taken to solve problem: {{ord.totaltimehour}} hour</p> 
-              <script>
-                let x = {{ ord.totaltimehour }};
-                let y = {{ ord.professional_id.rateperhour }};
-                let z = x * y;
-                console.log(z);
-                // JavaScript code
-                let amountInput = document.getElementById("amount"); // get the input element
-                amountInput.value = z; // set the value of the input element to z
-
-              </script>
-            <p>Total Amount to pay: Rs. <script>document.write(z)</script></p> 
+            <p>Total Amount to pay: Rs. <span id="totalamount"></span></p> 
 
               <h3>Payment Method</h3>
               <form action="/khalti/config" method="POST">
                 {% csrf_token %}
                   <input type="hidden" name="orderid" value="{{ ord.order_id }}">
-                  <input type="hidden"  id="amount" name="amount" value="10">
+                  <input type="hidden"  id="amounts" name="amount" value="10">
                   <button class="btn btn-outline-success" id="payment-button" type="submit">Pay Via Khalti</button>
             
               </form>
@@ -113,18 +103,12 @@
               <form method="post" action="{% url 'bookingdetails' od=ord.order_id %}">
                 {% csrf_token %}
                 <input type="hidden" name="orderid" value="{{ ord.order_id }}">
-                <input type="hidden" id="amount" name="amount" value="">
+      
+                <input type="hidden" id="amount" name="amount">
+           
                 <button class="btn btn-outline-success" type="submit">Pay Via Cash</button>
               </form>
-              
-              <script>
-                var z = 10; // set the value of z
-var amountInput = document.getElementById("amount"); // get the input element
-amountInput.value = z; // set the value of the input element to z
-              </script>
-              
-              
-
+            
               {% elif ord.payment_amount is not None %}
               <h5>Thank You for your Payment amount: Rs.{{ ord.payment_amount }} via {{ord.payment_method}}</h5>
               {% endif %}
@@ -137,9 +121,6 @@ amountInput.value = z; // set the value of the input element to z
      
 </div>
 <br>
-
-       
-
         </div>
       </div>
     </div>
@@ -147,6 +128,22 @@ amountInput.value = z; // set the value of the input element to z
   <br>
   <hr>
   <br>
+  <script>
+    let x = {{ ord.totaltimehour }};
+    let y = {{ ord.professional_id.rateperhour }};
+    let z = x * y;
+    console.log(z);
+    // JavaScript code for cash payment
+    let amountInput = document.getElementById("amount"); // get the input element
+    amountInput.value = z; // set the value of the input element to z
+    // JavaScript code for khalti payment
+    let amountsInput = document.getElementById("amounts"); // get the input element
+    amountsInput.value = z; // set the value of the input element to z
+
+    let outputElement = document.getElementById("totalamount");
+		outputElement.innerHTML = z;
+
+  </script>
   {% include 'homeowners/comment.html' %} 
 
   {% endblock %}
