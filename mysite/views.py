@@ -240,7 +240,12 @@ def notification(request):
             homeowner_id = Account_HomeOwner.objects.get(username=username)
             print(homeowner_id)
     msg = Notification.objects.filter(Q(classification="All") | Q(classification="All_HomeOwner") | Q(classification="HomeOwner", homeowner_id=homeowner_id)).order_by('-time')
-    return render(request, "homeowners/notification.html", {'msg':msg})
+    snum = Notification.objects.filter(Q(classification="All") | Q(classification="All_HomeOwner") | Q(classification="HomeOwner", homeowner_id=homeowner_id) & Q(view=False)).order_by('-time')
+
+    num = snum.count()
+    
+    
+    return render(request, "homeowners/notification.html", {'msg':msg, 'num':num})
 
 @login_required(login_url="hsignin")
 def profile(request):
@@ -440,7 +445,9 @@ def professionalnotification(request):
     if username:
             professional_id = Account_Professional.objects.get(username=username)        
     msg = Notification.objects.filter(Q(classification="All") | Q(classification="All_Professional") | Q(classification="Professional", professional_id=professional_id)).order_by('-time')
-    return render(request, "professionals/professionalnotification.html",{'msg':msg})
+    snum = Notification.objects.filter(Q(classification="All") | Q(classification="All_Professional") | Q(classification="Professional", professional_id=professional_id) & Q(view=False)).order_by('-time')
+    num= snum.count()
+    return render(request, "professionals/professionalnotification.html",{'msg':msg, 'num':num})
 
 
 @login_required(login_url="adminsignin")
@@ -563,7 +570,9 @@ def adminvieworder(request):
 @login_required(login_url="adminsignin")
 def adminnotification(request):
     msg = Notification.objects.filter(Q(classification="All") | Q(classification="Admin")).order_by('-time')
-    return render(request, "admin/adminnotification.html",{'msg':msg})
+    snum = Notification.objects.filter(Q(classification="All") | Q(classification="Admin") & Q(view=False)).order_by('-time')
+    num= snum.count() 
+    return render(request, "admin/adminnotification.html",{'msg':msg, 'num':num})
 
 @login_required(login_url="adminsignin")
 def notify(request):
@@ -923,6 +932,45 @@ def ppassword_reset(request):
                     messages.success(request, 'Password Changed Successfully')
                     return redirect("psignin")
     return render(request, "professionals/ppassword_reset.html")
+
+# def notificationnumber(request):
+#     print("notificationnumber view called")
+#     username = request.user.username
+#     if username:
+#         homeowner_id = Account_HomeOwner.objects.get(username=username)
+#     msg = Notification.objects.filter(Q(classification="All") | Q(classification="All_HomeOwner") | Q(classification="HomeOwner", homeowner_id=homeowner_id)).order_by('-time')
+#     num = msg.count()
+#     print(num)
+#     return render(request, "homeowners/hbases.html", {'num': num})
+
+
+def update_notification_view(request):
+    if request.method == 'POST':
+        not_id = request.POST.get('not_id')
+        notification = Notification.objects.get(not_id=not_id)
+        notification.view = True
+        notification.save()
+    return redirect(request.META['HTTP_REFERER'])
+
+def pupdate_notification_view(request):
+    if request.method == 'POST':
+        not_id = request.POST.get('not_id')
+        notification = Notification.objects.get(not_id=not_id)
+        notification.view = True
+        notification.save()
+    return redirect(request.META['HTTP_REFERER'])
+
+def aupdate_notification_view(request):
+    if request.method == 'POST':
+        not_id = request.POST.get('not_id')
+        notification = Notification.objects.get(not_id=not_id)
+        notification.view = True
+        notification.save()
+    return redirect(request.META['HTTP_REFERER'])
+      
+
+
+
 
                 
                 

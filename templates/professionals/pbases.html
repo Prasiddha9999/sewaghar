@@ -37,10 +37,36 @@
             <li class="nav-item">
               <a class="nav-link" href="{% url 'blog' %}" >Blogs</a>
             </li>
+  
             <li class="nav-item">
-              <a class="nav-link px-4" href="{% url 'professionalnotification' %}">
-              <span  id="boot-icon" class="bi bi-bell" style="font-size: 25px; -webkit-text-stroke-width: 1.2px;"></span></a>
-            </li>    
+              <a class="nav-link not px-4" href="{% url 'professionalnotification' %}">
+                <span id="boot-icon" class="bi bi-bell" style="font-size: 25px; -webkit-text-stroke-width: 1.2px;"></span>
+                <span id="notification-count" class="badge badge-danger badge-pill">{{ num }}</span>
+              </a>
+            </li>
+            
+            <style>
+              .nav-link.not{
+                position: relative;
+                display: flex;
+              }
+            
+              #boot-icon {
+                font-size: 25px;
+                -webkit-text-stroke-width: 1.2px;
+              }
+            
+              #notification-count {
+                position: absolute;
+                top: 5px;
+                right: 10px;
+                font-size: 10px;
+                padding: 2px 4px;
+                border-radius: 50%;
+                background-color: orange;
+                color: white;
+              }
+            </style>   
             
             <li class="nav-item">
               <a class="nav-link px-4" href="{% url 'request' %}" >

@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
+from django.contrib.auth.decorators import login_required
 
 from account.models import Order
 import json
@@ -8,6 +9,7 @@ from datetime import datetime
 
 
 # Create your views here.
+@login_required(login_url="hsignin")
 def config(request):
     if request.method == 'POST':
         amount = int(request.POST['amount'])
@@ -16,7 +18,7 @@ def config(request):
     return render(request,"config.html",{"amount":amount, "orderid":orderid})
 
 
-
+@login_required(login_url="hsignin")
 def verify(request):   
     if request.method == 'POST':
         payload = json.loads(request.body)

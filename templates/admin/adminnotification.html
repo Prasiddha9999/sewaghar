@@ -15,25 +15,21 @@
     <table class="table border table-light table-hover">
       <tbody>
         {% for i in msg %}
-        <tr>
-          <th scope="row">> {{ i.notification }}</th>  
-          <td style="color:blue; text-align: right;"><u>
-            {% load tz %}
-
-            {% with notification_time=i.time|date:"jS F Y, g:i A" default=None %}
-              {% if notification_time and notification_time|date:"Y-m-d" == now|date:"Y-m-d" %}
-                Today {{ notification_time|date:"g:i A" }}
-              {% elif notification_time and notification_time|date:"Y-m-d" == now|date:"Y-m-d"|add:"-1" %}
-                Yesterday {{ notification_time|date:"g:i A" }}
-              {% else %}
-                {{ notification_time|date:"jS F Y, g:i A" }}
-              {% endif %}
-            {% endwith %}
-
-          </u>
-          </td>
+        <tr {% if i.view is True %}style="color: #392C42B2;"{% endif %} onclick="submitForm('{{ i.not_id }}')">
+          <th scope="row">{{ i.notification }}</th>
+          <td style="text-align: right;">{{ i.time }}</td>
         </tr>
-        {% endfor %}
+        <form id="form_{{ i.not_id }}" method="post" action="{% url 'aupdate_notification_view' %}">
+          {% csrf_token %}
+          <input type="hidden" name="not_id" value="{{ i.not_id }}">
+        </form>
+      {% endfor %}
+      
+      <script>
+        function submitForm(notId) {
+          document.getElementById("form_" + notId).submit();
+        }
+      </script>
       </tbody>
     </table>
   </div>

@@ -133,5 +133,6 @@ class Notification(models.Model):
     )
     classification = models.CharField(max_length=50, choices=CLASSIFICATION_CHOICES)
     time = models.DateTimeField(auto_now_add=True)
+    view = models.BooleanField(default=False)
 
        

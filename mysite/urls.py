@@ -40,6 +40,12 @@ urlpatterns = [
     
     
     path("notification",views.notification, name="notification"),
+    # path('notificationnumber/', views.notificationnumber, name='notificationnumber'),
+    
+    path('pupdate_notification_view/', views.pupdate_notification_view, name='pupdate_notification_view'),
+    path('update_notification_view/', views.update_notification_view, name='update_notification_view'),
+    path('aupdate_notification_view/', views.aupdate_notification_view, name='aupdate_notification_view'),
+    
     path("profile",views.profile, name="profile"),
     path("viewprofile",views.viewprofile, name="viewprofile"),
     

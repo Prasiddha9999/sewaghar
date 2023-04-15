@@ -29,16 +29,15 @@
                           <input type="email" id="homeemail" name="email" class="form-control" placeholder="Enter your email address" required/>
                         </div>
                         
-                        <script>
+                        {% comment %} <script>
                           const emailInput = document.getElementById("homeemail");
-                        
                           emailInput.addEventListener("blur", () => {
                             const email = emailInput.value;
                             if (email && !/@gmail\.com$/.test(email)) {
                               emailInput.value = email + "@gmail.com";
                             }
                           });
-                        </script>
+                        </script> {% endcomment %}
                         
 
                     <div class="form-outline mb-4">
