@@ -38,19 +38,20 @@
           <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="navbar-collapse collapse" id="navbar">
-            <ul class="navbar-nav ms-auto">
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'hsignin' %}">Book the Service</a>
+        <div class="navbar-collapse collapse " id="navbar">
+            <ul class="navbar-nav ms-auto ">
+              <li class="nav-item ">
+                <a class="nav-link mainnav" href="{% url 'hsignin' %}" >Book the Service</a>
+
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'aboutus' %}">AboutUs</a>
+                <a class="nav-link" href="{% url 'aboutus' %}"  >AboutUs</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'blog' %}">Blog</a>
+                <a class="nav-link" href="{% url 'blog' %}" >Blog</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'hsignin' %}">For Home Owner</a>
+                <a class="nav-link" href="{% url 'hsignin' %}" >For Home Owner</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'psignin' %}">For Professional</a>
@@ -66,6 +67,13 @@
           background-size: cover;
           background-repeat: no-repeat;
           background-position: center center;
+        }
+
+       
+        
+   
+        a.nav-link.mainnav {
+          color: white;
         }
       </style>
 <!--Main layout-->

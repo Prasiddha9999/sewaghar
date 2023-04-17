@@ -48,8 +48,6 @@ def service(request):
     return render(request, "homeowners/service.html", {'serv': serv, 'query': query})
 
 
-
-
 @login_required(login_url="hsignin")
 def subservice(request,sk):
     servs = All_Service.objects.filter(service=sk)
@@ -502,10 +500,7 @@ def admincreatesubservice(request):
 
 @login_required(login_url="adminsignin")
 def adminmessage(request):
-    msg = Message.objects.all() 
-  
-    for i in msg:
-        print(msg) 
+    msg = Message.objects.all().order_by('-msg_id')
     return render(request, "admin/adminmessage.html",{'msg':msg})
 
 @login_required(login_url="adminsignin")
@@ -648,6 +643,7 @@ def deletemsg(request, msg_id):
 
 @login_required(login_url="adminsignin")
 def activate(request, professional_id):
+    print("hello workd")
     instance = get_object_or_404(Account_Professional, pk=professional_id)
     ins = get_object_or_404(User, pk=instance.user.pk)
     instance.status = not instance.status

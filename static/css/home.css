@@ -148,5 +148,19 @@ h2::after {
   
 }
 
+html * {
+  font-family: Lato;
+}
+
+
+
+.item img {
+  transition: transform 0.5s ease;
+}
+
+.item img:hover {
+  transform: scale(1.1);
+}
+
 
  

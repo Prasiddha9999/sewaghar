@@ -12,3 +12,7 @@
         color:rgb(250, 31, 31);
         text-align: center;
       }
+      html * {
+        font-family: Lato;
+      }
+      

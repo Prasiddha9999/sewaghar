@@ -98,7 +98,7 @@ urlpatterns = [
     path("deleteorder/<str:order_id>",views.deleteorder, name="deleteorder"),
     path("deletemsg/<str:msg_id>",views.deletemsg, name="deletemsg"),
 
-    path('activate/<str:professional_id>/', views.activate, name='activate'),
+    path('activate/<str:professional_id>', views.activate, name='activate'),
     path('activates/<int:order_id>/', views.activates, name='activates'),
     
     path('update_my_model/<str:service_id>/', views.update_my_model, name='update_my_model'),

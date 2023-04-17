@@ -92,7 +92,7 @@ def hsignup(request):
                 homeowner_id=data
             )
             notifications = Notification.objects.create(
-                notification="{full_name} Create the account as a HomeOwner",
+                notification= full_name + " Create the account as a HomeOwner",
                 classification="Admin",
             )
             notification.save()
@@ -201,12 +201,12 @@ def psignup(request):
                     user = user
             )
             notification = Notification.objects.create(
-                notification="Well Come to SewaGhar",
+                notification="Welcome to SewaGhar",
                 classification="Professional",
                 professional_id = data 
             )
             notifications = Notification.objects.create(
-                notification="{full_name} Create the account as a Professional for service {service}-{subservice}",
+                notification=full_name +" Create the account as a Professional for service" + service + "-" + subservice,
                 classification="Admin",
             )
             

@@ -9,11 +9,11 @@
         <hr class="w-25 mx-auto"/>
       </div>
 <!-- Services -->
-<div class="container-fluid px-3 py-2">
+<div class="container-fluid px-3 py-2 ">
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-2">
     {% for subservice in servs %}
     <div class="col">
-      <div class="card h-100">
+      <div class="card h-100 subservicecart">
         <a href="{% url 'servicemanlist' slk=subservice.subservice %}" class="card-body text-center text-decoration-none d-flex flex-column justify-content-between">
           <h5 class="card-title"><span style="color: black"><u>{{ subservice.subservice }}</u></span></h5>
           <figure><img src="/media/{{subservice.photo}}" style="max-width:50%; height:auto;" alt="Service Image"></figure>

@@ -8,3 +8,7 @@
         padding-right: 15%;
         
       }
+      html * {
+        font-family: Lato;
+      }
+      

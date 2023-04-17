@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
+    password = models.CharField(max_length=100)
     is_admin  = models.BooleanField('Is admin', default=False)
     is_homeowner  = models.BooleanField('Is homeowner', default=False)
     is_professional  = models.BooleanField('Is professional', default=False)
