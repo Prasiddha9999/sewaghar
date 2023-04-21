@@ -124,6 +124,7 @@ def servicetime(request,bk):
             )
         notificationss.save()
         order_id = serv.order_id  
+        messages.success(request, 'Service Booked Sucessfully', extra_tags='loginsucess')
         return redirect('unbook', prof_id=s, order_id=order_id)
     
     serdis = {'serdis':serdis}
@@ -198,6 +199,7 @@ def activates(request, order_id):
             classification="Admin",
             )
         notificationss.save()
+        messages.success(request, 'Service Booking Cancelled', extra_tags='loginsucess')
     elif status == 'solve':
         instance.status = 'solve'
         instance.message = message
@@ -223,6 +225,7 @@ def activates(request, order_id):
             classification="Admin",
             )
         notificationss.save()
+        messages.success(request, 'Problem Solved', extra_tags='loginsucess')
     else:
         instance.status = 'book'
         instance.message = message
@@ -279,7 +282,9 @@ def profile(request):
             hprofile.photo = photo
         hprofile.username = username
         hprofile.save() 
-        messages.success(request, "Profile updated successfully")
+        messages.success(request, 'Profile updated successfully', extra_tags='loginsucess')
+        return redirect('viewprofile')
+ 
     
     return render(request, "homeowners/profile.html",{'hprofile':hprofile})
 
@@ -290,14 +295,18 @@ def changepassword(request):
     mainhprofile = User.objects.get(username=username)
     if request.method == 'POST':
         password = request.POST.get('password')
-
-        # Retrieve the user's Account_HomeOwner object and update its fields
-        mainhprofile.password = make_password(password)
-        mainhprofile.save()
-        hprofile.password = make_password(password)
-        hprofile.save() 
-        messages.success(request, "Password updated successfully")
-    
+        conformpassword = request.POST.get('conformpassword')
+        
+        if password==conformpassword:
+            # Retrieve the user's Account_HomeOwner object and update its fields
+            mainhprofile.password = make_password(password)
+            mainhprofile.save()
+            hprofile.password = make_password(password)
+            hprofile.save() 
+            messages.success(request, "Password updated successfully")
+            return redirect('hsignin')
+        else :
+            messages.error(request, "Conform Password not match")
     return render(request, "homeowners/changepassword.html",{'hprofile':hprofile})
 
 @login_required(login_url="hsignin")

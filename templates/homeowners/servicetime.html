@@ -30,19 +30,19 @@
           {% csrf_token %}
 
           <label for="Date">Date</label>
-          <input id="date-picker" type="date"  name="date" class="form-control" autocomplete="off" />
+          <input id="date-picker" type="date"  name="date" class="form-control" autocomplete="off" required/>
           <br>
           <label for="Time">Time</label>
-          <input id="Time" name="time" type="time" class="form-control" />
+          <input id="Time" name="time" type="time" class="form-control" required/>
           <br>
           <label for="Location">Location</label>
-          <input id="Location" name="address" type="text" class="form-control"/>
+          <input id="Location" name="address" type="text" class="form-control" required/>
           <br>
           <label for="Contact Number">Contact Number</label>
-          <input id="number" name="number" type="number" minlength="10"   class="form-control"/>
+          <input id="number" name="number" type="number" minlength="10"   class="form-control" required/>
           <br>
           <label for="HouseNumber">Your House Number Optional</label>
-          <input id="HouseNumber" name="houseno"  type="text" class="form-control"/>
+          <input id="HouseNumber" name="houseno"  type="text" class="form-control" />
           <br>
     
           <div class="errormsg">

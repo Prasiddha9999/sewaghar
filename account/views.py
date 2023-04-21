@@ -36,6 +36,8 @@ def hsignin(request):
             login(request, user)
             if request.user.is_authenticated or not request.session.get_expiry_date():
                 # Redirect to the service page if user is already logged in or session has not expired
+                messages.success(request, 'Login Successfully', extra_tags='loginsucess')
+
                 return redirect('service')
             else:
                 # Redirect to the dashboard page if user is not logged in or session has expired

@@ -11,7 +11,7 @@
       {% if messages %}
       <div class="errormsg">
         {% for message in messages %}
-          {% if 'rating' in message.tags %}
+        {% if 'rating' in message.tags or 'loginsucess' in message.tags %}
           {%else%}
           <h5>{{ message }}</h5>
           {% endif %}

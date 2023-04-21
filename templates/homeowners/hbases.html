@@ -39,6 +39,12 @@
             <li class="nav-item">
               <a class="nav-link" href="{% url 'blog' %}" >Blogs</a>
             </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'bookings' %}" >My Bookings</a>
+            </li>
+
+
             <li class="nav-item">
               <a class="nav-link not px-4" href="{% url 'notification' %}">
                 <span id="boot-icon" class="bi bi-bell" style="font-size: 25px; -webkit-text-stroke-width: 1.2px;"></span>
@@ -71,10 +77,7 @@
             
                       
             
-            <li class="nav-item">
-              <a class="nav-link px-4" href="{% url 'bookings' %}" >
-              <span id="boot-icon" class="bi bi-bookmark" style="font-size: 25px; -webkit-text-stroke-width: 1.2px;"></span></a>
-            </li>  
+           
 
             <li class="nav-item dropdown">
               <a class=" bi bi-person nav-link dropdown-toggle" style="font-size: 25px; -webkit-text-stroke-width: 1.2px;"  id="navbarDropdown"  data-bs-toggle="dropdown" aria-expanded="false">
@@ -101,7 +104,17 @@
         }
       </style>
 
-
+      {% if messages %}
+      <div class="popup-message" id="popup-message">
+        {% for message in messages %}
+          {% comment %} {% if 'loginsucess' in message.tags %} {% endcomment %}
+          <h5>{{ message }}</h5>
+          {% comment %} {%else%}
+          <h5></h5> {% endcomment %}
+          {% comment %} {% endif %} {% endcomment %}
+        {% endfor %}
+      </div>
+      {% endif %}
     <!--Main layout-->
 {% block content %}
 
@@ -161,5 +174,31 @@
           passwordIcon.className = "bi bi-eye-slash";
       }
     }
+
+
+    function togglePassword1() {
+      var passwordInput = document.getElementById("conformpassword");
+      var passwordIcon = document.getElementById("password-icon");
+      if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+          passwordIcon.className = "bi bi-eye";
+      } else {
+          passwordInput.type = "password";
+          passwordIcon.className = "bi bi-eye-slash";
+      }
+    }
+  </script>
+
+  
+
+  <link rel="stylesheet" href="{% static 'homeowners/css/popup.css' %}">
+  <style>
+  </style>
+  <script>
+    var popup = document.getElementById('popup-message');
+    popup.style.display = 'block';
+    setTimeout(function() {
+        popup.style.display = 'none';
+    }, 1000);
   </script>
   </html>
