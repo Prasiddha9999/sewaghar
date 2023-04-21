@@ -32,21 +32,24 @@ def hsignin(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
-        if user is not None and user.is_homeowner:
-            login(request, user)
-            if request.user.is_authenticated or not request.session.get_expiry_date():
-                # Redirect to the service page if user is already logged in or session has not expired
-                messages.success(request, 'Login Successfully', extra_tags='loginsucess')
-
-                return redirect('service')
-            else:
-                # Redirect to the dashboard page if user is not logged in or session has expired
+        if user is not None:  # check if user is not None before checking attributes
+            if user.is_active:
+                if user.is_homeowner:
+                    login(request, user)
+                    messages.success(request, 'Login Successfully', extra_tags='loginsucess')
+                    return redirect('service')
+                else: 
+                    messages.info(request, 'Login through Professionals')
+                    return redirect('hsignin')
+            else: 
+                messages.info(request, 'You are deactivated by admin')
                 return redirect('hsignin')
-        else:
+        else:  
             messages.info(request, 'Invalid Login Credentials')
             return redirect('hsignin')
-    else:
+    else:  # if request method is not POST, render the 'psignin' page
         return render(request, "homeowners/hsignin.html")
+
     
     
     
@@ -127,6 +130,7 @@ def psignin(request):
             if user.is_active:
                 if user.is_professional:
                     login(request, user)
+                    messages.success(request, 'Login Successfully', extra_tags='loginsucess')
                     return redirect('request')
                 else: 
                     messages.info(request, 'Login through HomeOwner')
@@ -262,7 +266,8 @@ def adminsignin(request):
         user = authenticate(username=username, password=password)
         if user is not None and user.is_admin:
             login(request, user)
-            if request.user.is_authenticated or not request.session.get_expiry_date():
+            messages.success(request, 'Login Successfully', extra_tags='loginsucess')
+            if request.user.is_authenticated:
                 return redirect('adminhomepage')
             else:
                 # Redirect to the dashboard page if user is not logged in or session has expired
@@ -272,6 +277,8 @@ def adminsignin(request):
             return redirect('adminsignin')
     else:
         return render(request, "admin/adminsignin.html")
+    
+        
 
 
 

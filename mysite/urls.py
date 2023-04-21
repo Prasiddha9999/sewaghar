@@ -120,6 +120,9 @@ urlpatterns = [
     path("psend_otp",views.psend_otp, name="psend_otp"),
     path("penter_otp",views.penter_otp, name="penter_otp"),
     path("ppassword_reset",views.ppassword_reset, name="ppassword_reset"),
+    
+    path('online/<str:usernames>', views.online, name='online'),
+
 ]
 
 handler404 = 'mysite.views.entry_not_found'

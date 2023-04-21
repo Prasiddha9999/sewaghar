@@ -64,6 +64,7 @@ class Account_Professional(models.Model):
     ratings = models.IntegerField(default=0)
     num_ratings = models.IntegerField(default=0)
     otp = models.CharField(max_length=6, default="00000")
+    online = models.BooleanField(default=True)
     
     class Meta:
         ordering=('-register',)   

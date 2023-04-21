@@ -26,11 +26,26 @@
     <a class="navbar-brand" href="{% url 'request' %}">
       <img src="{% static 'images/logo.png' %}" width="70" height="70" alt="">
     </a>
+    
+    {% if po.online == False %}
+    <a class="abc nav-item">
+      <a class="bca nav-link" href="../online/{{user.username}}" type="submit"><div class="rec1"><div class="elcoff"><div class="onl">Ofline</div></div></div></a>
+    </a>
+    {% elif po.online == True %}
+    <a class="abc nav-item">
+      <a class="bca nav-link" href="../online/{{user.username}}" type="submit"><div class="rec1"><div class="elc"><div class="onl">Online</div></div></div></a>
+    </a>
+    {%endif%}
+
       <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar">
           <span class="navbar-toggler-icon"></span>
       </button>
+
+     
+      
       <div class="navbar-collapse collapse" id="navbar">
           <ul class="navbar-nav ms-auto">
+
             <li class="nav-item">
               <a class="nav-link" href="{% url 'aboutus' %} ">AboutUs</a>
             </li>
@@ -98,6 +113,17 @@
       }
     </style>
 
+    {% if messages %}
+    <div class="popup-message" id="popup-message">
+      {% for message in messages %}
+        {% comment %} {% if 'loginsucess' in message.tags %} {% endcomment %}
+        <h5>{{ message }}</h5>
+        {% comment %} {%else%}
+        <h5></h5> {% endcomment %}
+        {% comment %} {% endif %} {% endcomment %}
+      {% endfor %}
+    </div>
+    {% endif %}
     <!--Main layout-->
 {% block content %}
 
@@ -144,6 +170,44 @@
   </footer>
   
   
+  <script>
+  </script>
   </body>
-  
+  <script>
+    function togglePassword() {
+      var passwordInput = document.getElementById("password");
+      var passwordIcon = document.getElementById("password-icon");
+      if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+          passwordIcon.className = "bi bi-eye";
+      } else {
+          passwordInput.type = "password";
+          passwordIcon.className = "bi bi-eye-slash";
+      }
+    }
+
+
+    function togglePassword1() {
+      var passwordInput = document.getElementById("conformpassword");
+      var passwordIcon = document.getElementById("password-icon");
+      if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+          passwordIcon.className = "bi bi-eye";
+      } else {
+          passwordInput.type = "password";
+          passwordIcon.className = "bi bi-eye-slash";
+      }
+    }
+  </script>
+
+    <link rel="stylesheet" href="{% static 'homeowners/css/popup.css' %}">
+  <style>
+  </style>
+  <script>
+    var popup = document.getElementById('popup-message');
+    popup.style.display = 'block';
+    setTimeout(function() {
+        popup.style.display = 'none';
+    }, 2000);
+  </script>
   </html>

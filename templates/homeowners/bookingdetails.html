@@ -4,7 +4,7 @@
     <!-- Middle Section -->
     <br><br>
     <div class="text-center my-5">
-      <h3 class="display-5"><b>Service: <u>{{servicedata.service}} - {{servicedata.subservice}}</b></u></h3>
+      <h3 class="display-5"><b>Service: <u>{{servicedata.service}} - {{servicedata.subservice}}</u></b></h3>
       <hr class="w-25 mx-auto"/>
     </div>
     <br>
@@ -40,6 +40,7 @@
           <p>{{ord.professional_id.desc}}</p>
           <div class="bookbtn text-center">
             <form method="post" action="{% url 'activates' ord.order_id %}">
+    
               {% csrf_token %}
               {% if ord.status == 'book' %}
               <p>Reason for Cancellation</p>

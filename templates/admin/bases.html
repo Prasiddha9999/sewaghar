@@ -60,6 +60,18 @@
           }
         </style>
 
+        {% if messages %}
+        <div class="popup-message" id="popup-message">
+          {% for message in messages %}
+            {% comment %} {% if 'loginsucess' in message.tags %} {% endcomment %}
+            <h5>{{ message }}</h5>
+            {% comment %} {%else%}
+            <h5></h5> {% endcomment %}
+            {% comment %} {% endif %} {% endcomment %}
+          {% endfor %}
+        </div>
+        {% endif %}
+
         
   {% block content %}
 
@@ -134,6 +146,16 @@
   <!-- Navbar -->
 </header>
   </body>
+  <link rel="stylesheet" href="{% static 'homeowners/css/popup.css' %}">
+  <style>
+  </style>
+  <script>
+    var popup = document.getElementById('popup-message');
+    popup.style.display = 'block';
+    setTimeout(function() {
+        popup.style.display = 'none';
+    }, 2000);
+  </script>
   
   </html>
   

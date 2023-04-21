@@ -139,7 +139,7 @@ def servicetime(request,bk):
 @login_required(login_url="hsignin")
 def servicemanlist(request, slk):
     servicedata = All_Service.objects.get(subservice=slk)
-    servs = Account_Professional.objects.filter(subservice=slk).order_by('-ratings')
+    servs = Account_Professional.objects.filter(subservice=slk, online=True, status=True).order_by('-ratings')
     context = {'servs': servs, 'servicedata': servicedata}
     return render(request, "homeowners/servicemanlist.html", context)
 
@@ -371,9 +371,9 @@ def requestdetails(request,rd):
 def request(request):
     username = request.user.username
     ord = Order.objects.all()
-    alldata = Account_Professional.objects.get(username=username)
-    ord = Order.objects.filter(professional_id=alldata.professional_id).order_by('-date')
-    return render(request, "professionals/request.html",{'ord':ord})
+    po = Account_Professional.objects.get(username=username)
+    ord = Order.objects.filter(professional_id=po.professional_id).order_by('-date')
+    return render(request, "professionals/request.html",{'ord':ord, 'po':po})
 
 @login_required(login_url="psignin")
 def professionalprofile(request):
@@ -420,6 +420,7 @@ def professionalprofile(request):
         po.desc = desc
         po.save() 
         messages.success(request, "Profile updated successfully")
+        return redirect('professionalviewprofile')
     return render(request, "professionals/professionalprofile.html",{'po':po})
 
 @login_required(login_url="psignin")
@@ -429,13 +430,18 @@ def professionalchangepassword(request):
     mainpprofile = User.objects.get(username=username)
     if request.method == 'POST':
         password = request.POST.get('password')
-
+        conformpassword = request.POST.get('conformpassword')
+        if password == conformpassword:
         # Retrieve the user's Account_HomeOwner object and update its fields
-        mainpprofile.password = make_password(password)
-        mainpprofile.save()
-        po.password = make_password(password)
-        po.save() 
-        messages.success(request, "Password updated successfully")
+            mainpprofile.password = make_password(password)
+            mainpprofile.save()
+            po.password = make_password(password)
+            po.save() 
+            messages.success(request, "Password updated successfully")
+            return redirect('psignin')
+        else:
+            messages.error(request, "Conform Password not match")
+            
     return render(request, "professionals/professionalchangepassword.html",{'po':po})
 
 @login_required(login_url="psignin")
@@ -454,7 +460,8 @@ def professionalnotification(request):
     msg = Notification.objects.filter(Q(classification="All") | Q(classification="All_Professional") | Q(classification="Professional", professional_id=professional_id)).order_by('-time')
     snum = Notification.objects.filter(Q(classification="All") | Q(classification="All_Professional") | Q(classification="Professional", professional_id=professional_id) & Q(view=False)).order_by('-time')
     num= snum.count()
-    return render(request, "professionals/professionalnotification.html",{'msg':msg, 'num':num})
+    po = Account_Professional.objects.get(username=username)
+    return render(request, "professionals/professionalnotification.html",{'msg':msg, 'num':num,'po':po})
 
 
 @login_required(login_url="adminsignin")
@@ -972,7 +979,18 @@ def aupdate_notification_view(request):
         notification.view = True
         notification.save()
     return redirect(request.META['HTTP_REFERER'])
-      
+
+@login_required(login_url="psignin")
+def online(request, usernames):
+    professional = Account_Professional.objects.filter(username=usernames).first()
+    professional_id = professional.professional_id
+    obj = get_object_or_404(Account_Professional, pk=professional_id)
+    obj.online = not obj.online
+    obj.save()
+    previous_url = request.META.get('HTTP_REFERER')
+    return redirect(previous_url)
+
+
 
 
 
