@@ -77,7 +77,22 @@ def servicetime(request,bk):
         if selected_date == current_datetime.date() and selected_time < current_datetime.time():
             error_message = "Selected time cannot be before current time"
             return render(request, 'homeowners/servicetime.html', {'error_message': error_message, 's':s, 'sk':sk, 'servicedata':servicedata})
+        
+        # Combined the selected date and time into a single datetime 
+        selected_datetime = datetime.combine(selected_date, selected_time)
+        print(selected_datetime)
+        orders = Order.objects.filter(professional_id=bk)
 
+        # Check the professional is available at the selected datetime or not
+        for order in orders:
+            datetimes = datetime.combine(order.date, order.time)
+            time_diff = abs(selected_datetime - datetimes)
+            if time_diff.total_seconds() <= 7200:
+                error_message = "Not Available for that time"
+                return render(request, 'homeowners/servicetime.html', {'error_message': error_message, 's':s, 'sk':sk, 'servicedata':servicedata})
+                
+            else:
+                pass
         else:
             pass
     
