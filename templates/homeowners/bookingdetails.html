@@ -49,6 +49,7 @@
               <button type="submit" name="status" value="cancel" class="btn btn-warning">Cancel Request</button>
 
               {% elif ord.status == 'cancel' %}
+              Due to: {{ord.message}}<br>
               <button type="submit" name="status" value="book" disabled="notEditMode" class="btn btn-success">Successfully Canceled</button>
              
               {% else %}

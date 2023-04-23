@@ -106,7 +106,7 @@ class Order(models.Model):
     payment_token = models.CharField(max_length=255,  null=True, blank=True)
     payment_date = models.DateTimeField(null=True, blank=True)
     payment_method = models.CharField(max_length=255, null=True, blank=True)
-    totaltimehour = models.IntegerField(null=True, blank=True)
+    totaltimehour = models.FloatField(null=True, blank=True)
     ratingcheck = models.BooleanField(default=False)
     
     
