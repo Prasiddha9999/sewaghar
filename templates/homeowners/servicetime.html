@@ -44,6 +44,11 @@
           <label for="HouseNumber">Your House Number Optional</label>
           <input id="HouseNumber" name="houseno"  type="text" class="form-control" />
           <br>
+          
+          <td><a href="https://www.google.com/maps/" target="_blank" ><img class="gmaplogo" src="{% static 'images/gmap.png' %}" target="blank" alt="Google Maps Logo" width="90" height="50"></a></td><label for="Gmap">Click the side logo to Open Google Map</label><br><Br>
+          <label for="Gmap">Copy the Link of your House form Google Map</label>
+          <input id="gmap" name="gmap"  type="text" class="form-control" required/>
+          <br>
     
           <div class="errormsg">
             <h5>{{error_message}}</h5>

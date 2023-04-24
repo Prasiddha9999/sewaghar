@@ -55,7 +55,6 @@ def subservice(request,sk):
     servs = {'servs': servs}
     so = {'s': s}
     context = {**servs, **so}
-    
     return render(request, "homeowners/subservice.html",context)
 
 @login_required(login_url="hsignin")
@@ -103,6 +102,7 @@ def servicetime(request,bk):
         number = request.POST.get('number')
         houseno = request.POST.get('houseno')
         address = request.POST.get('address')
+        googlemap = request.POST.get('gmap')
         
         
         
@@ -117,6 +117,7 @@ def servicetime(request,bk):
             number = number,
             houseno = houseno,
             address = address,
+            googlemap = googlemap,
             professional_id = servs[0],  # Assign the instance to professional_id field
             homeowner_id = homeowner  # Assign the logged in homeowner to homeowner_id field
         )
@@ -283,6 +284,7 @@ def profile(request):
         if User.objects.filter(email=email, is_professional=True).exclude(email=request.user.email).exists():
             messages.info(request, "Email already exists")
             return redirect('profile')
+        
         
         # Retrieve the user's Account_HomeOwner object and update its fields
         mainhprofile.username = username

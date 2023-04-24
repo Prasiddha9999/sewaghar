@@ -29,7 +29,8 @@
         <h5>Location: {{ord.address}}</h5>
         <h5>Home no: {{ord.houseno}}</h5>
         <h5>Mobile no: {{ord.number}}</h5>
-        <h5>Service: {{ord.professional_id.service}} - {{ord.professional_id.subservice}}</h5>
+        <h5>Service: {{ord.professional_id.service}} - {{ord.professional_id.subservice}}</h5><br>
+        <a href="{{ ord.googlemap }}" target="_blank" ><img class="gmaplogo" src="{% static 'images/gmap.png' %}" target="blank" alt="Google Maps Logo" width="90" height="50"></a></td><label for="Gmap">Click the side logo to View Location</label><br>
         </div>
         <br>
         <div class="bookbtn text-center">

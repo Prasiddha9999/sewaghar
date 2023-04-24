@@ -34,9 +34,11 @@
             <h5>Service Charge Perhour : {{sk.rateperhour}}</h5>
             <h5>Rating : {{sk.ratings}} out of 5</h5>
             <h5>Mobile Number : {{sk.number}}</h5>
+           
           </div>
           <br><br><br><br>
           <p>{{sk.desc}}</p>
+          <a href="{{ ord.googlemap }}" target="_blank" ><img class="gmaplogo" src="{% static 'images/gmap.png' %}" target="blank" alt="Google Maps Logo" width="90" height="50"></a></td><label for="Gmap">Click the side logo to open map</label><br>
      
 <div class="bookbtn text-center">
   <form method="post" action="{% url 'activates' ord.order_id %}">

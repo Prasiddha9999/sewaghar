@@ -96,6 +96,7 @@ class Order(models.Model):
     )
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='book')
     houseno = models.CharField(max_length=255)
+    googlemap = models.CharField(max_length=1000, default="https://www.google.com/maps/")
     number = models.CharField(max_length=255)
     professional_id = models.ForeignKey(Account_Professional, on_delete=models.CASCADE)
     homeowner_id = models.ForeignKey(Account_HomeOwner, on_delete=models.CASCADE)
