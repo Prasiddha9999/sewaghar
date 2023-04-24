@@ -53,12 +53,20 @@
               <input type="text" id="messagess" class="form-control" name="messagess" required />
               <button type="submit" name="status" value="cancel" class="btn btn-warning">Cancel Request</button>
 
+              {% elif ord.status == 'accept' %}
+              <p>Thankyou for Booking Professionals</p>
+              <button name="status" disabled="notEditMode" class="btn btn-success">Accepted</button>
+
               {% elif ord.status == 'cancel' %}
               Due to: {{ord.message}}<br>
-              <button type="submit" name="status" value="book" disabled="notEditMode" class="btn btn-success">Successfully Canceled</button>
+              <button name="status" disabled="notEditMode" class="btn btn-success">Successfully Canceled</button>
+
+              {% elif ord.status == 'cancelbyprofessional' %}
+              Professioanal Cancelled the request due to : {{ord.message}}<br>
+              <button  name="status" disabled="notEditMode" class="btn btn-danger">Canceled</button>
              
               {% else %}
-              <button type="submit" name="status" value="solve" disabled="notEditMode" class="btn btn-info">Solved</button>
+              <button name="status" disabled="notEditMode" class="btn btn-info">Solved</button>
               <br><br>
               </form>
               <div class="col-md">

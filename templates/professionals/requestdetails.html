@@ -37,6 +37,13 @@
           <form method="post" action="{% url 'activates' ord.order_id %}">
             {% csrf_token %}
             {% if ord.status == 'book' %}
+                <p>If cancelled write reason for cancel</p>
+                <textarea name="message" class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea><br>
+                <button type="submit" name="status" value="accept" class="btn btn-success">Accept Request</button>
+                <button type="submit" name="status" value="cancelbyprofessional" class="btn btn-danger">Cancel Request</button>
+               
+
+            {% elif ord.status == 'accept' %}
             <br>
        <p><b>Note: Please do best work for increasing your rating</b></p>
         <p>After Completing your work, please click the solve button.</p>
@@ -47,6 +54,12 @@
             {% elif ord.status == 'cancel' %}
             <p>Due to : <b>{{ord.message}}<b></p>
             <button type="submit" name="status" value="cancel" disabled="notEditMode" class="btn btn-danger">Order Cancelled</button>
+
+            {% elif ord.status == 'cancelbyprofessional' %}
+            <p>You cancelled the request due to : <b>{{ord.message}}<b></p>
+            <button type="submit" name="status" value="cancel" disabled="notEditMode" class="btn btn-danger">Order Cancelled by You</button>
+ 
+
             {%else%}
 
             <p>Thankyou for your valuable work</p>

@@ -93,8 +93,11 @@ class Order(models.Model):
         ('book', 'Book'),
         ('cancel', 'Cancel'),
         ('solve', 'Solve'),
+        ('accept', 'Accept'),
+        ('cancelbyprofessional', 'Cancelbyprofessional'),
+        
     )
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='book')
+    status = models.CharField(max_length=25, choices=STATUS_CHOICES, default='book')
     houseno = models.CharField(max_length=255)
     googlemap = models.CharField(max_length=1000, default="https://www.google.com/maps/")
     number = models.CharField(max_length=255)

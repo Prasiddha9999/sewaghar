@@ -40,50 +40,99 @@
           <p>{{sk.desc}}</p>
           <a href="{{ ord.googlemap }}" target="_blank" ><img class="gmaplogo" src="{% static 'images/gmap.png' %}" target="blank" alt="Google Maps Logo" width="90" height="50"></a></td><label for="Gmap">Click the side logo to open map</label><br>
      
-<div class="bookbtn text-center">
-  <form method="post" action="{% url 'activates' ord.order_id %}">
-    {% csrf_token %}
-    {% if ord.status == 'book' %}
-    <p>Reason for Cancellation</p>
-    <textarea name="message" class="form-control" required id="exampleFormControlTextarea1" rows="1"></textarea><br>
-    <button type="submit" name="status" value="cancel" class="btn btn-warning">Cancel Request</button>
+          <div class="bookbtn text-center">
+            <form method="post" action="{% url 'activates' ord.order_id %}">
     
-    {% elif ord.status == 'cancel' %}
-    <button type="submit" name="status" value="book" disabled="notEditMode" class="btn btn-success">Sucessfully Canceled</button>
-   
-    {% else %}
-    <button type="submit" name="status" value="solve" class="btn btn-info">Solved</button>
-    <br><br>
-         <div class="col-md">
-           <div class="form-floating">
-             <select class="form-select" id="floatingSelectGrid" aria-label="Floating label select example">
-               <option selected>Choose Number</option>
-               <option value="1">1</option>
-               <option value="2">2</option>
-               <option value="3">3</option>
-               <option value="2">4</option>
-               <option value="3">5</option>
-             </select>
-             <label for="floatingSelectGrid">Ratings</label>
-           </div>
-         </div>
-<br>
-<h5>Pay Through Khalti</h5>
-<div class="input-group mb-3">
-   <input type="text" class="form-control" placeholder="Grand Total">
-   <button class="btn btn-outline-success" type="button">Pay</button>
- </div>
+              {% csrf_token %}
+              {% if ord.status == 'book' %}
+              <p>Reason for Cancellation</p>
+              {% comment %} <textarea type="text"  class="form-control" name="message" required id="exampleFormControlTextarea1" rows="1"></textarea><br> {% endcomment %}
+              <input type="text" id="messagess" class="form-control" name="messagess" required />
+              <button type="submit" name="status" value="cancel" class="btn btn-warning">Cancel Request</button>
+
+              {% elif ord.status == 'accept' %}
+              <p>Thankyou for Booking Professionals</p>
+              <button name="status" disabled="notEditMode" class="btn btn-success">Accepted</button>
+
+              {% elif ord.status == 'cancel' %}
+              Due to: {{ord.message}}<br>
+              <button name="status" disabled="notEditMode" class="btn btn-success">Successfully Canceled</button>
+
+              {% elif ord.status == 'cancelbyprofessional' %}
+              Professioanal Cancelled the request due to : {{ord.message}}<br>
+              <button  name="status" disabled="notEditMode" class="btn btn-danger">Canceled</button>
+             
+              {% else %}
+              <button name="status" disabled="notEditMode" class="btn btn-info">Solved</button>
+              <br><br>
+              </form>
+              <div class="col-md">
+                
+                <form method="POST" action="{% url 'rate_professional' prof_id=ord.professional_id.professional_id ord_id=ord.order_id  %}">
+                  {% csrf_token %}
+                  <div class="form-floating">
+                      <select class="form-select" type="integer" id="rating" name="rating" aria-label="Floating label select example" required>
+                          <option value="" selected>Choose Rating</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                      </select>
+                      <label for="rating">Rate this professional:</label>
+                  </div>
+                  <!-- Messages for rating form -->
+                  {% if messages %}
+                  <div class="errormsg">
+                    {% for message in messages %}
+                      {% if 'rating' in message.tags %}
+                      <h5>{{ message }}</h5>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                  {% endif %}
+          
+                  <button type="submit" class="btn btn-primary">Submit Rating</button>
+              </form>
+              
+              </div>
+              <br>
+
+
+              {% if ord.payment_amount is none %}
+              <p>Total Time taken to solve problem: {{ord.totaltimehour}} hour</p> 
+            <p>Total Amount to pay: Rs. <span id="totalamount"></span></p> 
+
+              <h3>Payment Method</h3>
+              <form action="/khalti/config" method="POST">
+                {% csrf_token %}
+                  <input type="hidden" name="orderid" value="{{ ord.order_id }}">
+                  <input type="hidden"  id="amounts" name="amount" value="10">
+                  <button class="btn btn-outline-success" id="payment-button" type="submit">Pay Via Khalti</button>
+            
+              </form>
+              <br>
+              <form method="post" action="{% url 'bookingdetails' od=ord.order_id %}">
+                {% csrf_token %}
+                <input type="hidden" name="orderid" value="{{ ord.order_id }}">
+      
+                <input type="hidden" id="amount" name="amount">
+           
+                <button class="btn btn-outline-success" type="submit">Pay Via Cash</button>
+              </form>
+            
+              {% elif ord.payment_amount is not None %}
+              <h5>Thank You for your Payment amount: Rs.{{ ord.payment_amount }} via {{ord.payment_method}}</h5>
+              {% endif %}
        </div>
      </div>
    </div> 
        
     {% endif %}
-</form>
+
      
 </div>
 <br>
-
-
         </div>
       </div>
     </div>
@@ -91,6 +140,22 @@
   <br>
   <hr>
   <br>
+  <script>
+    let x = {{ ord.totaltimehour }};
+    let y = {{ ord.professional_id.rateperhour }};
+    let z = x * y;
+    console.log(z);
+    // JavaScript code for cash payment
+    let amountInput = document.getElementById("amount"); // get the input element
+    amountInput.value = z; // set the value of the input element to z
+    // JavaScript code for khalti payment
+    let amountsInput = document.getElementById("amounts"); // get the input element
+    amountsInput.value = z; // set the value of the input element to z
+
+    let outputElement = document.getElementById("totalamount");
+		outputElement.innerHTML = z;
+
+  </script>
   {% include 'homeowners/comment.html' %} 
 
   {% endblock %}

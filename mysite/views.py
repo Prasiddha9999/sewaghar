@@ -242,6 +242,62 @@ def activates(request, order_id):
             )
         notificationss.save()
         messages.success(request, 'Problem Solved', extra_tags='loginsucess')
+        
+    elif status == 'accept':
+        instance.status = 'accept'
+        instance.message = message
+        instance.totaltimehour = totalhour
+        instance.save()
+        ord = Order.objects.get(order_id=order_id)
+        homeowner = Account_HomeOwner.objects.get(homeowner_id=ord.homeowner_id.homeowner_id)
+        professional = Account_Professional.objects.get(professional_id=ord.professional_id.professional_id)
+        notification = Notification.objects.create(
+            notification= f"Hey {professional.full_name},Thankyou for accepting Request id {ord.order_id} requested by {homeowner.full_name}.",
+            classification="Professional",
+            professional_id =  professional
+            )
+        notification.save()
+        notifications = Notification.objects.create(
+            notification= f"Hey {homeowner.full_name}, Your Booking id {ord.order_id} is accepted.",
+            classification="HomeOwner",
+            homeowner_id = homeowner
+            )
+        notifications.save()
+        notificationss = Notification.objects.create(
+            notification= f"{homeowner.full_name}, accept the Bookings id {ord.order_id} for service.",
+            classification="Admin",
+            )
+        notificationss.save()
+        messages.success(request, 'Sucessfully Accepted', extra_tags='loginsucess')
+        
+    elif status == 'cancelbyprofessional':
+        instance.status = 'cancelbyprofessional'
+        instance.message = message
+        instance.totaltimehour = totalhour
+        instance.save()
+        ord = Order.objects.get(order_id=order_id)
+        homeowner = Account_HomeOwner.objects.get(homeowner_id=ord.homeowner_id.homeowner_id)
+        professional = Account_Professional.objects.get(professional_id=ord.professional_id.professional_id)
+        notification = Notification.objects.create(
+            notification= f"Hey {professional.full_name}, your Cancelled the request id {ord.order_id}.",
+            classification="Professional",
+            professional_id =  professional
+            )
+        notification.save()
+        notifications = Notification.objects.create(
+            notification= f"Hey {homeowner.full_name}, Your Booking id {ord.order_id} is Cancelled by Professional.",
+            classification="HomeOwner",
+            homeowner_id = homeowner
+            )
+        notifications.save()
+        notificationss = Notification.objects.create(
+            notification= f"{professional.full_name}, cancel the Order id {ord.order_id} for service.",
+            classification="Admin",
+            )
+        notificationss.save()
+        messages.success(request, 'Sucessfully Cancelled', extra_tags='loginsucess')
+        
+        
     else:
         instance.status = 'book'
         instance.message = message
