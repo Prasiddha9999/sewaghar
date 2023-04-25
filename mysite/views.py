@@ -621,8 +621,15 @@ def adminservicedetail(request, pk):
 
 @login_required(login_url="adminsignin")
 def adminservicelist(request):
+    query = request.GET.get('q')
+    if query:
+        # search for users that match the query string in any of the specified fields
+        serv = All_Service.objects.filter(
+           Q(service_id__icontains=query) | Q(service__icontains=query) | Q(subservice__icontains=query)
+        )
+    else:
     # serv = All_Service.objects.exclude(service=True)
-    serv = All_Service.objects.all()
+        serv = All_Service.objects.all()
     return render(request, "admin/adminservicelist.html",{'serv':serv})
 
 @login_required(login_url="adminsignin")
@@ -632,7 +639,14 @@ def adminservicemandetail(request,pok):
 
 @login_required(login_url="adminsignin")
 def adminservicemanlist(request):
-    po = Account_Professional.objects.all()
+    query = request.GET.get('q')
+    if query:
+        # search for users that match the query string in any of the specified fields
+        po = Account_Professional.objects.filter(
+           Q(professional_id__icontains=query) | Q(username__icontains=query) | Q(email__icontains=query) | Q(full_name__icontains=query) | Q(service__icontains=query) | Q(status__icontains=query)
+        )
+    else:
+        po = Account_Professional.objects.all()
     return render(request, "admin/adminservicemanlist.html",{'po':po})
 
 @login_required(login_url="adminsignin")
@@ -642,12 +656,26 @@ def adminuserdetail(request,hk):
 
 @login_required(login_url="adminsignin")
 def adminusermanlist(request):
-    ho =Account_HomeOwner.objects.all()
+    query = request.GET.get('q')
+    if query:
+        # search for users that match the query string in any of the specified fields
+        ho = Account_HomeOwner.objects.filter(
+           Q(homeowner_id__icontains=query) | Q(username__icontains=query) | Q(email__icontains=query) | Q(full_name__icontains=query) 
+        )
+    else:
+        ho =Account_HomeOwner.objects.all()
     return render(request, 'admin/adminusermanlist.html',{'ho':ho})
 
 @login_required(login_url="adminsignin")
 def adminvieworder(request):
-    ord = Order.objects.all()
+    query = request.GET.get('q')
+    if query:
+        # search for users that match the query string in any of the specified fields
+        ord = Order.objects.filter(
+           Q(order_id__icontains=query) |  Q(status__icontains=query) | Q(date__icontains=query) 
+        )
+    else:
+        ord = Order.objects.all()
     return render(request, "admin/adminvieworder.html",{'ord':ord})
 
 

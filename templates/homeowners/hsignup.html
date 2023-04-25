@@ -53,13 +53,13 @@
                         <div class="form-outline mb-4">
                           <label class="form-label" for="homepassword1">Password</label>
                           <div class="input-group">
-                          <input type="password" id="homepassword" name = "password" class="form-control" placeholder="Enter the Password" required/>
+                          <input type="password" id="homepassword" name = "password" class="form-control" placeholder="Enter the Password" minlength="8" maxlength="15" required/>
                           <button class="btn btn-outline-secondary" type="button" onclick="togglePassword()"><i id="password-icon" class="bi bi-eye-slash"></i></button>
                           </div>
 
                           <label class="form-label" for="homepassword2">Conform Password</label>
                           <div class="input-group">
-                          <input type="password" id="homepassword1" name = "homepassword1" class="form-control" placeholder="Enter the onform Password" required/>
+                          <input type="password" id="homepassword1" name = "homepassword1" class="form-control" placeholder="Enter the Conform Password" minlength="8" maxlength="15" required/>
                           <button class="btn btn-outline-secondary" type="button" onclick="togglePassword1()"><i id="password-icon" class="bi bi-eye-slash"></i></button>
                           </div>
                         </div>

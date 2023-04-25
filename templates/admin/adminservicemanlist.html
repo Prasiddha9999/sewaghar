@@ -9,6 +9,21 @@
    <h3 class="display-5">Professionals List</h3>
    <hr class="w-25 mx-auto"/>
  </div>
+ {% comment %} search bar {% endcomment %}
+  <div class="container">
+    <div class="row justify-content-end">
+        <div class="col-md-6">
+            <form method="get" action="{% url 'adminservicemanlist' %}">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="q" placeholder="Search users by username, id, email, name, service or status">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                        <button class="btn btn-outline-secondary" type="submit">Clear search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
  <div class="container mt-3 table-responsive">
      <table class="table border table-hover">
        <thead>

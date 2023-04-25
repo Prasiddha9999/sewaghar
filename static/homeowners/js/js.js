@@ -5,6 +5,7 @@ window.onload = function() {
 
  // Add event listener to search bar
  searchBar.addEventListener('input', () => {
+  
    // Get the search query
    const query = searchBar.value.toLowerCase();
 
