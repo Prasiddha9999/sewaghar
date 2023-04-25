@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'mysite.apps.MysiteConfig',
     'khaltiapp.apps.KhaltiappConfig',
     'django.contrib.admin',
