@@ -40,686 +40,789 @@ def termsandcondition(request):
 
 @login_required(login_url="hsignin")
 def service(request):
-    query = request.GET.get('q')
-    if query:
-        serv = All_Service.objects.filter(service__icontains=query).distinct('service')
+    # import ipdb;ipdb.set_trace()
+    if request.user.is_homeowner is True:
+        query = request.GET.get('q')
+        if query:
+            serv = All_Service.objects.filter(service__icontains=query).distinct('service')
+        else:
+            serv = All_Service.objects.all().distinct('service')
+        
+        return render(request, "homeowners/service.html", {'serv': serv, 'query': query})
     else:
-        serv = All_Service.objects.all().distinct('service')
-    return render(request, "homeowners/service.html", {'serv': serv, 'query': query})
+        return redirect('404')
 
 
 @login_required(login_url="hsignin")
 def subservice(request,sk):
-    servs = All_Service.objects.filter(service=sk)
-    s = sk
-    servs = {'servs': servs}
-    so = {'s': s}
-    context = {**servs, **so}
-    return render(request, "homeowners/subservice.html",context)
+    if request.user.is_homeowner is True:
+        servs = All_Service.objects.filter(service=sk)
+        s = sk
+        servs = {'servs': servs}
+        so = {'s': s}
+        context = {**servs, **so}
+        return render(request, "homeowners/subservice.html",context)
+    else:
+        return redirect('404')
+            
 
 @login_required(login_url="hsignin")
-def servicetime(request,bk):
-    
-    sk = Account_Professional.objects.get(professional_id=bk)
-    sk_service = sk.subservice
-    servicedata = All_Service.objects.get(subservice=sk_service)
-    servs = Account_Professional.objects.filter(professional_id=bk)
-    serdis = All_Service.objects.filter(subservice__in=servs.values('subservice')).values('service_id')
-    print(serdis.values("service"))
-    s = bk  
-    
-    current_datetime = datetime.now()
-    if request.method == 'POST':
-        selected_date = datetime.strptime(request.POST.get('date'), '%Y-%m-%d').date()
-        selected_time = datetime.strptime(request.POST.get('time'), '%H:%M').time()
-
-        if selected_date == current_datetime.date() and selected_time < current_datetime.time():
-            error_message = "Selected time cannot be before current time"
-            return render(request, 'homeowners/servicetime.html', {'error_message': error_message, 's':s, 'sk':sk, 'servicedata':servicedata})
+def servicetime(request,bk): 
+    if request.user.is_homeowner is True:
+        sk = Account_Professional.objects.get(professional_id=bk)
+        sk_service = sk.subservice
+        servicedata = All_Service.objects.get(subservice=sk_service)
+        servs = Account_Professional.objects.filter(professional_id=bk)
+        serdis = All_Service.objects.filter(subservice__in=servs.values('subservice')).values('service_id')
+        print(serdis.values("service"))
+        s = bk  
         
-        # Combined the selected date and time into a single datetime 
-        selected_datetime = datetime.combine(selected_date, selected_time)
-        print(selected_datetime)
-        orders = Order.objects.filter(professional_id=bk)
+        current_datetime = datetime.now()
+        if request.method == 'POST':
+            selected_date = datetime.strptime(request.POST.get('date'), '%Y-%m-%d').date()
+            selected_time = datetime.strptime(request.POST.get('time'), '%H:%M').time()
 
-        # Check the professional is available at the selected datetime or not
-        for order in orders:
-            datetimes = datetime.combine(order.date, order.time)
-            time_diff = abs(selected_datetime - datetimes)
-            if time_diff.total_seconds() <= 7200:
-                error_message = "Not Available for that time"
+            if selected_date == current_datetime.date() and selected_time < current_datetime.time():
+                error_message = "Selected time cannot be before current time"
                 return render(request, 'homeowners/servicetime.html', {'error_message': error_message, 's':s, 'sk':sk, 'servicedata':servicedata})
-                
+            
+            # Combined the selected date and time into a single datetime 
+            selected_datetime = datetime.combine(selected_date, selected_time)
+            print(selected_datetime)
+            orders = Order.objects.filter(professional_id=bk)
+
+            # Check the professional is available at the selected datetime or not
+            for order in orders:
+                datetimes = datetime.combine(order.date, order.time)
+                time_diff = abs(selected_datetime - datetimes)
+                if time_diff.total_seconds() <= 7200:
+                    error_message = "Not Available for that time"
+                    return render(request, 'homeowners/servicetime.html', {'error_message': error_message, 's':s, 'sk':sk, 'servicedata':servicedata})
+                    
+                else:
+                    pass
             else:
                 pass
-        else:
-            pass
-    
-    
-    if request.method =="POST":
-        date = request.POST.get('date')
-        time = request.POST.get('time')
-        number = request.POST.get('number')
-        houseno = request.POST.get('houseno')
-        address = request.POST.get('address')
-        googlemap = request.POST.get('gmap')
         
         
+        if request.method =="POST":
+            date = request.POST.get('date')
+            time = request.POST.get('time')
+            number = request.POST.get('number')
+            houseno = request.POST.get('houseno')
+            address = request.POST.get('address')
+            googlemap = request.POST.get('gmap')
+            
+            
+            
+            # Convert s to an instance of Account_Professional model
+            professional = Account_Professional.objects.get(professional_id=s)
+            current_user = request.user
+            homeowner = get_object_or_404(Account_HomeOwner, username=current_user.username)
         
-        # Convert s to an instance of Account_Professional model
-        professional = Account_Professional.objects.get(professional_id=s)
-        current_user = request.user
-        homeowner = get_object_or_404(Account_HomeOwner, username=current_user.username)
-    
-        serv = Order(
-            date = date,
-            time = time,
-            number = number,
-            houseno = houseno,
-            address = address,
-            googlemap = googlemap,
-            professional_id = servs[0],  # Assign the instance to professional_id field
-            homeowner_id = homeowner  # Assign the logged in homeowner to homeowner_id field
-        )
-        serv.save()
-        notification = Notification.objects.create(
-                notification= f"Hey {professional.full_name}, you have received a new Request from {homeowner.full_name}.",
-                classification="Professional",
-                professional_id = professional 
+            serv = Order(
+                date = date,
+                time = time,
+                number = number,
+                houseno = houseno,
+                address = address,
+                googlemap = googlemap,
+                professional_id = servs[0],  # Assign the instance to professional_id field
+                homeowner_id = homeowner  # Assign the logged in homeowner to homeowner_id field
             )
-        notification.save()
-        notifications = Notification.objects.create(
-                notification= f"Hey {homeowner.full_name}, You have booked Professionals {professional.full_name}.",
-                classification="HomeOwner",
-                homeowner_id = homeowner 
-            )
-        notifications.save()
-        notificationss = Notification.objects.create(
-                notification= f"{homeowner.full_name}, book Professionals '{professional.full_name}' for service {servicedata.service}-{servicedata.subservice}.",
-                classification="Admin",
-            )
-        notificationss.save()
-        order_id = serv.order_id  
-        messages.success(request, 'Service Booked Sucessfully', extra_tags='loginsucess')
-        return redirect('unbook', prof_id=s, order_id=order_id)
-    
-    serdis = {'serdis':serdis}
-    servs = {'servs': servs} 
-    servicedata = {'servicedata': servicedata} 
-    so = {'s': s}
-    sk = {'sk':sk}
-    context = {**servs, **so, **serdis, **servicedata, **sk}
-    return render(request, "homeowners/servicetime.html",context)
+            serv.save()
+            notification = Notification.objects.create(
+                    notification= f"Hey {professional.full_name}, you have received a new Request from {homeowner.full_name}.",
+                    classification="Professional",
+                    professional_id = professional 
+                )
+            notification.save()
+            notifications = Notification.objects.create(
+                    notification= f"Hey {homeowner.full_name}, You have booked Professionals {professional.full_name}.",
+                    classification="HomeOwner",
+                    homeowner_id = homeowner 
+                )
+            notifications.save()
+            notificationss = Notification.objects.create(
+                    notification= f"{homeowner.full_name}, book Professionals '{professional.full_name}' for service {servicedata.service}-{servicedata.subservice}.",
+                    classification="Admin",
+                )
+            notificationss.save()
+            order_id = serv.order_id  
+            messages.success(request, 'Service Booked Sucessfully', extra_tags='loginsucess')
+            return redirect('unbook', prof_id=s, order_id=order_id)
+        
+        serdis = {'serdis':serdis}
+        servs = {'servs': servs} 
+        servicedata = {'servicedata': servicedata} 
+        so = {'s': s}
+        sk = {'sk':sk}
+        context = {**servs, **so, **serdis, **servicedata, **sk}
+        return render(request, "homeowners/servicetime.html",context)
+    else:
+        return redirect('404')
 
     
 @login_required(login_url="hsignin")
 def servicemanlist(request, slk):
-    servicedata = All_Service.objects.get(subservice=slk)
-    servs = Account_Professional.objects.filter(subservice=slk, online=True, status=True).order_by('-ratings')
-    context = {'servs': servs, 'servicedata': servicedata}
-    return render(request, "homeowners/servicemanlist.html", context)
+    if request.user.is_homeowner is True:
+        servicedata = All_Service.objects.get(subservice=slk)
+        servs = Account_Professional.objects.filter(subservice=slk, online=True, status=True).order_by('-ratings')
+        context = {'servs': servs, 'servicedata': servicedata}
+        return render(request, "homeowners/servicemanlist.html", context)
+    else:
+        return redirect('404')
 
 
 
 @login_required(login_url="hsignin")
 def book(request,sml):
-    sk = Account_Professional.objects.get(professional_id=sml)
-    sk_service = sk.subservice
-    servicedata = All_Service.objects.get(subservice=sk_service)
-    return render(request, "homeowners/book.html",{'sk':sk, 'servicedata':servicedata})
+    if request.user.is_homeowner is True:
+        sk = Account_Professional.objects.get(professional_id=sml)
+        sk_service = sk.subservice
+        servicedata = All_Service.objects.get(subservice=sk_service)
+        return render(request, "homeowners/book.html",{'sk':sk, 'servicedata':servicedata})
+    else:
+        return redirect('404')
 
 @login_required(login_url="hsignin")
 def unbook(request, prof_id, order_id):
-    sk = Account_Professional.objects.get(professional_id=prof_id)
-    sk_service = sk.subservice
-    servicedata = All_Service.objects.get(subservice=sk_service)
-    ord = Order.objects.get(order_id=order_id)
+    if request.user.is_homeowner is True:
+        sk = Account_Professional.objects.get(professional_id=prof_id)
+        sk_service = sk.subservice
+        servicedata = All_Service.objects.get(subservice=sk_service)
+        ord = Order.objects.get(order_id=order_id)
 
-    if ord.status == 'cancel':
-        status = 'Cancel'
-    elif ord.status == 'solve':
-        status = 'Solve'
+        if ord.status == 'cancel':
+            status = 'Cancel'
+        elif ord.status == 'solve':
+            status = 'Solve'
+        else:
+            status = 'Book'
+        return render(request, "homeowners/unbook.html",{'sk':sk, 'ord':ord, 'status':status, 'servicedata':servicedata})
     else:
-        status = 'Book'
-    return render(request, "homeowners/unbook.html",{'sk':sk, 'ord':ord, 'status':status, 'servicedata':servicedata})
+        return redirect('404')
 
 @login_required(login_url="hsignin")
 def activates(request, order_id):
-    instance = get_object_or_404(Order, order_id=order_id)
-    status = request.POST.get('status')
-    message = request.POST.get('messagess')
-    totalhour = request.POST.get('totalhour')
-    
-    if status == 'cancel':
-        instance.status = 'cancel'
-        instance.message = message
-        instance.totaltimehour = totalhour
-        instance.save()
-        ord = Order.objects.get(order_id=order_id)
-        homeowner = Account_HomeOwner.objects.get(homeowner_id=ord.homeowner_id.homeowner_id)
-        professional = Account_Professional.objects.get(professional_id=ord.professional_id.professional_id)
-        notification = Notification.objects.create(
-            notification= f"Hey {professional.full_name}, your Request id {ord.order_id} has been Cancelled by {homeowner.full_name}.",
-            classification="Professional",
-            professional_id =  professional
-            )
-        notification.save()
-        notifications = Notification.objects.create(
-            notification= f"Hey {homeowner.full_name}, You Cancelled the Booking id {ord.order_id}.",
-            classification="HomeOwner",
-            homeowner_id = homeowner
-            )
-        notifications.save()
-        notificationss = Notification.objects.create(
-            notification= f"{homeowner.full_name}, cancel the Bookings id {ord.order_id} for service.",
-            classification="Admin",
-            )
-        notificationss.save()
-        messages.success(request, 'Service Booking Cancelled', extra_tags='loginsucess')
-    elif status == 'solve':
-        instance.status = 'solve'
-        instance.message = message
-        instance.totaltimehour = totalhour
-        instance.save()
-        ord = Order.objects.get(order_id=order_id)
-        homeowner = Account_HomeOwner.objects.get(homeowner_id=ord.homeowner_id.homeowner_id)
-        professional = Account_Professional.objects.get(professional_id=ord.professional_id.professional_id)
-        notification = Notification.objects.create(
-            notification= f"Hey {professional.full_name}, Thankyou for Solving request id {ord.order_id} requested by {homeowner.full_name}.",
-            classification="Professional",
-            professional_id =  professional
-            )
-        notification.save()
-        notifications = Notification.objects.create(
-                    notification= f"Hey {homeowner.full_name}, Your Problem has been solved by {professional.full_name}.",
-                    classification="HomeOwner",
-                    homeowner_id = homeowner
-                    )
-        notifications.save()
-        notificationss = Notification.objects.create(
-            notification= f"{homeowner.full_name}, problem has been solved by {professional.full_name} having booking id {ord.order_id}",
-            classification="Admin",
-            )
-        notificationss.save()
-        messages.success(request, 'Problem Solved', extra_tags='loginsucess')
+    if request.user.is_homeowner is True:
+        instance = get_object_or_404(Order, order_id=order_id)
+        status = request.POST.get('status')
+        message = request.POST.get('messagess')
+        totalhour = request.POST.get('totalhour')
         
-    elif status == 'accept':
-        instance.status = 'accept'
-        instance.message = message
-        instance.totaltimehour = totalhour
-        instance.save()
-        ord = Order.objects.get(order_id=order_id)
-        homeowner = Account_HomeOwner.objects.get(homeowner_id=ord.homeowner_id.homeowner_id)
-        professional = Account_Professional.objects.get(professional_id=ord.professional_id.professional_id)
-        notification = Notification.objects.create(
-            notification= f"Hey {professional.full_name},Thankyou for accepting Request id {ord.order_id} requested by {homeowner.full_name}.",
-            classification="Professional",
-            professional_id =  professional
-            )
-        notification.save()
-        notifications = Notification.objects.create(
-            notification= f"Hey {homeowner.full_name}, Your Booking id {ord.order_id} is accepted.",
-            classification="HomeOwner",
-            homeowner_id = homeowner
-            )
-        notifications.save()
-        notificationss = Notification.objects.create(
-            notification= f"{homeowner.full_name}, accept the Bookings id {ord.order_id} for service.",
-            classification="Admin",
-            )
-        notificationss.save()
-        messages.success(request, 'Sucessfully Accepted', extra_tags='loginsucess')
-        
-    elif status == 'cancelbyprofessional':
-        instance.status = 'cancelbyprofessional'
-        instance.message = message
-        instance.totaltimehour = totalhour
-        instance.save()
-        ord = Order.objects.get(order_id=order_id)
-        homeowner = Account_HomeOwner.objects.get(homeowner_id=ord.homeowner_id.homeowner_id)
-        professional = Account_Professional.objects.get(professional_id=ord.professional_id.professional_id)
-        notification = Notification.objects.create(
-            notification= f"Hey {professional.full_name}, your Cancelled the request id {ord.order_id}.",
-            classification="Professional",
-            professional_id =  professional
-            )
-        notification.save()
-        notifications = Notification.objects.create(
-            notification= f"Hey {homeowner.full_name}, Your Booking id {ord.order_id} is Cancelled by Professional.",
-            classification="HomeOwner",
-            homeowner_id = homeowner
-            )
-        notifications.save()
-        notificationss = Notification.objects.create(
-            notification= f"{professional.full_name}, cancel the Order id {ord.order_id} for service.",
-            classification="Admin",
-            )
-        notificationss.save()
-        messages.success(request, 'Sucessfully Cancelled', extra_tags='loginsucess')
-        
-        
+        if status == 'cancel':
+            instance.status = 'cancel'
+            instance.message = message
+            instance.totaltimehour = totalhour
+            instance.save()
+            ord = Order.objects.get(order_id=order_id)
+            homeowner = Account_HomeOwner.objects.get(homeowner_id=ord.homeowner_id.homeowner_id)
+            professional = Account_Professional.objects.get(professional_id=ord.professional_id.professional_id)
+            notification = Notification.objects.create(
+                notification= f"Hey {professional.full_name}, your Request id {ord.order_id} has been Cancelled by {homeowner.full_name}.",
+                classification="Professional",
+                professional_id =  professional
+                )
+            notification.save()
+            notifications = Notification.objects.create(
+                notification= f"Hey {homeowner.full_name}, You Cancelled the Booking id {ord.order_id}.",
+                classification="HomeOwner",
+                homeowner_id = homeowner
+                )
+            notifications.save()
+            notificationss = Notification.objects.create(
+                notification= f"{homeowner.full_name}, cancel the Bookings id {ord.order_id} for service.",
+                classification="Admin",
+                )
+            notificationss.save()
+            messages.success(request, 'Service Booking Cancelled', extra_tags='loginsucess')
+        elif status == 'solve':
+            instance.status = 'solve'
+            instance.message = message
+            instance.totaltimehour = totalhour
+            instance.save()
+            ord = Order.objects.get(order_id=order_id)
+            homeowner = Account_HomeOwner.objects.get(homeowner_id=ord.homeowner_id.homeowner_id)
+            professional = Account_Professional.objects.get(professional_id=ord.professional_id.professional_id)
+            notification = Notification.objects.create(
+                notification= f"Hey {professional.full_name}, Thankyou for Solving request id {ord.order_id} requested by {homeowner.full_name}.",
+                classification="Professional",
+                professional_id =  professional
+                )
+            notification.save()
+            notifications = Notification.objects.create(
+                        notification= f"Hey {homeowner.full_name}, Your Problem has been solved by {professional.full_name}.",
+                        classification="HomeOwner",
+                        homeowner_id = homeowner
+                        )
+            notifications.save()
+            notificationss = Notification.objects.create(
+                notification= f"{homeowner.full_name}, problem has been solved by {professional.full_name} having booking id {ord.order_id}",
+                classification="Admin",
+                )
+            notificationss.save()
+            messages.success(request, 'Problem Solved', extra_tags='loginsucess')
+            
+        elif status == 'accept':
+            instance.status = 'accept'
+            instance.message = message
+            instance.totaltimehour = totalhour
+            instance.save()
+            ord = Order.objects.get(order_id=order_id)
+            homeowner = Account_HomeOwner.objects.get(homeowner_id=ord.homeowner_id.homeowner_id)
+            professional = Account_Professional.objects.get(professional_id=ord.professional_id.professional_id)
+            notification = Notification.objects.create(
+                notification= f"Hey {professional.full_name},Thankyou for accepting Request id {ord.order_id} requested by {homeowner.full_name}.",
+                classification="Professional",
+                professional_id =  professional
+                )
+            notification.save()
+            notifications = Notification.objects.create(
+                notification= f"Hey {homeowner.full_name}, Your Booking id {ord.order_id} is accepted.",
+                classification="HomeOwner",
+                homeowner_id = homeowner
+                )
+            notifications.save()
+            notificationss = Notification.objects.create(
+                notification= f"{homeowner.full_name}, accept the Bookings id {ord.order_id} for service.",
+                classification="Admin",
+                )
+            notificationss.save()
+            messages.success(request, 'Sucessfully Accepted', extra_tags='loginsucess')
+            
+        elif status == 'cancelbyprofessional':
+            instance.status = 'cancelbyprofessional'
+            instance.message = message
+            instance.totaltimehour = totalhour
+            instance.save()
+            ord = Order.objects.get(order_id=order_id)
+            homeowner = Account_HomeOwner.objects.get(homeowner_id=ord.homeowner_id.homeowner_id)
+            professional = Account_Professional.objects.get(professional_id=ord.professional_id.professional_id)
+            notification = Notification.objects.create(
+                notification= f"Hey {professional.full_name}, your Cancelled the request id {ord.order_id}.",
+                classification="Professional",
+                professional_id =  professional
+                )
+            notification.save()
+            notifications = Notification.objects.create(
+                notification= f"Hey {homeowner.full_name}, Your Booking id {ord.order_id} is Cancelled by Professional.",
+                classification="HomeOwner",
+                homeowner_id = homeowner
+                )
+            notifications.save()
+            notificationss = Notification.objects.create(
+                notification= f"{professional.full_name}, cancel the Order id {ord.order_id} for service.",
+                classification="Admin",
+                )
+            notificationss.save()
+            messages.success(request, 'Sucessfully Cancelled', extra_tags='loginsucess')
+            
+            
+        else:
+            instance.status = 'book'
+            instance.message = message
+            instance.totaltimehour = totalhour
+            instance.save()
+        previous_url = request.META.get('HTTP_REFERER')
+        return redirect(previous_url)
     else:
-        instance.status = 'book'
-        instance.message = message
-        instance.totaltimehour = totalhour
-        instance.save()
-    previous_url = request.META.get('HTTP_REFERER')
-    return redirect(previous_url)
+        return redirect('404')
 
 @login_required(login_url="hsignin")
 def notification(request):
-    username = request.user.username
-    if username:
-            homeowner_id = Account_HomeOwner.objects.get(username=username)
-            print(homeowner_id)
-    msg = Notification.objects.filter(Q(classification="All") | Q(classification="All_HomeOwner") | Q(classification="HomeOwner", homeowner_id=homeowner_id)).order_by('-time')
-    snum = Notification.objects.filter(Q(classification="All") | Q(classification="All_HomeOwner") | Q(classification="HomeOwner", homeowner_id=homeowner_id) & Q(view=False)).order_by('-time')
+    if request.user.is_homeowner is True:
+        username = request.user.username
+        if username:
+                homeowner_id = Account_HomeOwner.objects.get(username=username)
+                print(homeowner_id)
+        msg = Notification.objects.filter(Q(classification="All") | Q(classification="All_HomeOwner") | Q(classification="HomeOwner", homeowner_id=homeowner_id)).order_by('-time')
+        snum = Notification.objects.filter(Q(classification="All") | Q(classification="All_HomeOwner") | Q(classification="HomeOwner", homeowner_id=homeowner_id) & Q(view=False)).order_by('-time')
 
-    num = snum.count()
-    
-    
-    return render(request, "homeowners/notification.html", {'msg':msg, 'num':num})
+        num = snum.count()
+        
+        
+        return render(request, "homeowners/notification.html", {'msg':msg, 'num':num})
+    else:
+        return redirect('404')
 
 @login_required(login_url="hsignin")
 def profile(request):
-    username = request.user.username
-    hprofile = Account_HomeOwner.objects.get(username=username)
-    mainhprofile = User.objects.get(username=username)
-    if request.method == 'POST':
-        full_name = request.POST.get('full_name')
-        email = request.POST.get('email')
-        number = request.POST.get('number')
-        address = request.POST.get('address')
-        photo = request.FILES.get('photo')
-        username = request.POST.get('username')
+    if request.user.is_homeowner is True:
+        username = request.user.username
+        hprofile = Account_HomeOwner.objects.get(username=username)
+        mainhprofile = User.objects.get(username=username)
+        if request.method == 'POST':
+            full_name = request.POST.get('full_name')
+            email = request.POST.get('email')
+            number = request.POST.get('number')
+            address = request.POST.get('address')
+            photo = request.FILES.get('photo')
+            username = request.POST.get('username')
 
-        if User.objects.filter(username=username).exclude(username=request.user.username).exists():
-            messages.info(request, "Username already exists")
-            return redirect('profile')
-        
-        if User.objects.filter(email=email, is_professional=True).exclude(email=request.user.email).exists():
-            messages.info(request, "Email already exists")
-            return redirect('profile')
-        
-        
-        # Retrieve the user's Account_HomeOwner object and update its fields
-        mainhprofile.username = username
-        mainhprofile.email = email
-        mainhprofile.save()
-        
-        hprofile.full_name = full_name
-        hprofile.email = email
-        hprofile.number = number
-        hprofile.address = address
-        if photo:
-            hprofile.photo = photo
-        hprofile.username = username
-        hprofile.save() 
-        messages.success(request, 'Profile updated successfully', extra_tags='loginsucess')
-        return redirect('viewprofile')
- 
+            if User.objects.filter(username=username).exclude(username=request.user.username).exists():
+                messages.info(request, "Username already exists")
+                return redirect('profile')
+            
+            if User.objects.filter(email=email, is_professional=True).exclude(email=request.user.email).exists():
+                messages.info(request, "Email already exists")
+                return redirect('profile')
+            
+            
+            # Retrieve the user's Account_HomeOwner object and update its fields
+            mainhprofile.username = username
+            mainhprofile.email = email
+            mainhprofile.save()
+            
+            hprofile.full_name = full_name
+            hprofile.email = email
+            hprofile.number = number
+            hprofile.address = address
+            if photo:
+                hprofile.photo = photo
+            hprofile.username = username
+            hprofile.save() 
+            messages.success(request, 'Profile updated successfully', extra_tags='loginsucess')
+            return redirect('viewprofile')
     
-    return render(request, "homeowners/profile.html",{'hprofile':hprofile})
+        
+        return render(request, "homeowners/profile.html",{'hprofile':hprofile})
+    else:
+        return redirect('404')
 
 @login_required(login_url="hsignin")
 def changepassword(request):
-    username = request.user.username
-    hprofile = Account_HomeOwner.objects.get(username=username)
-    mainhprofile = User.objects.get(username=username)
-    if request.method == 'POST':
-        password = request.POST.get('password')
-        conformpassword = request.POST.get('conformpassword')
-        
-        if password==conformpassword:
-            # Retrieve the user's Account_HomeOwner object and update its fields
-            mainhprofile.password = make_password(password)
-            mainhprofile.save()
-            hprofile.password = make_password(password)
-            hprofile.save() 
-            messages.success(request, "Password updated successfully")
-            return redirect('hsignin')
-        else :
-            messages.error(request, "Conform Password not match")
-    return render(request, "homeowners/changepassword.html",{'hprofile':hprofile})
+    if request.user.is_homeowner is True:
+        username = request.user.username
+        hprofile = Account_HomeOwner.objects.get(username=username)
+        mainhprofile = User.objects.get(username=username)
+        if request.method == 'POST':
+            password = request.POST.get('password')
+            conformpassword = request.POST.get('conformpassword')
+            
+            if password==conformpassword:
+                # Retrieve the user's Account_HomeOwner object and update its fields
+                mainhprofile.password = make_password(password)
+                mainhprofile.save()
+                hprofile.password = make_password(password)
+                hprofile.save() 
+                messages.success(request, "Password updated successfully")
+                return redirect('hsignin')
+            else :
+                messages.error(request, "Conform Password not match")
+        return render(request, "homeowners/changepassword.html",{'hprofile':hprofile})
+    else:
+        return redirect('404')
 
 @login_required(login_url="hsignin")
 def viewprofile(request):
-    username = request.user.username
-    hprofile = Account_HomeOwner.objects.get(username=username)
-    return render(request, "homeowners/viewprofile.html",{'hprofile':hprofile})
+    if request.user.is_homeowner is True:
+        username = request.user.username
+        hprofile = Account_HomeOwner.objects.get(username=username)
+        return render(request, "homeowners/viewprofile.html",{'hprofile':hprofile})
+    else:
+        return redirect('404')
 
 
 @login_required(login_url="hsignin")
 def bookings(request):
-    username = request.user.username
-    alldata = Account_HomeOwner.objects.get(username=username)
-    ord = Order.objects.filter(homeowner_id=alldata.homeowner_id).order_by('-date')
-    return render(request, "homeowners/bookings.html",{'ord':ord})
+    if request.user.is_homeowner is True:
+        username = request.user.username
+        alldata = Account_HomeOwner.objects.get(username=username)
+        ord = Order.objects.filter(homeowner_id=alldata.homeowner_id).order_by('-date')
+        return render(request, "homeowners/bookings.html",{'ord':ord})
+    else:
+        return redirect('404')
 
 @login_required(login_url="hsignin")
 def bookingdetails(request,od):
-    ord = Order.objects.get(order_id=od)
-    sk_service = ord.professional_id.subservice
-    servicedata = All_Service.objects.get(subservice=sk_service)
-    if ord.status == 'cancel':
-        status = 'Cancel'
-    elif ord.status == 'solve':
-        status = 'Solve'
+    if request.user.is_homeowner is True:
+        ord = Order.objects.get(order_id=od)
+        sk_service = ord.professional_id.subservice
+        servicedata = All_Service.objects.get(subservice=sk_service)
+        if ord.status == 'cancel':
+            status = 'Cancel'
+        elif ord.status == 'solve':
+            status = 'Solve'
+        else:
+            status = 'Book'
+            
+        #cash Payment
+        if request.method == 'POST':
+            print("DSfsdf")
+            amount = request.POST['amount']
+            print(amount)
+            if amount:
+                orderid = request.POST['orderid']
+
+            try:
+                order = Order.objects.get(order_id=orderid)
+            except Order.DoesNotExist:
+                # Handle the case where the order ID doesn't exist
+                return HttpResponse("TryAgain")
+
+            order.payment_amount = amount
+            order.payment_date = datetime.now()
+            order.payment_method = "Cash"
+            order.save()
+            return redirect(request.path)
+        return render(request, "homeowners/bookingdetails.html",{'ord':ord, 'status':status, 'servicedata': servicedata})
     else:
-        status = 'Book'
-        
-    #cash Payment
-    if request.method == 'POST':
-        print("DSfsdf")
-        amount = request.POST['amount']
-        print(amount)
-        if amount:
-            orderid = request.POST['orderid']
-
-        try:
-            order = Order.objects.get(order_id=orderid)
-        except Order.DoesNotExist:
-            # Handle the case where the order ID doesn't exist
-            return HttpResponse("TryAgain")
-
-        order.payment_amount = amount
-        order.payment_date = datetime.now()
-        order.payment_method = "Cash"
-        order.save()
-        return redirect(request.path)
-    return render(request, "homeowners/bookingdetails.html",{'ord':ord, 'status':status, 'servicedata': servicedata})
+        return redirect('404')
 
 @login_required(login_url="psignin")
 def requestdetails(request,rd):
-    ord = Order.objects.get(order_id=rd)
-    if ord.status == 'cancel':
-        status = 'Cancel'
-    elif ord.status == 'solve':
-        status = 'Solve'
+    if request.user.is_professional is True:
+        ord = Order.objects.get(order_id=rd)
+        if ord.status == 'cancel':
+            status = 'Cancel'
+        elif ord.status == 'solve':
+            status = 'Solve'
+        else:
+            status = 'Book'
+        return render(request, "professionals/requestdetails.html",{'ord':ord, 'status':status})
     else:
-        status = 'Book'
-    return render(request, "professionals/requestdetails.html",{'ord':ord, 'status':status})
+        return redirect('404')
 
 @login_required(login_url="psignin")
 def request(request):
-    username = request.user.username
-    ord = Order.objects.all()
-    po = Account_Professional.objects.get(username=username)
-    ord = Order.objects.filter(professional_id=po.professional_id).order_by('-date')
-    return render(request, "professionals/request.html",{'ord':ord, 'po':po})
+    if request.user.is_professional is True:
+        username = request.user.username
+        ord = Order.objects.all()
+        po = Account_Professional.objects.get(username=username)
+        ord = Order.objects.filter(professional_id=po.professional_id).order_by('-date')
+        return render(request, "professionals/request.html",{'ord':ord, 'po':po})
+    else:
+        return redirect('404')
 
 @login_required(login_url="psignin")
 def professionalprofile(request):
-    username = request.user.username
-    po = Account_Professional.objects.get(username=username)
-    mainpprofile = User.objects.get(username=username)
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        full_name = request.POST.get('full_name')
-        email = request.POST.get('email')
-        number = request.POST.get('number')
-        address = request.POST.get('address')
-        age = request.POST.get('age')
-        gender = request.POST.get('gender')
-        exprience = request.POST.get('exprience')
-        rateperhour = request.POST.get('rateperhour')
-        photo = request.FILES.get('photo')
-        desc = request.POST.get('desc')
-        
-        if User.objects.filter(username=username).exclude(username=request.user.username).exists():
-            messages.info(request, "Username already exists")
-            return redirect('professionalprofile')
-               
-        if User.objects.filter(email=email, is_professional=True).exclude(email=request.user.email).exists():
-            messages.info(request, "Email already exists")
-            return redirect('professionalprofile')
-        
-        # Retrieve the user's Account_HomeOwner object and update its fields
-        mainpprofile.username = username
-        mainpprofile.email = email
-        mainpprofile.save()
-        
-        po.full_name = full_name
-        po.email = email
-        po.number = number
-        po.username = username
-        po.address = address
-        po.age = age
-        po.gender = gender
-        po.exprience = exprience
-        po.rateperhour = rateperhour
-        if photo:
-            po.photo = photo
-        po.desc = desc
-        po.save() 
-        messages.success(request, "Profile updated successfully")
-        return redirect('professionalviewprofile')
-    return render(request, "professionals/professionalprofile.html",{'po':po})
+    if request.user.is_professional is True:
+        username = request.user.username
+        po = Account_Professional.objects.get(username=username)
+        mainpprofile = User.objects.get(username=username)
+        if request.method == 'POST':
+            username = request.POST.get('username')
+            full_name = request.POST.get('full_name')
+            email = request.POST.get('email')
+            number = request.POST.get('number')
+            address = request.POST.get('address')
+            age = request.POST.get('age')
+            gender = request.POST.get('gender')
+            exprience = request.POST.get('exprience')
+            rateperhour = request.POST.get('rateperhour')
+            photo = request.FILES.get('photo')
+            desc = request.POST.get('desc')
+            
+            if User.objects.filter(username=username).exclude(username=request.user.username).exists():
+                messages.info(request, "Username already exists")
+                return redirect('professionalprofile')
+                
+            if User.objects.filter(email=email, is_professional=True).exclude(email=request.user.email).exists():
+                messages.info(request, "Email already exists")
+                return redirect('professionalprofile')
+            
+            # Retrieve the user's Account_HomeOwner object and update its fields
+            mainpprofile.username = username
+            mainpprofile.email = email
+            mainpprofile.save()
+            
+            po.full_name = full_name
+            po.email = email
+            po.number = number
+            po.username = username
+            po.address = address
+            po.age = age
+            po.gender = gender
+            po.exprience = exprience
+            po.rateperhour = rateperhour
+            if photo:
+                po.photo = photo
+            po.desc = desc
+            po.save() 
+            messages.success(request, "Profile updated successfully")
+            return redirect('professionalviewprofile')
+        return render(request, "professionals/professionalprofile.html",{'po':po})
+    else:
+        return redirect('404')
 
 @login_required(login_url="psignin")
 def professionalchangepassword(request):
-    username = request.user.username
-    po = Account_Professional.objects.get(username=username)
-    mainpprofile = User.objects.get(username=username)
-    if request.method == 'POST':
-        password = request.POST.get('password')
-        conformpassword = request.POST.get('conformpassword')
-        if password == conformpassword:
-        # Retrieve the user's Account_HomeOwner object and update its fields
-            mainpprofile.password = make_password(password)
-            mainpprofile.save()
-            po.password = make_password(password)
-            po.save() 
-            messages.success(request, "Password updated successfully")
-            return redirect('psignin')
-        else:
-            messages.error(request, "Conform Password not match")
-            
-    return render(request, "professionals/professionalchangepassword.html",{'po':po})
+    if request.user.is_professional is True:
+        username = request.user.username
+        po = Account_Professional.objects.get(username=username)
+        mainpprofile = User.objects.get(username=username)
+        if request.method == 'POST':
+            password = request.POST.get('password')
+            conformpassword = request.POST.get('conformpassword')
+            if password == conformpassword:
+            # Retrieve the user's Account_HomeOwner object and update its fields
+                mainpprofile.password = make_password(password)
+                mainpprofile.save()
+                po.password = make_password(password)
+                po.save() 
+                messages.success(request, "Password updated successfully")
+                return redirect('psignin')
+            else:
+                messages.error(request, "Conform Password not match")
+                
+        return render(request, "professionals/professionalchangepassword.html",{'po':po})
+    else:
+        return redirect('404')
 
 @login_required(login_url="psignin")
 def professionalviewprofile(request):
-    username = request.user.username
-    po = Account_Professional.objects.get(username=username)
-    return render(request, "professionals/professionalviewprofile.html",{'po':po})
+    if request.user.is_professional is True:
+        username = request.user.username
+        po = Account_Professional.objects.get(username=username)
+        return render(request, "professionals/professionalviewprofile.html",{'po':po})
+    else:
+        return redirect('404')
   
 
 @login_required(login_url="psignin")
 def professionalnotification(request):
-    username = request.user.username
-    print(username)
-    if username:
-            professional_id = Account_Professional.objects.get(username=username)        
-    msg = Notification.objects.filter(Q(classification="All") | Q(classification="All_Professional") | Q(classification="Professional", professional_id=professional_id)).order_by('-time')
-    snum = Notification.objects.filter(Q(classification="All") | Q(classification="All_Professional") | Q(classification="Professional", professional_id=professional_id) & Q(view=False)).order_by('-time')
-    num= snum.count()
-    po = Account_Professional.objects.get(username=username)
-    return render(request, "professionals/professionalnotification.html",{'msg':msg, 'num':num,'po':po})
+    if request.user.is_professional is True:
+        username = request.user.username
+        print(username)
+        if username:
+                professional_id = Account_Professional.objects.get(username=username)        
+        msg = Notification.objects.filter(Q(classification="All") | Q(classification="All_Professional") | Q(classification="Professional", professional_id=professional_id)).order_by('-time')
+        snum = Notification.objects.filter(Q(classification="All") | Q(classification="All_Professional") | Q(classification="Professional", professional_id=professional_id) & Q(view=False)).order_by('-time')
+        num= snum.count()
+        po = Account_Professional.objects.get(username=username)
+        return render(request, "professionals/professionalnotification.html",{'msg':msg, 'num':num,'po':po})
+    else:
+        return redirect('404')
 
 
 @login_required(login_url="adminsignin")
 def adminhomepage(request):
-    h = Account_HomeOwner.objects.all().count()
-    p = Account_Professional.objects.all().count()
-    s = Service_List.objects.all().count()
-    ho = {'h': h}
-    po = {'p': p}
-    so = {'s': s}
-    context = {**ho, **po, **so}
-    return render(request, "admin/adminhomepage.html",context)
+    if request.user.is_admin is True:
+        h = Account_HomeOwner.objects.all().count()
+        p = Account_Professional.objects.all().count()
+        s = Service_List.objects.all().count()
+        ho = {'h': h}
+        po = {'p': p}
+        so = {'s': s}
+        context = {**ho, **po, **so}
+        return render(request, "admin/adminhomepage.html",context)
+    else:
+        return redirect('404')
 
 @login_required(login_url="adminsignin")
 def admincreateservice(request):
-    servs = Service_List.objects.all().distinct('service_list') 
-    if request.method =="POST":
-        service_list = request.POST.get('service_list')
-        if Service_List.objects.filter(service_list=service_list).exists():
-                messages.info(request,'Sorry! Service Already Exist')
-                return redirect('admincreateservice')
-        else:    
-            serv = Service_List(
-                service_list = service_list 
-            )
-            serv.save()
-            messages.info(request,'New Service Created')
-    return render(request, "admin/admincreateservice.html",{'servs':servs})
+    if request.user.is_admin is True:
+        servs = Service_List.objects.all().distinct('service_list') 
+        if request.method =="POST":
+            service_list = request.POST.get('service_list')
+            if Service_List.objects.filter(service_list=service_list).exists():
+                    messages.info(request,'Sorry! Service Already Exist')
+                    return redirect('admincreateservice')
+            else:    
+                serv = Service_List(
+                    service_list = service_list 
+                )
+                serv.save()
+                messages.info(request,'New Service Created')
+        return render(request, "admin/admincreateservice.html",{'servs':servs})
+    else:
+        return redirect('404')
 
 @login_required(login_url="adminsignin")
 def admincreatesubservice(request):
-    servs = Service_List.objects.all().distinct('service_list') 
-    if request.method =="POST":
-        service = request.POST.get('service')
-        subservice = request.POST.get('subservice')
-        photo = request.FILES.get('photo')
-        desc = request.POST.get('desc')
-        if All_Service.objects.filter(subservice=subservice).exists():
-                messages.info(request,'Sorry! Sub-Service Already Exist')
-                return redirect('admincreatesubservice')
-        else:    
-            serv = All_Service(
-                service = service,
-                subservice = subservice,
-                photo = photo,
-                desc = desc   
-            )
-            serv.save()
-            messages.info(request,'New Sub-Service Created')
-    return render(request, "admin/admincreatesubservice.html",{'servs':servs})
+    if request.user.is_admin is True:
+        servs = Service_List.objects.all().distinct('service_list') 
+        if request.method =="POST":
+            service = request.POST.get('service')
+            subservice = request.POST.get('subservice')
+            photo = request.FILES.get('photo')
+            desc = request.POST.get('desc')
+            if All_Service.objects.filter(subservice=subservice).exists():
+                    messages.info(request,'Sorry! Sub-Service Already Exist')
+                    return redirect('admincreatesubservice')
+            else:    
+                serv = All_Service(
+                    service = service,
+                    subservice = subservice,
+                    photo = photo,
+                    desc = desc   
+                )
+                serv.save()
+                messages.info(request,'New Sub-Service Created')
+        return render(request, "admin/admincreatesubservice.html",{'servs':servs})
+    else:
+        return redirect('404')
 
 
 @login_required(login_url="adminsignin")
 def adminmessage(request):
-    msg = Message.objects.all().order_by('-msg_id')
-    return render(request, "admin/adminmessage.html",{'msg':msg})
+    if request.user.is_admin is True:
+        msg = Message.objects.all().order_by('-msg_id')
+        return render(request, "admin/adminmessage.html",{'msg':msg})
+    else:
+        return redirect('404')
 
 @login_required(login_url="adminsignin")
 def adminorderdetail(request,ok):
-    ord = Order.objects.get(order_id=ok) 
-    return render(request, "admin/adminorderdetail.html",{'ord':ord})
+    if request.user.is_admin is True:
+        ord = Order.objects.get(order_id=ok) 
+        return render(request, "admin/adminorderdetail.html",{'ord':ord})
+    else:
+        return redirect('404')
 
 @login_required(login_url="adminsignin")
 def adminprofile(request):
-    return render(request, "admin/adminprofile.html")
+    if request.user.is_admin is True:
+        return render(request, "admin/adminprofile.html")
+    else:
+        return redirect('404')
 
 @login_required(login_url="adminsignin")
 def adminservicedetail(request, pk):
-    serv = All_Service.objects.get(service_id=pk)
-    if request.method == "POST":
-        subservice = request.POST.get('subservice')
-        photo = request.FILES.get('photo')
-        desc = request.POST.get('desc')
-        
-        # Update the existing instance with the new values
-        serv.subservice = subservice
-        if photo:
-            serv.photo = photo
-        serv.desc = desc
-        serv.save()
-        messages.info(request,'Sucessfull Update!!!')
-        
-    return render(request, "admin/adminservicedetail.html", {'serv': serv})
+    if request.user.is_admin is True:
+        serv = All_Service.objects.get(service_id=pk)
+        if request.method == "POST":
+            subservice = request.POST.get('subservice')
+            photo = request.FILES.get('photo')
+            desc = request.POST.get('desc')
+            
+            # Update the existing instance with the new values
+            serv.subservice = subservice
+            if photo:
+                serv.photo = photo
+            serv.desc = desc
+            serv.save()
+            messages.info(request,'Sucessfull Update!!!')
+            
+        return render(request, "admin/adminservicedetail.html", {'serv': serv})
+    else:
+        return redirect('404')
 
 @login_required(login_url="adminsignin")
 def adminservicelist(request):
-    query = request.GET.get('q')
-    if query:
-        # search for users that match the query string in any of the specified fields
-        serv = All_Service.objects.filter(
-           Q(service_id__icontains=query) | Q(service__icontains=query) | Q(subservice__icontains=query)
-        )
+    if request.user.is_admin is True:
+        query = request.GET.get('q')
+        if query:
+            # search for users that match the query string in any of the specified fields
+            serv = All_Service.objects.filter(
+            Q(service_id__icontains=query) | Q(service__icontains=query) | Q(subservice__icontains=query)
+            )
+        else:
+        # serv = All_Service.objects.exclude(service=True)
+            serv = All_Service.objects.all()
+        return render(request, "admin/adminservicelist.html",{'serv':serv})
     else:
-    # serv = All_Service.objects.exclude(service=True)
-        serv = All_Service.objects.all()
-    return render(request, "admin/adminservicelist.html",{'serv':serv})
+        return redirect('404')
 
 @login_required(login_url="adminsignin")
 def adminservicemandetail(request,pok):
-    po = Account_Professional.objects.get(professional_id=pok)
-    return render(request, "admin/adminservicemandetail.html",{'po':po})
+    if request.user.is_admin is True:
+        po = Account_Professional.objects.get(professional_id=pok)
+        return render(request, "admin/adminservicemandetail.html",{'po':po})
+    else:
+        return redirect('404')
 
 @login_required(login_url="adminsignin")
 def adminservicemanlist(request):
-    query = request.GET.get('q')
-    if query:
-        # search for users that match the query string in any of the specified fields
-        po = Account_Professional.objects.filter(
-           Q(professional_id__icontains=query) | Q(username__icontains=query) | Q(email__icontains=query) | Q(full_name__icontains=query) | Q(service__icontains=query) | Q(status__icontains=query)
-        )
+    if request.user.is_admin is True:
+        query = request.GET.get('q')
+        if query:
+            # search for users that match the query string in any of the specified fields
+            po = Account_Professional.objects.filter(
+            Q(professional_id__icontains=query) | Q(username__icontains=query) | Q(email__icontains=query) | Q(full_name__icontains=query) | Q(service__icontains=query) | Q(status__icontains=query)
+            )
+        else:
+            po = Account_Professional.objects.all()
+        return render(request, "admin/adminservicemanlist.html",{'po':po})
     else:
-        po = Account_Professional.objects.all()
-    return render(request, "admin/adminservicemanlist.html",{'po':po})
+        return redirect('404')
 
 @login_required(login_url="adminsignin")
 def adminuserdetail(request,hk):
-    ho = Account_HomeOwner.objects.get(homeowner_id=hk)
-    return render(request, "admin/adminuserdetail.html",{'ho':ho})
+    if request.user.is_admin is True:
+        ho = Account_HomeOwner.objects.get(homeowner_id=hk)
+        return render(request, "admin/adminuserdetail.html",{'ho':ho})
+    else:
+        return redirect('404')
 
 @login_required(login_url="adminsignin")
 def adminusermanlist(request):
-    query = request.GET.get('q')
-    if query:
-        # search for users that match the query string in any of the specified fields
-        ho = Account_HomeOwner.objects.filter(
-           Q(homeowner_id__icontains=query) | Q(username__icontains=query) | Q(email__icontains=query) | Q(full_name__icontains=query) 
-        )
+    if request.user.is_admin is True:
+        query = request.GET.get('q')
+        if query:
+            # search for users that match the query string in any of the specified fields
+            ho = Account_HomeOwner.objects.filter(
+            Q(homeowner_id__icontains=query) | Q(username__icontains=query) | Q(email__icontains=query) | Q(full_name__icontains=query) 
+            )
+        else:
+            ho =Account_HomeOwner.objects.all()
+        return render(request, 'admin/adminusermanlist.html',{'ho':ho})
     else:
-        ho =Account_HomeOwner.objects.all()
-    return render(request, 'admin/adminusermanlist.html',{'ho':ho})
+        return redirect('404')
 
 @login_required(login_url="adminsignin")
 def adminvieworder(request):
-    query = request.GET.get('q')
-    if query:
-        # search for users that match the query string in any of the specified fields
-        ord = Order.objects.filter(
-           Q(order_id__icontains=query) |  Q(status__icontains=query) | Q(date__icontains=query) 
-        )
+    if request.user.is_admin is True:
+        query = request.GET.get('q')
+        if query:
+            # search for users that match the query string in any of the specified fields
+            ord = Order.objects.filter(
+            Q(order_id__icontains=query) |  Q(status__icontains=query) | Q(date__icontains=query) 
+            )
+        else:
+            ord = Order.objects.all()
+        return render(request, "admin/adminvieworder.html",{'ord':ord})
     else:
-        ord = Order.objects.all()
-    return render(request, "admin/adminvieworder.html",{'ord':ord})
+        return redirect('404')
 
 
 @login_required(login_url="adminsignin")
 def adminnotification(request):
-    msg = Notification.objects.filter(Q(classification="All") | Q(classification="Admin")).order_by('-time')
-    snum = Notification.objects.filter(Q(classification="All") | Q(classification="Admin") & Q(view=False)).order_by('-time')
-    num= snum.count() 
-    return render(request, "admin/adminnotification.html",{'msg':msg, 'num':num})
+    if request.user.is_admin is True:
+        msg = Notification.objects.filter(Q(classification="All") | Q(classification="Admin")).order_by('-time')
+        snum = Notification.objects.filter(Q(classification="All") | Q(classification="Admin") & Q(view=False)).order_by('-time')
+        num= snum.count() 
+        return render(request, "admin/adminnotification.html",{'msg':msg, 'num':num})
+    else:
+        return redirect('404')
 
 @login_required(login_url="adminsignin")
 def notify(request):
-    classificationss = [choice[1] for choice in Notification.CLASSIFICATION_CHOICES]
-    print(classificationss)
-    homeownerss = Notification.objects.all().distinct('homeowner_id')
-    professionalss = Notification.objects.all().distinct('professional_id')
-    
-    if request.method == "POST":
-        notification = request.POST.get('notification')
-        classification = request.POST.get('classification')
-        homeowner_username = request.POST.get('homeowner')
-        professional_username = request.POST.get('professional')
+    if request.user.is_admin is True:
+        classificationss = [choice[1] for choice in Notification.CLASSIFICATION_CHOICES]
+        homeownerss = Notification.objects.all().distinct('homeowner_id')
+        professionalss = Notification.objects.all().distinct('professional_id')
         
-        homeowner = None
-        if homeowner_username:
-            homeowner = Account_HomeOwner.objects.get(username=homeowner_username)
-            print(homeowner)
-        
-        professional = None
-        if professional_username:
-            professional = Account_Professional.objects.get(username=professional_username)
-            print(professional)
+        if request.method == "POST":
+            notification = request.POST.get('notification')
+            classification = request.POST.get('classification')
+            homeowner_username = request.POST.get('homeowner')
+            professional_username = request.POST.get('professional')
+            
+            homeowner = None
+            if homeowner_username:
+                homeowner = Account_HomeOwner.objects.get(username=homeowner_username)
+                print(homeowner)
+            
+            professional = None
+            if professional_username:
+                professional = Account_Professional.objects.get(username=professional_username)
+                print(professional)
 
-        # Create a new notification instance
-        notification = Notification.objects.create(
-            notification=notification,
-            classification=classification,
-            homeowner_id=homeowner,
-            professional_id=professional,
-        )
-        messages.info(request, 'Notification created successfully!')
-        return redirect('notify')
-    
-    return render(request, "admin/notify.html", locals())
+            # Create a new notification instance
+            notification = Notification.objects.create(
+                notification=notification,
+                classification=classification,
+                homeowner_id=homeowner,
+                professional_id=professional,
+            )
+            messages.info(request, 'Notification created successfully!')
+            return redirect('notify')
+        
+        return render(request, "admin/notify.html", locals())
+    else:
+        return redirect('404')
 
 
 
@@ -727,63 +830,86 @@ def notify(request):
 
 @login_required(login_url="adminsignin")
 def deleteservice(request, service_id):
-    serv = All_Service.objects.filter(service_id = service_id).delete() 
-    return redirect("adminservicelist")
+    if request.user.is_admin is True:
+        serv = All_Service.objects.filter(service_id = service_id).delete() 
+        return redirect("adminservicelist")
+    else:
+        return redirect('404')
 
 @login_required(login_url="adminsignin")
 def deleteservicelist(request, servicelist_id):
-    serv = Service_List.objects.filter(servicelist_id = servicelist_id).delete() 
-    return redirect("admincreateservice")
+    if request.user.is_admin is True:
+        serv = Service_List.objects.filter(servicelist_id = servicelist_id).delete() 
+        return redirect("admincreateservice")
+    else:
+        return redirect('404')
 
 @login_required(login_url="adminsignin")
 def deleteuser(request, homeowner_id):
-    ho = Account_HomeOwner.objects.filter(homeowner_id = homeowner_id).delete() 
-    return redirect("adminusermanlist")
+    if request.user.is_admin is True:
+        ho = Account_HomeOwner.objects.filter(homeowner_id = homeowner_id).delete() 
+        return redirect("adminusermanlist")
+    else:
+        return redirect('404')
 
 @login_required(login_url="adminsignin")
 def deleteserviceman(request, professional_id):
-    po = Account_Professional.objects.filter(professional_id = professional_id).delete() 
-    return redirect("adminservicemanlist")
+    if request.user.is_admin is True:
+        po = Account_Professional.objects.filter(professional_id = professional_id).delete() 
+        return redirect("adminservicemanlist")
+    else:
+        return redirect('404')
 
 @login_required(login_url="adminsignin")
 def deleteorder(request, order_id):
-    ord = Order.objects.filter(order_id = order_id).delete() 
-    return redirect("adminvieworder")
+    if request.user.is_admin is True:
+        ord = Order.objects.filter(order_id = order_id).delete() 
+        return redirect("adminvieworder")
+    else:
+        return redirect('404')
 
 @login_required(login_url="adminsignin")
 def deletemsg(request, msg_id):
-    msg = Message.objects.filter(msg_id = msg_id).delete() 
-    return redirect("adminmessage")
+    if request.user.is_admin is True:
+        msg = Message.objects.filter(msg_id = msg_id).delete() 
+        return redirect("adminmessage")
+    else:
+        return redirect('404')
 
 
 
 
 @login_required(login_url="adminsignin")
 def activate(request, professional_id):
-    print("hello workd")
-    instance = get_object_or_404(Account_Professional, pk=professional_id)
-    ins = get_object_or_404(User, pk=instance.user.pk)
-    instance.status = not instance.status
-    ins.is_active = not ins.is_active
-    instance.save()
-    ins.save()
-    previous_url = request.META.get('HTTP_REFERER')
-    return redirect(previous_url)
+    if request.user.is_admin is True:
+        instance = get_object_or_404(Account_Professional, pk=professional_id)
+        ins = get_object_or_404(User, pk=instance.user.pk)
+        instance.status = not instance.status
+        ins.is_active = not ins.is_active
+        instance.save()
+        ins.save()
+        previous_url = request.META.get('HTTP_REFERER')
+        return redirect(previous_url)
+    else:
+        return redirect('404')
 
 @login_required(login_url="adminsignin")
 def update_my_model(request, service_id):
-    servs = Account_Professional.objects.filter(service_id = service_id)
-    if request.method =="POST":       
-        
-        serv = All_Service(request.POST, servs=servs)         
-        if serv.is_valid():
-            serv.save()
-            return redirect('update_my_model')
+    if request.user.is_admin is True:
+        servs = Account_Professional.objects.filter(service_id = service_id)
+        if request.method =="POST":       
+            
+            serv = All_Service(request.POST, servs=servs)         
+            if serv.is_valid():
+                serv.save()
+                return redirect('update_my_model')
+        else:
+            serv = All_Service(servs=servs) 
+            messages.info(request, 'Please Send Again.')
+            
+        return render(request, 'adminservicedetail', {'serv': serv})
     else:
-        serv = All_Service(servs=servs) 
-        messages.info(request, 'Please Send Again.')
-        
-    return render(request, 'adminservicedetail', {'serv': serv})
+        return redirect('404')
 
 
 @login_required(login_url=["hsignin", "psignin"])
@@ -1056,40 +1182,54 @@ def ppassword_reset(request):
 #     print(num)
 #     return render(request, "homeowners/hbases.html", {'num': num})
 
-
+@login_required(login_url="hsignin")
 def update_notification_view(request):
-    if request.method == 'POST':
-        not_id = request.POST.get('not_id')
-        notification = Notification.objects.get(not_id=not_id)
-        notification.view = True
-        notification.save()
-    return redirect(request.META['HTTP_REFERER'])
+    if request.user.is_homeowner is True:
+        if request.method == 'POST':
+            not_id = request.POST.get('not_id')
+            notification = Notification.objects.get(not_id=not_id)
+            notification.view = True
+            notification.save()
+        return redirect(request.META['HTTP_REFERER'])
+    else:
+        return redirect('404')
 
+@login_required(login_url="psignin")
 def pupdate_notification_view(request):
-    if request.method == 'POST':
-        not_id = request.POST.get('not_id')
-        notification = Notification.objects.get(not_id=not_id)
-        notification.view = True
-        notification.save()
-    return redirect(request.META['HTTP_REFERER'])
+    if request.user.is_professional is True:
+        if request.method == 'POST':
+            not_id = request.POST.get('not_id')
+            notification = Notification.objects.get(not_id=not_id)
+            notification.view = True
+            notification.save()
+        return redirect(request.META['HTTP_REFERER'])
+    else:
+        return redirect('404')
 
+@login_required(login_url="adminsignin")
 def aupdate_notification_view(request):
-    if request.method == 'POST':
-        not_id = request.POST.get('not_id')
-        notification = Notification.objects.get(not_id=not_id)
-        notification.view = True
-        notification.save()
-    return redirect(request.META['HTTP_REFERER'])
+    if request.user.is_admin is True:
+        if request.method == 'POST':
+            not_id = request.POST.get('not_id')
+            notification = Notification.objects.get(not_id=not_id)
+            notification.view = True
+            notification.save()
+        return redirect(request.META['HTTP_REFERER'])
+    else:
+        return redirect('404')
 
 @login_required(login_url="psignin")
 def online(request, usernames):
-    professional = Account_Professional.objects.filter(username=usernames).first()
-    professional_id = professional.professional_id
-    obj = get_object_or_404(Account_Professional, pk=professional_id)
-    obj.online = not obj.online
-    obj.save()
-    previous_url = request.META.get('HTTP_REFERER')
-    return redirect(previous_url)
+    if request.user.is_professional is True:
+        professional = Account_Professional.objects.filter(username=usernames).first()
+        professional_id = professional.professional_id
+        obj = get_object_or_404(Account_Professional, pk=professional_id)
+        obj.online = not obj.online
+        obj.save()
+        previous_url = request.META.get('HTTP_REFERER')
+        return redirect(previous_url)
+    else:
+        return redirect('404')
 
 
 
