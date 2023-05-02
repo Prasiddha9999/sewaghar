@@ -7,6 +7,7 @@ from account.models import All_Service
 from account.models import Service_List
 from account.models import Notification
 from account.models import Message
+from account.models import Blog
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -27,7 +28,8 @@ def home(request):
     return render(request, "home.html")
 
 def blog(request):
-    return render(request, "blog.html")
+    blog = Blog.objects.all()
+    return render(request, "blog.html",{"blog":blog})
 
 def aboutus(request):
     return render(request, "aboutus.html")
@@ -37,6 +39,8 @@ def privacypolicy(request):
 
 def termsandcondition(request):
     return render(request, "termsandcondition.html")
+
+
 
 @login_required(login_url="hsignin")
 def service(request):
@@ -205,7 +209,6 @@ def unbook(request, prof_id, order_id):
 
 @login_required(login_url="hsignin")
 def activates(request, order_id):
-    if request.user.is_homeowner is True:
         instance = get_object_or_404(Order, order_id=order_id)
         status = request.POST.get('status')
         message = request.POST.get('messagess')
@@ -326,8 +329,7 @@ def activates(request, order_id):
             instance.save()
         previous_url = request.META.get('HTTP_REFERER')
         return redirect(previous_url)
-    else:
-        return redirect('404')
+
 
 @login_required(login_url="hsignin")
 def notification(request):
@@ -335,7 +337,6 @@ def notification(request):
         username = request.user.username
         if username:
                 homeowner_id = Account_HomeOwner.objects.get(username=username)
-                print(homeowner_id)
         msg = Notification.objects.filter(Q(classification="All") | Q(classification="All_HomeOwner") | Q(classification="HomeOwner", homeowner_id=homeowner_id)).order_by('-time')
         snum = Notification.objects.filter(Q(classification="All") | Q(classification="All_HomeOwner") | Q(classification="HomeOwner", homeowner_id=homeowner_id) & Q(view=False)).order_by('-time')
 
@@ -431,6 +432,13 @@ def bookings(request):
         alldata = Account_HomeOwner.objects.get(username=username)
         ord = Order.objects.filter(homeowner_id=alldata.homeowner_id).order_by('-date')
         return render(request, "homeowners/bookings.html",{'ord':ord})
+    else:
+        return redirect('404')
+    
+@login_required(login_url="hsignin")
+def paymentpage(request):
+    if request.user.is_homeowner is True:
+        return render(request, "homeowners/paymentpage.html")
     else:
         return redirect('404')
 
@@ -653,6 +661,64 @@ def admincreatesubservice(request):
         return render(request, "admin/admincreatesubservice.html",{'servs':servs})
     else:
         return redirect('404')
+    
+@login_required(login_url="adminsignin")
+def admincreateblog(request):
+    if request.user.is_admin is True:
+        if request.method =="POST":
+            title = request.POST.get('title')
+            photo = request.FILES.get('photo')
+            desc = request.POST.get('desc')
+            if Blog.objects.filter(title=title).exists():
+                    messages.info(request,'Sorry! Title Already Exist')
+                    return redirect('admincreateblog')
+            else:    
+                blog = Blog(
+                    title = title,
+                    photo = photo,
+                    desc = desc   
+                )
+                blog.save()
+                messages.info(request,'New Blog Created')
+        return render(request, "admin/admincreateblog.html")
+    else:
+        return redirect('404')
+    
+    
+@login_required(login_url="adminsignin")
+def adminblogdetail(request, pk):
+    if request.user.is_admin is True:
+        blog = Blog.objects.get(blog_id=pk)
+        if request.method == "POST":
+            title = request.POST.get('title')
+            photo = request.FILES.get('photo')
+            desc = request.POST.get('desc')
+            
+            # Update the existing instance with the new values
+            blog.title = title
+            if photo:
+                blog.photo = photo
+            blog.desc = desc
+            blog.save()
+            messages.info(request,'Sucessfull Update!!!')
+            
+        return render(request, "admin/adminblogdetail.html", {'blog': blog})
+    else:
+        return redirect('404')
+    
+@login_required(login_url="adminsignin")
+def adminblog(request):
+    if request.user.is_admin is True:
+        query = request.GET.get('q')
+        if query:
+            blog = Blog.objects.filter(
+            Q(blog_id__icontains=query) | Q(title__icontains=query) 
+            )
+        else:
+            blog = Blog.objects.all()
+        return render(request, "admin/adminblog.html",{'blog':blog})
+    else:
+        return redirect('404')
 
 
 @login_required(login_url="adminsignin")
@@ -873,6 +939,14 @@ def deletemsg(request, msg_id):
     if request.user.is_admin is True:
         msg = Message.objects.filter(msg_id = msg_id).delete() 
         return redirect("adminmessage")
+    else:
+        return redirect('404')
+    
+@login_required(login_url="adminsignin")
+def deleteblog(request, blog_id):
+    if request.user.is_admin is True:
+        blog = Blog.objects.filter(blog_id = blog_id).delete() 
+        return redirect("adminblog")
     else:
         return redirect('404')
 

@@ -16,7 +16,7 @@
       <div class="card h-100 subservicecart">
         <a href="{% url 'servicemanlist' slk=subservice.subservice %}" class="card-body text-center text-decoration-none d-flex flex-column justify-content-between">
           <h5 class="card-title"><span style="color: black"><u>{{ subservice.subservice }}</u></span></h5>
-          <figure><img src="/media/{{subservice.photo}}" style="max-width:50%; height:auto;" alt="Service Image"></figure>
+          <figure><img src="/media/{{subservice.photo}}" width="250" height="180" alt="Service Image"></figure>
           <h5 class="card-title"><span style="color: #808080">{{ subservice.desc }}</span></h5>
         </a>
       </div>

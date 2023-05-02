@@ -8,44 +8,31 @@
         <h2 class="display-5"><b>Blog</b></h2>
         <hr class="w-25 mx-auto"/>
       </div>
+
+{%for i in blog%}
       <div class="container">
         <div class="row">
-          <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
+          <div class="col-lg-6 col-md-6 col-12 col-xxl-6">  
             <figure>
-              <img src="{% static 'images/offer.jpg' %}" alt="About Us IMG" class="img-fluid content-img">
+              <img src="/media/{{i.photo}}" alt="About Us IMG" width="600" height="280" >
+ 
+
+
+
             </figure>
           </div>
 
           <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
-            <h1>Offer!!! Comming Soon</h1>
+            <h1>{{i.title}}</h1>
             <p>
-              It's exciting to hear about the upcoming offer on SewaGhar's home service provider web app! The organization's commitment to providing high-quality services at affordable rates is truly admirable, and this offer will be a great opportunity for even more homeowners in Nepal to benefit from their services. I appreciate how SewaGhar is constantly looking for ways to improve their offerings and make their services more accessible to those who need them. I am looking forward to seeing the details of the upcoming offer and taking advantage of it to receive even more value from this great app. Thank you, SewaGhar, for your dedication to providing exceptional home services to the people of Nepal.
+             {{i.desc}}
             </p>
           </div>
         </div>
       </div>
-    </section>
+      
+{%endfor%}
 
-     <!-- About Sewa Ghar-->
-     <section class="main_heading my-5">
-      <div class="text-center">
-        <hr class="w-25 mx-auto"/>
-      </div>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
-            <figure>
-              <img src="{% static 'images/inc.jpg' %}" alt="About Us IMG" class="img-fluid content-img">
-            </figure>
-          </div>
 
-          <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
-            <h1>Increasing Order Day by Day</h1>
-            <p>
-              It is wonderful to see the increasing number of orders for home services through the SewaGhar home service provider web app. This reflects the growing popularity of the app and its user-friendly interface that makes it easy for homeowners to schedule and receive quality services. The increasing order also indicates that the app's commitment to providing excellent service and customer satisfaction is resonating with its users. This is a testament to the app's effectiveness in addressing the needs of homeowners in Nepal who require reliable and efficient home services. I am confident that as the number of orders continues to increase, more and more people in Nepal will benefit from this valuable tool.
-            </p>
-          </div>
-        </div>
-      </div>
     </section>
     {% endblock %}

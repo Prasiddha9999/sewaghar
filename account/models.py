@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
-
 from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
@@ -141,4 +140,10 @@ class Notification(models.Model):
     time = models.DateTimeField(auto_now_add=True)
     view = models.BooleanField(default=False)
 
+
+class Blog(models.Model):
+    blog_id = models.AutoField(primary_key=True)
+    photo = models.ImageField(upload_to='images')
+    title = models.TextField(max_length=100) 
+    desc = models.TextField(max_length=500) 
        

@@ -50,18 +50,25 @@
                           //console.log(payload);
                           paymentpass(payload);
                           window.location.replace(`/bookingdetails/{{orderid}}`);
+                          setTimeout(function() {
+                            window.location.reload();
+                          }, 1000); // Set a delay of 1 second (1000 milliseconds)
+                        
+                        
                         
                         
                       },
                       onError (error) {
                           console.log(error);
-                          window.location.replace(`/bookingdetails/{{orderid}}`);
+                          window.location.replace(`/paymentpage`);
                           
                       },
                       onClose () {
-                          console.log('widget is closing');
-                          window.location.replace(`/bookingdetails/{{orderid}}`);
-                         
+                        console.log('widget is closing');
+                        window.location.replace(`/bookingdetails/{{orderid}}`);
+                        setTimeout(function() {
+                          window.location.reload();
+                        }, 1000); // Set a delay of 1 second (1000 milliseconds)
                       }
                   }
               };

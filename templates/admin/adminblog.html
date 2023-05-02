@@ -1,0 +1,59 @@
+{% extends 'admin/bases.html'%}
+{% block content %}
+{% load static %}
+<!--Main layout-->
+<main>
+<br>
+<div class="text-center my-5">
+ <h3 class="display-5">Blog </h3>
+ <hr class="w-25 mx-auto"/>
+</div>
+<div class="container">
+  <div class="row justify-content-end">
+      <div class="col-md-6">
+          <form method="get" action="{% url 'adminblog' %}">
+              <div class="input-group mb-3">
+                  <input type="text" class="form-control" name="q" placeholder="Search Blog by title">
+                  <div class="input-group-append">
+                      <button class="btn btn-outline-success" type="submit">Search</button>
+                      <button class="btn btn-outline-secondary" type="submit">Clear search</button>
+                  </div>
+              </div>
+          </form>
+      </div> 
+  </div>
+<div class="container mt-3 table-responsive">
+   <table class="table border table-hover">
+     <thead>
+       <tr>
+           <th scope="col">#</th>
+           <th scope="col">Title</th>
+           <th scope="col">Image</th>
+           <th scope="col">Description</th>
+           <th scope="col">Details</th>
+           <th scope="col">Action</th>
+       </tr>
+     </thead>
+     <tbody>
+      {%for i in blog%}
+       <tr>
+           <th scope="row">{{i.blog_id}}</th>
+           <td>{{i.title}}</td>
+           <td><img src="/media/{{i.photo}}" width="120" height="100" alt=""></td> 
+           <td>{{i.desc}}</td>
+           
+           <td><a href="{%url 'adminblogdetail' pk=i.blog_id%}" >View more</a></td>
+           <td><a href="deleteblog/{{i.blog_id}}" type="submit" >Delete<a></td>
+       </tr>
+       {%endfor%}
+
+     </tbody>
+   </table>
+ </div>
+
+<br>
+
+
+</main>
+<!--Main layout-->
+{% endblock %}

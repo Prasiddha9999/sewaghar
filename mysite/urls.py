@@ -28,6 +28,7 @@ urlpatterns = [
     path("aboutus",views.aboutus, name="aboutus"),
     path("privacypolicy",views.privacypolicy, name="privacypolicy"),
     path("termsandcondition",views.termsandcondition, name="termsandcondition"),
+    path("paymentpage",views.paymentpage, name="paymentpage"),
     path("service",views.service, name="service"),
     
     
@@ -88,6 +89,12 @@ urlpatterns = [
     path("adminorderdetail/<int:ok>",views.adminorderdetail, name="adminorderdetail"),
     
     path("adminnotification",views.adminnotification, name="adminnotification"),
+    
+    path("adminblogdetail/<int:pk>",views.adminblogdetail, name="adminblogdetail"),
+    path("admincreateblog",views.admincreateblog, name="admincreateblog"),
+    path("adminblog",views.adminblog, name="adminblog"),
+    
+    
     path("notify",views.notify, name="notify"),
     
     
@@ -97,6 +104,7 @@ urlpatterns = [
     path("deleteserviceman/<str:professional_id>",views.deleteserviceman, name="deleteserviceman"),
     path("deleteorder/<str:order_id>",views.deleteorder, name="deleteorder"),
     path("deletemsg/<str:msg_id>",views.deletemsg, name="deletemsg"),
+    path("deleteblog/<str:blog_id>",views.deleteblog, name="deleteblog"),
 
     path('activate/<str:professional_id>', views.activate, name='activate'),
     path('activates/<int:order_id>/', views.activates, name='activates'),

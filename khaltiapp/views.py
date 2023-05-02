@@ -6,13 +6,14 @@ from account.models import Order
 import json
 import requests
 from datetime import datetime
+from django.contrib import messages
 
 
 # Create your views here.
 @login_required(login_url="hsignin")
 def config(request):
     if request.method == 'POST':
-        amount = int(request.POST['amount'])
+        amount = float(request.POST['amount'])
         orderid = request.POST['orderid']
     amount=amount
     return render(request,"config.html",{"amount":amount, "orderid":orderid})
@@ -45,10 +46,11 @@ def verify(request):
             return JsonResponse({'status': 'error'})
         else:
             # if the request is authenticated, save the data in the Order table
+            # messages.success(request, "Payment Successfully")
             orders = Order.objects.get(order_id=orderid)
             orders.payment_token = token
             orders.payment_idx = idx
-            orders.payment_amount = int(amount/100)
+            orders.payment_amount = float(amount/100)
             orders.payment_date = datetime.now()
             orders.payment_method = "Khalti"
             orders.save()
