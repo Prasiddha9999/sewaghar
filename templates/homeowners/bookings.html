@@ -30,7 +30,7 @@
                 <td>{{i.professional_id.service}}-{{i.professional_id.subservice}}</td>
                 <td>{{i.date}} - {{i.time}}</td>
                 <td>{% if i.payment_amount %}{{i.payment_amount}}{% endif %}</td>
-                <td><a href="{%url 'bookingdetails' od=i.order_id%}">viewmore</a></td>
+                <td><a href="{%url 'bookingdetails' od=i.order_id%}"class="viewmore">viewmore</a></td>
                 <td>{{i.status}}</td>
             </tr>
             {%endfor%}

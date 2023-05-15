@@ -18,7 +18,7 @@
                   {% csrf_token %}
                   <h4>Register Serivice</h4>
                   {%for i in servs%}
-                  <u>-{{i.service_list}}-<a href="deleteservicelist/{{i.servicelist_id}}" type="submit" >Delete<a>,</u>
+                  <u>-{{i.service_list}}</u>-<a href="deleteservicelist/{{i.servicelist_id}}" type="submit" class="delete"> Delete<a>,
                   {%endfor%}
                   <br><br>
                         <div class="form-outline mb-4">

@@ -30,7 +30,19 @@
             <h5>Sub-service: {{po.subservice}}</h5>
             <h5>Exprience: {{po.exprience}} -year</h5>
             <h5>Description: {{po.desc}}</h5>
-            <h5>Ratting: {{po.ratings}} out of 5</h5>
+
+            <h5>Rating:
+              <div class="star-rating" style="display: inline-block;">
+                {% for star in "12345" %}
+                  {% if forloop.counter <= po.ratings %}
+                    <span class="star filled-star">&#9733;</span>
+                  {% else %}
+                    <span class="star">&#9734;</span>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </h5>
+          
             <br>
         </div>
           <div class="text-center pt-1 mb-5 pb-1">

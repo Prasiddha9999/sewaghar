@@ -38,7 +38,7 @@
             {% csrf_token %}
             {% if ord.status == 'book' %}
                 <p>If cancelled write reason for cancel</p>
-                <textarea name="message" class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea><br>
+                <textarea name="messagess" class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea><br>
                 <button type="submit" name="status" value="accept" class="btn btn-success">Accept Request</button>
                 <button type="submit" name="status" value="cancelbyprofessional" class="btn btn-danger">Cancel Request</button>
                

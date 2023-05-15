@@ -46,8 +46,8 @@
            <td>{{i.date}}</td>
            <td>{{i.time}}</td>
            <td>{{i.status}}</td>
-           <td><a href="{%url 'adminorderdetail' ok=i.order_id%}">View More<a></td>
-           <td><a href="deleteorder/{{i.order_id}}" type="submit">Delete<a></td>
+           <td><a href="{%url 'adminorderdetail' ok=i.order_id%}"class="viewmore">View More<a></td>
+           <td><a href="deleteorder/{{i.order_id}}" type="submit"class="delete">Delete<a></td>
        </tr>
        {%endfor%}
      </tbody>

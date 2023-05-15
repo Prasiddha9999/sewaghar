@@ -41,7 +41,20 @@
             <h5>Exprience: {{po.exprience}} -year</h5>
             <h5>Online: {{po.online}}</h5>
             <h5>Description: {{po.desc}}</h5>
-            <h5>Ratting: {{po.ratings}} out of 5</h5>
+
+            <h5>Rating:
+              <div class="star-rating" style="display: inline-block;">
+                {% for star in "12345" %}
+                  {% if forloop.counter <= po.ratings %}
+                    <span class="star filled-star">&#9733;</span>
+                  {% else %}
+                    <span class="star">&#9734;</span>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </h5>
+            
+
             <br>
             <div class="actionbtn">
               <br>

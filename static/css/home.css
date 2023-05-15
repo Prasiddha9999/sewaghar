@@ -162,5 +162,60 @@ html * {
   transform: scale(1.1);
 }
 
+.star {
+  color: rgb(230, 129, 47);
+}
+
+
+.viewmore{
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+  background-color: rgb(94, 173, 242);
+  border-radius: 3px;
+  padding:2px;
+}
+
+
+  .delete {
+    text-decoration: none !important;
+    color: rgb(252, 252, 252) !important;
+    background-color: rgb(237, 81, 81) !important;
+    border-radius: 3px;
+    padding:2px;
+  }
+
+  .delete:hover {
+    opacity: 0.8!important;
+    color: rgb(255, 255, 255)!important;
+    background-color: rgb(225, 0, 0) !important;
+    /* Add any other desired hover styles */
+  }
+
+  
+  .viewmore:hover{
+    opacity: 0.8!important;
+    background-color: rgb(0, 135, 253);
+    color: rgb(255, 255, 255)!important;
+    /* Add any other desired hover styles */
+  }
+
+
+  .moreinfo{
+    text-decoration: none !important;
+    color: rgb(215, 225, 226) !important;
+  
+  }
+
+  .moreinfo:hover{
+    text-decoration: none !important;
+    color: rgb(247, 247, 247) !important;
+    font-size: large;
+  
+  }
+  .text-white{
+    text-decoration: none;
+  }
+
+
 
  

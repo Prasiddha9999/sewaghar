@@ -44,8 +44,8 @@
            <td><img src="/media/{{i.photo}}" width="70" height="70" alt=""></td> 
            <td>{{i.desc}}</td>
            
-           <td><a href="{%url 'adminservicedetail' pk=i.service_id%}" >View more</a></td>
-           <td><a href="deleteservice/{{i.service_id}}" type="submit" >Delete<a></td>
+           <td><a href="{%url 'adminservicedetail' pk=i.service_id%}" class="viewmore">View more</a></td>
+           <td><a href="deleteservice/{{i.service_id}}" type="submit"class="delete" >Delete<a></td>
        </tr>
        {%endfor%}
 

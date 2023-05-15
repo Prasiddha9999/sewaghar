@@ -19,9 +19,9 @@
               <h5 class="card-title"><span style="color: #808080">{{ servicedata.desc }}</span></h5>
             </div>
           </div>
-          <div class="nextprevious">
+          {% comment %} <div class="nextprevious">
             <a href="{{request.META.HTTP_REFERER}}" class="btn btn-danger back" role="button">Back</a>
-          </div>
+          </div> {% endcomment %}
         </div>
 
         <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
@@ -33,7 +33,20 @@
             <h5>Age: {{ord.professional_id.age}}</h5>
             <h5>Location: {{ord.professional_id.address}}</h5>
             <h5>Service Charge Per Hour: {{ord.professional_id.rateperhour}}</h5>
-            <h5>Rating: {{ord.professional_id.ratings}} out of 5</h5>
+            <h5>Rating:
+              <div class="star-rating" style="display: inline-block;">
+                {% for star in "12345" %}
+                  {% if forloop.counter <= ord.professional_id.ratings %}
+                    <span class="star filled-star">&#9733;</span>
+                  {% else %}
+                    <span class="star">&#9734;</span>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </h5>
+            
+            
+            
             <h5>Mobile Number: {{ord.number}}</h5>
             
           </div>

@@ -45,8 +45,8 @@
            <td>{{i.email}}</td>
            <td>{{i.number}}</td>
            <td>{{i.address}}</td>
-           <td><a href="{%url 'adminuserdetail' hk=i.homeowner_id%}">View More<a></td>
-            <td><a href="deleteuser/{{i.homeowner_id}}" type="submit">Delete<a></td>
+           <td><a href="{%url 'adminuserdetail' hk=i.homeowner_id%}"class="viewmore">View More<a></td>
+            <td><a href="deleteuser/{{i.homeowner_id}}" type="submit"class="delete">Delete<a></td>
        </tr>
       {% endfor%}
      </tbody>

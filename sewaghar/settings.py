@@ -31,9 +31,9 @@ ALLOWED_HOSTS = ['*'] #Host name
 
 INSTALLED_APPS = [
     'jazzmin',
+    'django.contrib.admin',
     'mysite.apps.MysiteConfig',
     'khaltiapp.apps.KhaltiappConfig',
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -131,12 +131,12 @@ USE_TZ = True
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, 'static')
 # ]
-# STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
 
 # # Default primary key field type
 # MEDIA_URL = '/media/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
+
 
 STATIC_URL = '/static/'
 

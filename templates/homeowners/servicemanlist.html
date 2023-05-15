@@ -20,9 +20,9 @@
           <h5 class="card-title"><span style="color: #808080">{{ servicedata.desc }}</span></h5>
         </div>
       </div>
-      <div class="nextprevious">
+      {% comment %} <div class="nextprevious">
         <a href="{{request.META.HTTP_REFERER}}" class="btn btn-danger back" role="button">Back</a>
-      </div>
+      </div> {% endcomment %}
     </div>
     
     <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
@@ -40,7 +40,6 @@
   <table class="table border table-hover">
     <thead>
       <tr>
-        <th scope="col">Id</th>
         <th scope="col">Name</th>
         <th scope="col">Location</th>
         <th scope="col">Rating</th>
@@ -50,11 +49,26 @@
     <tbody>
       {% for i in servs %}
       <tr>
-        <th scope="row">{{i.professional_id}}</th>
         <td>{{i.full_name}}</td>
         <td>{{i.address}}</td>
-        <td>{{i.ratings}} out of 5</td>
-        <td><a href="{% url 'book' sml=i.professional_id %}">View More</a></td>
+
+        <td>
+          <div class="star-rating" style="display: inline-block;">
+            {% for star in "12345" %}
+              {% if forloop.counter <= i.ratings %}
+                <span class="star filled-star">&#9733;</span>
+              {% else %}
+                <span class="star">&#9734;</span>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </td>
+
+
+
+        <td><a href="{% url 'book' sml=i.professional_id %}" class="viewmore">View More</a></td>
+
+
       </tr>
       {% empty %}
       <div class="errormsg">

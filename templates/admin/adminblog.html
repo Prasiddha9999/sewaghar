@@ -42,8 +42,8 @@
            <td><img src="/media/{{i.photo}}" width="120" height="100" alt=""></td> 
            <td>{{i.desc}}</td>
            
-           <td><a href="{%url 'adminblogdetail' pk=i.blog_id%}" >View more</a></td>
-           <td><a href="deleteblog/{{i.blog_id}}" type="submit" >Delete<a></td>
+           <td><a href="{%url 'adminblogdetail' pk=i.blog_id%}" class="viewmore">View more</a></td>
+           <td><a href="deleteblog/{{i.blog_id}}" type="submit" class="delete">Delete<a></td>
        </tr>
        {%endfor%}
 
