@@ -1,0 +1,95 @@
+{% extends 'admin/bases.html' %}
+
+{% block content %}
+  {% load static %}
+  <!-- Main layout -->
+  <main>
+    <!-- Middle Section -->
+    <br><br>
+    <div class="text-center my-5">
+      <h3 class="display-5">Order List</h3>
+      <hr class="w-25 mx-auto">
+    </div>
+
+
+    <div class="container">
+      <table class="table-bordered text-center">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Status</th>
+            <th>House No</th>
+            <th>Message</th>
+            <th>Payment Amount</th>
+            <th>Payment Date</th>
+            <th>Payment Method</th>
+            <th>Total Time (Hour)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+          <tr>
+            <td>{{ order.order_id }}</td>
+            <td>{{ order.date }}</td>
+            <td>{{ order.time }}</td>
+            <td>{{ order.status }}</td>
+            <td>{{ order.houseno }}</td>
+            <td>{{ order.message }}</td>
+            <td>{{ order.payment_amount }}</td>
+            <td>{{ order.payment_date }}</td>
+            <td>{{ order.payment_method }}</td>
+            <td>{{ order.totaltimehour }}</td>
+          </tr>
+          
+          {% endfor %}
+          <td>Total Earn</td>
+          <td>Rs. {{amount}}</td>
+        </tbody>
+      </table>
+    </div>
+
+<br><br>
+    <h4>Payment Method = Khalti</h4>
+    <div class="container">
+      <table class="table-bordered text-center">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Status</th>
+            <th>House No</th>
+            <th>Message</th>
+            <th>Payment Amount</th>
+            <th>Payment Date</th>
+            <th>Payment Method</th>
+            <th>Total Time (Hour)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in korders %}
+          <tr>
+            <td>{{ order.order_id }}</td>
+            <td>{{ order.date }}</td>
+            <td>{{ order.time }}</td>
+            <td>{{ order.status }}</td>
+            <td>{{ order.houseno }}</td>
+            <td>{{ order.message }}</td>
+            <td>{{ order.payment_amount }}</td>
+            <td>{{ order.payment_date }}</td>
+            <td>{{ order.payment_method }}</td>
+            <td>{{ order.totaltimehour }}</td>
+          </tr>
+          
+          {% endfor %}
+          <td>Total Earn via Khalti</td>
+          <td>Rs. {{kamount}}</td>
+        </tbody>
+      </table>
+    </div>
+    <br><br>
+  </main>
+  <!-- Main layout -->
+{% endblock %}

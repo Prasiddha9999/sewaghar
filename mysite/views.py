@@ -431,7 +431,15 @@ def bookings(request):
         username = request.user.username
         alldata = Account_HomeOwner.objects.get(username=username)
         ord = Order.objects.filter(homeowner_id=alldata.homeowner_id).order_by('-date')
-        return render(request, "homeowners/bookings.html",{'ord':ord})
+        
+        #total amount
+        amount = 0
+        for order in ord:
+            if order.payment_amount:
+                amounts = float(order.payment_amount)
+                amount = amount + amounts
+        amount = amount
+        return render(request, "homeowners/bookings.html",{'ord':ord,'amount':amount})
     else:
         return redirect('404')
     
@@ -498,8 +506,22 @@ def request(request):
         username = request.user.username
         ord = Order.objects.all()
         po = Account_Professional.objects.get(username=username)
-        ord = Order.objects.filter(professional_id=po.professional_id).order_by('-date')
-        return render(request, "professionals/request.html",{'ord':ord, 'po':po})
+        ord = Order.objects.filter(professional_id=po.professional_id).order_by('-date')       
+        amount = 0
+        for order in ord:
+            if order.payment_amount:
+                amounts = float(order.payment_amount)
+                amount = amount + amounts
+        amount = amount
+                
+
+
+
+
+
+
+        
+        return render(request, "professionals/request.html",{'ord':ord, 'po':po, 'amount':amount})
     else:
         return redirect('404')
 
@@ -852,6 +874,28 @@ def adminnotification(request):
         return render(request, "admin/adminnotification.html",{'msg':msg, 'num':num})
     else:
         return redirect('404')
+
+
+@login_required(login_url="adminsignin")  
+def ordertable(request,professional_id):
+    orders = Order.objects.filter(professional_id=professional_id).order_by('-date')
+    korders = Order.objects.filter(professional_id=professional_id, payment_method='Khalti').order_by('-date')
+    #total amount
+    amount = 0
+    for order in orders:
+        if order.payment_amount:
+            amounts = float(order.payment_amount)
+            amount = amount + amounts
+    amount = amount    
+    
+    #total maount via khalti
+    kamount = 0
+    for korder in korders:
+        if korder.payment_amount:
+            kamounts = float(korder.payment_amount)
+            kamount = kamount + kamounts
+    kamount = kamount    
+    return render(request, 'admin/ordertable.html', {'orders':orders,'amount':amount,'kamount':kamount,'korders':korders})
 
 @login_required(login_url="adminsignin")
 def notify(request):

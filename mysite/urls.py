@@ -93,8 +93,7 @@ urlpatterns = [
     path("adminblogdetail/<int:pk>",views.adminblogdetail, name="adminblogdetail"),
     path("admincreateblog",views.admincreateblog, name="admincreateblog"),
     path("adminblog",views.adminblog, name="adminblog"),
-    
-    
+    path('ordertable/<str:professional_id>', views.ordertable, name='ordertable'),
     path("notify",views.notify, name="notify"),
     
     

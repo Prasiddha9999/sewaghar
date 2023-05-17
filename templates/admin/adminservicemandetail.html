@@ -41,6 +41,8 @@
             <h5>Exprience: {{po.exprience}} -year</h5>
             <h5>Online: {{po.online}}</h5>
             <h5>Description: {{po.desc}}</h5>
+            {% comment %} {%if po.status %}{% endcomment %}
+
 
             <h5>Rating:
               <div class="star-rating" style="display: inline-block;">
@@ -53,6 +55,7 @@
                 {% endfor %}
               </div>
             </h5>
+            <button><a href="../ordertable/{{po.professional_id}}" type="submit" class="btn btn-success">Generate Statement<a></button> 
             
 
             <br>
