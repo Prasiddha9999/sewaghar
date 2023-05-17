@@ -465,7 +465,6 @@ def bookingdetails(request,od):
             
         #cash Payment
         if request.method == 'POST':
-            print("DSfsdf")
             amount = request.POST['amount']
             print(amount)
             if amount:
@@ -513,14 +512,7 @@ def request(request):
                 amounts = float(order.payment_amount)
                 amount = amount + amounts
         amount = amount
-                
 
-
-
-
-
-
-        
         return render(request, "professionals/request.html",{'ord':ord, 'po':po, 'amount':amount})
     else:
         return redirect('404')
