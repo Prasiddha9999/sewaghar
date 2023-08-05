@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-^%ao5i)#!(2xk@eh1boqc(@k3=et-ednz#=4_jep%cl)ge1byj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False #True
 
-ALLOWED_HOSTS = ['*'] #Host name
+ALLOWED_HOSTS = ['.vercel.app'] #Host name
 
 # Application definition
 
@@ -88,7 +88,8 @@ DATABASES = {
         'NAME': 'sewaghar',
         'USER': 'postgres',
         'PASSWORD': '1234',
-        'HOST': 'localhost'
+        'HOST': 'localhost',
+        'PORT': ''
     }
 }
 
@@ -174,3 +175,4 @@ EMAIL_USE_TLS = True
 #EMAIL_USE_SSL = True
 
 APPEND_SLASH = False
+

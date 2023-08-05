@@ -33,7 +33,7 @@ window.onload = function() {
    });
  }
 
- //for filter professionals by loaction
+ //for filter service by loaction
  const searchInput = document.getElementById('location-search');
  searchInput.addEventListener('input', filterByLocation);
  function filterByLocation() {

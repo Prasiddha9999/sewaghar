@@ -92,7 +92,7 @@ searchBar.value = searchQuery;
 // Filter the professionals based on the search query
 const professionalsList = document.querySelector('tbody');
 Array.from(professionalsList.children).forEach(professional => {
-  const location = professional.querySelector('td:nth-child(3)').textContent.toLowerCase();
+  const location = professional.querySelector('td:nth-child(2)').textContent.toLowerCase();
   if (!location.includes(searchQuery.toLowerCase())) {
     professional.style.display = 'none';
   }
@@ -102,7 +102,7 @@ Array.from(professionalsList.children).forEach(professional => {
 searchBar.addEventListener('input', () => {
   const searchValue = searchBar.value.toLowerCase();
   Array.from(professionalsList.children).forEach(professional => {
-    const location = professional.querySelector('td:nth-child(3)').textContent.toLowerCase();
+    const location = professional.querySelector('td:nth-child(2)').textContent.toLowerCase();
     if (!location.includes(searchValue)) {
       professional.style.display = 'none';
     } else {
@@ -110,8 +110,6 @@ searchBar.addEventListener('input', () => {
     }
   });
 });
-
-
 </script>
 
 
