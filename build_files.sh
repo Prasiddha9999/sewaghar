@@ -1,15 +1,19 @@
 #!/bin/bash
 
-# Install pip
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-python3 get-pip.py --user
+# Check Python version
+python3 --version
 
-# Upgrade pip to the latest version
-python3 -m pip install --upgrade pip --user
+# Create and activate a virtual environment
+workon sewa
 
-# Install requirements
-python3 -m pip install -r requirements.txt --user
+# Install or upgrade pip
+python -m pip install --upgrade pip
+
+# Install project dependencies
+pip install -r requirements.txt
 
 # Run Django management commands
-python3 manage.py collectstatic --noinput
-python3 manage.py migrate
+python manage.py collectstatic --noinput
+python manage.py migrate
+
+
