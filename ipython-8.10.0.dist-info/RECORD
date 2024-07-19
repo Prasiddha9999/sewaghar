@@ -1,5 +1,5 @@
-../../bin/ipython.exe,sha256=wcZH2SzWuL3QFQ3cg5x5xVvY2zaBg4-gZcoGlEDD6Uc,108404
-../../bin/ipython3.exe,sha256=wcZH2SzWuL3QFQ3cg5x5xVvY2zaBg4-gZcoGlEDD6Uc,108404
+../../bin/ipython.exe,sha256=9lrLOJxqbxAlVBebYtHJ8n0IAaJNSw5aVUqiAyxrjdM,108404
+../../bin/ipython3.exe,sha256=9lrLOJxqbxAlVBebYtHJ8n0IAaJNSw5aVUqiAyxrjdM,108404
 ../../share/man/man1/ipython.1,sha256=PVdQP2hHmHyUEwzLOPcgavnCe9jTDVrM1jKZt4cnF_Q,2058
 IPython/__init__.py,sha256=AzNjFzAujeWf8NbUx2fYL7b9Z9gETONZ49pNtwv4ihQ,5980
 IPython/__main__.py,sha256=hoP6JcHBVEVF5jB_MgVRTmMYQkCNhVbO0Znu_OhHvic,488

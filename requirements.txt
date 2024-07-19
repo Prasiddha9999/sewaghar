@@ -40,3 +40,5 @@ traitlets==5.9.0
 tzdata==2022.7
 urllib3==1.26.15
 wcwidth==0.2.6
+setuptools>=65.5.1
+wheel
