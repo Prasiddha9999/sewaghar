@@ -1,13 +1,22 @@
 #!/bin/bash
 
-# Install pip if it's not already installed
-if ! command -v pip &> /dev/null
+# Ensure Python is installed
+if ! command -v python3 &> /dev/null
 then
-    echo "pip not found, installing pip"
-    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-    python get-pip.py --user
+    echo "Python3 not found, installing Python3"
+    apt-get update && apt-get install -y python3
+fi
+
+# Ensure pip is installed
+if ! command -v pip3 &> /dev/null
+then
+    echo "pip3 not found, installing pip3"
+    apt-get install -y python3-pip
 fi
 
 # Install requirements
-pip install -r requirements.txt
-python3.9 manage.py collectstatic
+pip3 install -r requirements.txt
+
+# Run Django management commands (if needed)
+python3 manage.py collectstatic --noinput
+python3 manage.py migrate
