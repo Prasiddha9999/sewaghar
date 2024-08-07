@@ -16,8 +16,6 @@ def config(request):
         amount = float(request.POST['amount'])
         orderid = request.POST['orderid']
     amount=amount
-    print(amount)
-    print(orderid)
     return render(request,"config.html",{"amount":amount, "orderid":orderid})
 
 
