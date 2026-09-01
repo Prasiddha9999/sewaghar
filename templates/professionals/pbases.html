@@ -1,216 +1,79 @@
-{% load static%}
-{% static "images" as baseUrl %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'professionals/css/others.css' %}">
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <script src="{% static 'javascript/home.js' %}"></script>
-    <title>Sewa Ghar</title>
-    <link  rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    <link rel="icon" href="{% static 'images/logo.png' %}">
-    <!-- Font Awesome 4-->
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"> 
-    
-</head>
-<body>
-  <!-- Nav Bar -->
- <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top py-0" style="background: rgb(2,0,36);
- background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,53,121,0.1517857142857143) 0%, rgba(0,212,255,0.1517857142857143) 100%);">
+{% extends 'base.html' %}
+{% load static %}
+
+{% block nav %}
+<nav class="navbar navbar-expand-lg sg-navbar py-2">
   <div class="container">
     <a class="navbar-brand" href="{% url 'request' %}">
-      <img src="{% static 'images/logo.png' %}" width="70" height="70" alt="">
+      <img src="{% static 'images/logo.png' %}" alt="SewaGhar logo">
+      <span class="sg-brand-name">Sewa<span>Ghar</span></span>
     </a>
-    
-    {% if po.online == False %}
-    <a class="abc nav-item">
-      <a class="bca nav-link" href="../online/{{user.username}}" type="submit"><div class="rec1"><div class="elcoff"><div class="onl">Ofline</div></div></div></a>
-    </a>
-    {% elif po.online == True %}
-    <a class="abc nav-item">
-      <a class="bca nav-link" href="../online/{{user.username}}" type="submit"><div class="rec1"><div class="elc"><div class="onl">Online</div></div></div></a>
-    </a>
-    {%endif%}
 
-      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar">
-          <span class="navbar-toggler-icon"></span>
-      </button>
-
-     
-      
-      <div class="navbar-collapse collapse" id="navbar">
-          <ul class="navbar-nav ms-auto">
-
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'aboutus' %} ">AboutUs</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'blog' %}" >Blogs</a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'request' %}" >My Requests</a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link not px-4" href="{% url 'professionalnotification' %}">
-                <span id="boot-icon" class="bi bi-bell" style="font-size: 25px; -webkit-text-stroke-width: 1.2px;"></span>
-                <span id="notification-count" class="badge badge-danger badge-pill">{{ num }}</span>
-              </a>
-            </li>
-            
-            <style>
-              .nav-link.not{
-                position: relative;
-                display: flex;
-              }
-            
-              #boot-icon {
-                font-size: 25px;
-                -webkit-text-stroke-width: 1.2px;
-              }
-            
-              #notification-count {
-                position: absolute;
-                top: 5px;
-                right: 10px;
-                font-size: 10px;
-                padding: 2px 4px;
-                border-radius: 50%;
-                background-color: orange;
-                color: white;
-              }
-       
-            </style>   
-            
-          
-
-            <li class="nav-item dropdown">
-              <a class=" bi bi-person nav-link dropdown-toggle" style="font-size: 25px; -webkit-text-stroke-width: 1.2px;"  id="navbarDropdown"  data-bs-toggle="dropdown" aria-expanded="false">
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li class="dropdown-item" aria-disabled="true">{{user.username}}</a></li>
-                <li><a class="dropdown-item" href="{% url 'professionalviewprofile' %}">My Profile</a></li>
-                <li><a class="dropdown-item" href="{% url 'professionalchangepassword' %}">Change Password</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="{% url 'user_logout' %}">Logout</a></li>
-              </ul>
-            </li>
-          </ul>
-      </div>
-    </div>
-    </nav>
-    <style>
-      body {
-        background-image: url({% static 'images/back1.jpg' %});
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center center;
-      }
-    </style>
-
-    {% if messages %}
-    <div class="popup-message" id="popup-message">
-      {% for message in messages %}
-        {% comment %} {% if 'loginsucess' in message.tags %} {% endcomment %}
-        <h5>{{ message }}</h5>
-        {% comment %} {%else%}
-        <h5></h5> {% endcomment %}
-        {% comment %} {% endif %} {% endcomment %}
-      {% endfor %}
-    </div>
+    {% if po %}
+      {% if po.online %}
+      <a class="sg-online-pill is-online" href="{% url 'online' usernames=user.username %}" title="You are visible to customers. Click to go offline.">
+        <span class="dot"></span>Online
+      </a>
+      {% else %}
+      <a class="sg-online-pill is-offline" href="{% url 'online' usernames=user.username %}" title="You are hidden from customers. Click to go online.">
+        <span class="dot"></span>Offline
+      </a>
+      {% endif %}
     {% endif %}
-    <!--Main layout-->
-{% block content %}
 
+    <div class="d-flex align-items-center gap-2 order-lg-2">
+      <a class="nav-link sg-bell d-lg-none" href="{% url 'professionalnotification' %}" aria-label="Notifications">
+        <i class="bi bi-bell"></i>
+        {% if num %}<span class="sg-bell-badge">{{ num }}</span>{% endif %}
+      </a>
+      <button class="sg-theme-toggle" type="button" onclick="sgToggleTheme()" aria-label="Toggle dark mode">
+        <i class="bi bi-moon-stars sg-icon-moon"></i>
+        <i class="bi bi-sun sg-icon-sun"></i>
+      </button>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-label="Toggle navigation">
+        <i class="bi bi-list fs-4"></i>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse order-lg-1" id="navbar">
+      <ul class="navbar-nav ms-auto me-lg-2 align-items-lg-center gap-lg-1">
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'request' %}active{% endif %}" href="{% url 'request' %}">My Requests</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'blog' %}active{% endif %}" href="{% url 'blog' %}">Blog</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'aboutus' %}active{% endif %}" href="{% url 'aboutus' %}">About Us</a>
+        </li>
+        <li class="nav-item d-none d-lg-block">
+          <a class="nav-link sg-bell {% if request.resolver_match.url_name == 'professionalnotification' %}active{% endif %}" href="{% url 'professionalnotification' %}" aria-label="Notifications">
+            <i class="bi bi-bell"></i>
+            {% if num %}<span class="sg-bell-badge">{{ num }}</span>{% endif %}
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle d-inline-flex align-items-center gap-2" href="#" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle fs-5"></i><span class="d-lg-none">Account</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            <li><div class="sg-dropdown-user"><i class="bi bi-person me-1"></i>{{ user.username }}</div></li>
+            <li><a class="dropdown-item" href="{% url 'professionalviewprofile' %}"><i class="bi bi-person-badge me-2"></i>My Profile</a></li>
+            <li><a class="dropdown-item" href="{% url 'professionalchangepassword' %}"><i class="bi bi-shield-lock me-2"></i>Change Password</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{% url 'user_logout' %}"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
 {% endblock %}
-<!--Main layout-->
 
-       <!-- footer -->
-       <footer class="text-center text-lg-start text-white mt-5" style="background-color: #323742">
-        <div class="container p-4 pb-0">
-          <div class="row">
-            <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-              <h6 class="text-uppercase mb-4 font-weight-bold">About</h6>
-              <p><a class="text-white" href="{% url 'blog' %} ">BLOG</a></p>
-              <p><a class="text-white" href="{% url 'aboutus' %}">ABOUT US</a></p>
-              <p><a class="text-white" href="{% url 'privacypolicy' %}">PRIVACY POLICY</a></p>
-              <p><a class="text-white" href="{% url 'termsandcondition' %}">TERMS AND CONDITION</a></p>
-            </div>
-            <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-              <h6 class="text-uppercase mb-4 font-weight-bold">Service</h6>
-              <p class="text-white">Home Repairs</p>
-              <p class="text-white">Carpenter</p>
-              <p class="text-white">Painter</p>
-              <p class="text-white">Computer Repair</p>
-              <p class="text-white">Electrician</p>
-              <p class="text-white">Plumber</p>
-            </div>
-            <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
-              <h6 class="text-uppercase mb-4 font-weight-bold">Contact</h6>
-              <p><i class="fa fa-home mr-3"></i> Balaju "8" Kathmandu</p>
-              <p><i class="fa fa-envelope mr-3"></i> sajilosewa@gmail.com</p>
-              <p><i class="fa fa-phone mr-3"></i> 9863144095</p>
-            </div>
-            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
-              <h6 class="text-uppercase mb-4 font-weight-bold text-center" style="color: #e9724a">Sewa Ghar</h6>
-              <a href="https://goo.gl/maps/7aoK13241tkdsdJx5">
-                <img src="{% static 'images/map.png' %}" class="d-block w-100 mb-2" alt="Map of Sewa Ghar">
-              </a>
-              <div class="icon">
-                <a class="btn btn-primary btn-floating m-1" style="background-color: #3b5998" href="https://www.facebook.com/profile.php?id=100091409652130&is_tour_dismissed=true" role="button"><i class="fa fa-facebook"></i></a>
-                <a class="btn btn-primary btn-floating m-1" style="background-color: #0082ca" href="https://mail.google.com/mail/?view=cm&fs=1&to=sewagharservice@gmail.com&su=SUBJECT&body=BODY" role="button"><i class="fa fa-envelope"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="text-center py-3" style="background-color: rgba(0, 0, 0, 0.2)">© 2023 Copyright: Sewa Ghar</div>
-  </footer>
-  
-  
-  <script>
-  </script>
-  </body>
-  <script>
-    function togglePassword() {
-      var passwordInput = document.getElementById("password");
-      var passwordIcon = document.getElementById("password-icon");
-      if (passwordInput.type === "password") {
-          passwordInput.type = "text";
-          passwordIcon.className = "bi bi-eye";
-      } else {
-          passwordInput.type = "password";
-          passwordIcon.className = "bi bi-eye-slash";
-      }
-    }
+{% block messages %}
+  {% include 'partials/toasts.html' %}
+{% endblock %}
 
-
-    function togglePassword1() {
-      var passwordInput = document.getElementById("conformpassword");
-      var passwordIcon = document.getElementById("password-icon");
-      if (passwordInput.type === "password") {
-          passwordInput.type = "text";
-          passwordIcon.className = "bi bi-eye";
-      } else {
-          passwordInput.type = "password";
-          passwordIcon.className = "bi bi-eye-slash";
-      }
-    }
-  </script>
-
-    <link rel="stylesheet" href="{% static 'homeowners/css/popup.css' %}">
-  <style>
-  </style>
-  <script>
-    var popup = document.getElementById('popup-message');
-    popup.style.display = 'block';
-    setTimeout(function() {
-        popup.style.display = 'none';
-    }, 2000);
-  </script>
-  </html>
+{% block main %}
+{% block content %}
+{% endblock %}
+{% endblock %}

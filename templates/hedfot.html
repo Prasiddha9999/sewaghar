@@ -1,149 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
 
-{% load static%}
-{% static "images" as baseUrl %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'homeowners/css/signin.css' %}">
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <script src="{% static 'javascript/home.js' %}"></script>
-    <title>Sewa Ghar</title>
-    <link  rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    <link rel="icon" href="{% static 'images/logo.png' %}">
-    <!-- Font Awesome 4-->
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-</head>
-<body>
-
-    <!-- Nav Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top py-0" style="background: rgb(2,0,36);
-    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,53,121,0.1517857142857143) 0%, rgba(0,212,255,0.1517857142857143) 100%);">
-        <div class="container">
-          
-          <a class="navbar-brand" href="{% url 'home' %}">
-            <img src="{% static 'images/logo.png' %}" width="70" height="70" alt="">
-          </a>
-          <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="navbar-collapse collapse " id="navbar">
-            <ul class="navbar-nav ms-auto ">
-              <li class="nav-item ">
-                <a class="nav-link mainnav" href="{% url 'hsignin' %}" >Book the Service</a>
-
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'aboutus' %}"  >AboutUs</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'blog' %}" >Blog</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'hsignin' %}" >For Home Owner</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'psignin' %}">For Professional</a>
-              </li>
-            </ul>
-        </div>
-      </div>
-      </nav>
-
-      <style>
-        body {
-          background-image: url({% static 'images/back1.jpg' %});
-          background-size: cover;
-          background-repeat: no-repeat;
-          background-position: center center;
-        }
-   
-        a.nav-link.mainnav {
-          color: white;
-        }
-      </style>
-<!--Main layout-->
-{% block content %}
-
+{% block nav %}
+<nav class="navbar navbar-expand-lg sg-navbar py-2">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'home' %}">
+      <img src="{% static 'images/logo.png' %}" alt="SewaGhar logo">
+      <span class="sg-brand-name">Sewa<span>Ghar</span></span>
+    </a>
+    <div class="d-flex align-items-center gap-2 order-lg-2">
+      <button class="sg-theme-toggle" type="button" onclick="sgToggleTheme()" aria-label="Toggle dark mode">
+        <i class="bi bi-moon-stars sg-icon-moon"></i>
+        <i class="bi bi-sun sg-icon-sun"></i>
+      </button>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-label="Toggle navigation">
+        <i class="bi bi-list fs-4"></i>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse order-lg-1" id="navbar">
+      <ul class="navbar-nav ms-auto me-lg-3 align-items-lg-center gap-lg-1">
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'aboutus' %}active{% endif %}" href="{% url 'aboutus' %}">About Us</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'blog' %}active{% endif %}" href="{% url 'blog' %}">Blog</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'hsignin' %}active{% endif %}" href="{% url 'hsignin' %}">For Home Owners</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.url_name == 'psignin' %}active{% endif %}" href="{% url 'psignin' %}">For Professionals</a>
+        </li>
+        <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+          <a class="btn btn-primary btn-sm px-3 py-2" href="{% url 'hsignin' %}"><i class="bi bi-calendar-check me-1"></i>Book a Service</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
 {% endblock %}
-<!--Main layout-->
 
-      <!-- footer -->
-      <footer class="text-center text-lg-start text-white" style="background-color: #323742">
-        <div class="container p-4 pb-0">
-          <div class="row">
-            <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-              <h6 class="text-uppercase mb-4 font-weight-bold">About</h6>
-              <p><a class="text-white" href="{% url 'blog' %} ">BLOG</a></p>
-              <p><a class="text-white" href="{% url 'aboutus' %}">ABOUT US</a></p>
-              <p><a class="text-white" href="{% url 'privacypolicy' %}">PRIVACY POLICY</a></p>
-              <p><a class="text-white" href="{% url 'termsandcondition' %}">TERMS AND CONDITION</a></p>
-            </div>
-            <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-              <h6 class="text-uppercase mb-4 font-weight-bold">Service</h6>
-              <p class="text-white">Home Repairs</p>
-              <p class="text-white">Carpenter</p>
-              <p class="text-white">Painter</p>
-              <p class="text-white">Computer Repair</p>
-              <p class="text-white">Electrician</p>
-              <p class="text-white">Plumber</p>
-            </div>
-            <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mt-3">
-              <h6 class="text-uppercase mb-4 font-weight-bold">Contact</h6>
-              <p><i class="fa fa-home mr-3"></i> Balaju "8" Kathmandu</p>
-              <p><i class="fa fa-envelope mr-3"></i> sajilosewa@gmail.com</p>
-              <p><i class="fa fa-phone mr-3"></i> 9863144095</p>
-            </div>
-            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
-              <h6 class="text-uppercase mb-4 font-weight-bold text-center" style="color: #e9724a">Sewa Ghar</h6>
-              <a href="https://goo.gl/maps/7aoK13241tkdsdJx5">
-                <img src="{% static 'images/map.png' %}" class="d-block w-100 mb-2" alt="Map of Sewa Ghar">
-              </a>
-              
-              <div class="icon">
-                <a class="btn btn-primary btn-floating m-1" style="background-color: #3b5998" href="https://www.facebook.com/profile.php?id=100091409652130&is_tour_dismissed=true" role="button"><i class="fa fa-facebook"></i></a>
-                <a class="btn btn-primary btn-floating m-1" style="background-color: #0082ca" href="https://mail.google.com/mail/?view=cm&fs=1&to=sewagharservice@gmail.com&su=SUBJECT&body=BODY" role="button"><i class="fa fa-envelope"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="text-center py-3" style="background-color: rgba(0, 0, 0, 0.2)">© 2023 Copyright: Sewa Ghar</div>
-  </footer>
-
-</body>
-<script>
-  function togglePassword() {
-    var passwordInput = document.getElementById("homepassword");
-    var passwordIcon = document.getElementById("password-icon");
-    if (passwordInput.type === "password") {
-        passwordInput.type = "text";
-        passwordIcon.className = "bi bi-eye";
-    } else {
-        passwordInput.type = "password";
-        passwordIcon.className = "bi bi-eye-slash";
-    }
-  }
-
-  function togglePassword1() {
-    var passwordInput = document.getElementById("homepassword1");
-    var passwordIcon = document.getElementById("password-icon");
-    if (passwordInput.type === "password") {
-        passwordInput.type = "text";
-        passwordIcon.className = "bi bi-eye";
-    } else {
-        passwordInput.type = "password";
-        passwordIcon.className = "bi bi-eye-slash";
-    }
-  }
-</script>
-</html>
+{% block main %}
+{% block content %}
+{% endblock %}
+{% endblock %}

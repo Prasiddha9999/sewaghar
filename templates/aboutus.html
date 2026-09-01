@@ -1,32 +1,35 @@
-{% extends 'hedfot.html'%}
+{% extends 'hedfot.html' %}
+{% block title %}About Us — SewaGhar{% endblock %}
 {% block content %}
 {% load static %}
-    <!-- About Sewa Ghar-->
-    <section class="main_heading my-5">
-      <div class="text-center container">
-        <h2 class="display-5"><b>About Us</b></h2>
-        <hr class="w-25 mx-auto"/>
-      </div>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
-            <figure>
-              <img src="{% static 'images/homec.jpg' %}" alt="About Us IMG" class="img-fluid content-img">
-            </figure>
-          </div>
 
-          <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
-            <h1>Sewa Ghar</h1>
-            <p>
-              This appis to fix all problems related to your homes like home appliances, electricians, carpentry, and other 
-household issues. In this app, Home Owners request the service from professionals and 
-professionals will give the service to the home Owners. A mediator or admin can manage
-and view the activity of both homeowners and professionals. The aim of the project is to 
-create Sewa Ghar to choose professionals by 
-viewing their ratings, profile, etc.
-            </p>
-          </div>
+<section class="py-5">
+  <div class="container">
+    <div class="sg-section-head">
+      <span class="sg-eyebrow"><i class="bi bi-house-heart"></i> Who we are</span>
+      <h1 class="mt-3">About SewaGhar</h1>
+    </div>
+
+    <div class="row align-items-center g-5 mt-1">
+      <div class="col-12 col-md-6 sg-reveal">
+        <img src="{% static 'images/homec.jpg' %}" alt="SewaGhar professionals at work" class="img-fluid rounded-4 border shadow-sm w-100" style="border-color: var(--sg-border) !important;">
+      </div>
+      <div class="col-12 col-md-6 sg-reveal">
+        <h2>Sewa Ghar</h2>
+        <p class="sg-muted">SewaGhar exists to fix all problems related to your home — home appliances, electrical work, carpentry, and other household issues. Home owners request a service from professionals, and professionals deliver that service right to their door.</p>
+        <p class="sg-muted">A dedicated admin team manages and reviews the activity of both home owners and professionals, keeping the platform safe and reliable. Our aim is simple: help you choose the right professional by viewing their ratings, profile and experience — with zero guesswork.</p>
+        <div class="d-flex flex-wrap gap-2 mt-4">
+          <a href="{% url 'hsignin' %}" class="btn btn-primary"><i class="bi bi-calendar-check me-2"></i>Book a Service</a>
+          <a href="{% url 'psignin' %}" class="btn btn-outline-primary"><i class="bi bi-briefcase me-2"></i>Join as a Professional</a>
         </div>
       </div>
-    </section>
-    {% endblock %}
+    </div>
+
+    <div class="row g-3 row-cols-1 row-cols-md-3 mt-4 sg-reveal">
+      <div class="col"><div class="card sg-feature"><span class="sg-feature-icon"><i class="bi bi-bullseye"></i></span><div><h6>Our Mission</h6><p>Make home maintenance effortless by connecting households with skilled, verified professionals.</p></div></div></div>
+      <div class="col"><div class="card sg-feature"><span class="sg-feature-icon"><i class="bi bi-shield-check"></i></span><div><h6>Our Promise</h6><p>Every professional is identity-verified and reviewed by the admin team before going live.</p></div></div></div>
+      <div class="col"><div class="card sg-feature"><span class="sg-feature-icon"><i class="bi bi-graph-up-arrow"></i></span><div><h6>Our Vision</h6><p>Become the most trusted home-services marketplace, growing from Nepal to the world.</p></div></div></div>
+    </div>
+  </div>
+</section>
+{% endblock %}

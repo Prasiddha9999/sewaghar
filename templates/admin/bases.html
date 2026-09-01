@@ -1,163 +1,97 @@
-{% load static%}
-{% static "images" as baseUrl %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'admin/css/styles.css' %}">
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <link rel="stylesheet" href="{% static 'admin/js/admin.js' %}">
-    <title>Sewa Ghar</title>
-    <link  rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    <link rel="icon" href="{% static 'images/logo.png' %}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+{% extends 'base.html' %}
+{% load static %}
 
-    
-    <!-- Font Awesome 4-->
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"> 
- 
+{% block title %}SewaGhar — Admin Panel{% endblock %}
 
-    
-</head>
-<body> 
- 
- <!--Main Navigation-->
-<header>
-  <div
-      class="side-navbar active-nav d-flex justify-content-between flex-wrap flex-column"
-      id="sidebar"
-    >
-      <ul class="nav flex-column text-white w-100">
-        <div class="nav-links h3 text-white my-2" style="color: black!important;">
-          &nbsp;&nbsp;&nbsp;Admin Pannel
-        </div>
-        <a href="{% url 'adminhomepage' %}" class="nav-link" aria-current="true"> <span class="mx-2">Dashboard</span><a/>
-        <a href="{% url 'adminservicemanlist' %}" class="nav-link "><span class="mx-2">Professional</span><a/>
-        <a href="{% url 'adminusermanlist' %}" class="nav-link "><span class="mx-2">Homeowner</span><a/>
-        <a href="{% url 'adminservicelist' %}" class="nav-link "><span class="mx-2">Services</span><a/>
-        <a href="{% url 'admincreateservice' %}" class="nav-link "><span class="mx-2">Create Service</span><a/>
-        <a href="{% url 'admincreatesubservice' %}" class="nav-link  "><span class="mx-2">Create Sub-Service</span><a/>
-        <a href="{% url 'adminvieworder' %}" class="nav-link "><span class="mx-2">ViewOrder</span><a/>
-        <a href="{% url 'adminmessage' %}" class="nav-link "><span class="mx-2">Message</span><a/>
-        <a href="{% url 'adminblog' %}" class="nav-link "><span class="mx-2">Blog</span><a/>
-        <a href="{% url 'admincreateblog' %}" class="nav-link "><span class="mx-2">Create Blog</span><a/>
-        <a href="{% url 'notify' %}" class="nav-link "><span class="mx-2">Notify</span><a/>
-       
+{% block body_class %}sg-admin-body{% endblock %}
+
+{% block nav %}
+<header class="sg-admin-topbar">
+  <button class="sg-sidebar-toggle" type="button" id="sgSidebarToggle" aria-label="Toggle sidebar">
+    <i class="bi bi-list"></i>
+  </button>
+  <a class="d-flex align-items-center gap-2 text-decoration-none" href="{% url 'adminhomepage' %}">
+    <img src="{% static 'images/logo.png' %}" class="sg-logo" alt="SewaGhar logo">
+    <span class="sg-brand-name d-none d-sm-inline">Sewa<span>Ghar</span> <small class="sg-muted fw-normal">Admin</small></span>
+  </a>
+  <div class="ms-auto d-flex align-items-center gap-2">
+    <a class="nav-link sg-bell px-2" href="{% url 'adminnotification' %}" aria-label="Notifications">
+      <i class="bi bi-bell"></i>
+      {% if num %}<span class="sg-bell-badge">{{ num }}</span>{% endif %}
+    </a>
+    <button class="sg-theme-toggle" type="button" onclick="sgToggleTheme()" aria-label="Toggle dark mode">
+      <i class="bi bi-moon-stars sg-icon-moon"></i>
+      <i class="bi bi-sun sg-icon-sun"></i>
+    </button>
+    <div class="dropdown">
+      <a class="nav-link dropdown-toggle d-inline-flex align-items-center gap-2 px-2" href="#" id="adminUserDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-person-circle fs-5"></i>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminUserDropdown">
+        <li><div class="sg-dropdown-user"><i class="bi bi-person me-1"></i>{{ user.username }}</div></li>
+        <li><a class="dropdown-item" href="{% url 'adminprofile' %}"><i class="bi bi-person-badge me-2"></i>My Profile</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="{% url 'user_logout' %}"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
       </ul>
     </div>
-{% comment %} navbar collapse {% endcomment %}
-    <div class=" my-container active-cont px-5">  
-        <a class="btn border-0 px-5" id="menu-btn">-><i class="bx bx-menu"></i></a>
-        <style>
-          body {
-            background-image: url({% static 'images/back1.jpg' %});
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center center;
-          }
-        </style>
-
-        {% if messages %}
-        <div class="popup-message" id="popup-message">
-          {% for message in messages %}
-            {% comment %} {% if 'loginsucess' in message.tags %} {% endcomment %}
-            <h5>{{ message }}</h5>
-            {% comment %} {%else%}
-            <h5></h5> {% endcomment %}
-            {% comment %} {% endif %} {% endcomment %}
-          {% endfor %}
-        </div>
-        {% endif %}
-
-        
-  {% block content %}
-
-  {% endblock %}
-    </div>
-    <script>
-      var menu_btn = document.querySelector("#menu-btn");
-      var sidebar = document.querySelector("#sidebar");
-      var container = document.querySelector(".my-container");
-      menu_btn.addEventListener("click", () => {
-        sidebar.classList.toggle("active-nav");
-        container.classList.toggle("active-cont");
-      });
-    </script>
-
-      <!-- Nav Bar -->
- <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top py-0" style="background: rgb(2,0,36);
- background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,53,121,0.1517857142857143) 0%, rgba(0,212,255,0.1517857142857143) 100%);">
-  <div class="container">
-    <a class="navbar-brand" href="{% url 'adminhomepage' %}">
-      <img src="{% static 'images/logo.png' %}" width="70" height="70" alt="">
-    </a>
-      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar">
-          <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="navbar-collapse collapse" id="navbar">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link not px-4" href="{% url 'adminnotification' %}">
-                <span id="boot-icon" class="bi bi-bell" style="font-size: 25px; -webkit-text-stroke-width: 1.2px;"></span>
-                <span id="notification-count" class="badge badge-danger badge-pill">{{ num }}</span>
-              </a>
-            </li>
-            
-            <style>
-              .nav-link.not {
-                position: relative;
-                display: flex;
-              }
-            
-              #boot-icon {
-                font-size: 25px;
-                -webkit-text-stroke-width: 1.2px;
-              }
-            
-              #notification-count {
-                position: absolute;
-                top: 5px;
-                right: 10px;
-                font-size: 10px;
-                padding: 2px 4px;
-                border-radius: 50%;
-                background-color: orange;
-                color: white;
-              }
-            </style>   
-  
-              <li class="nav-item dropdown">
-                <a class=" bi bi-person nav-link dropdown-toggle" style="font-size: 25px; -webkit-text-stroke-width: 1.2px;"  id="navbarDropdown"  data-bs-toggle="dropdown" aria-expanded="false">
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li class="dropdown-item" aria-disabled="true">{{user.username}}</a></li>
-                  <li><a class="dropdown-item" href="{% url 'adminprofile' %}">My Profile</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="{% url 'user_logout' %}">Logout</a></li>
-              </ul>
-            </li>
-          </ul>
-      </div>
-    </div>
-    </nav>
-  <!-- Navbar -->
+  </div>
 </header>
-  </body>
-  <link rel="stylesheet" href="{% static 'homeowners/css/popup.css' %}">
-  <style>
-  </style>
-  <script>
-    var popup = document.getElementById('popup-message');
-    popup.style.display = 'block';
-    setTimeout(function() {
-        popup.style.display = 'none';
-    }, 2000);
-  </script>
-  
-  </html>
-  
+{% endblock %}
+
+{% block messages %}
+  {% include 'partials/toasts.html' %}
+{% endblock %}
+
+{% block main %}
+{% with active=request.resolver_match.url_name %}
+<div class="sg-admin-shell" id="sgAdminShell">
+  <aside class="sg-sidebar" id="sgSidebar">
+    <div class="sg-sidebar-label">Overview</div>
+    <a href="{% url 'adminhomepage' %}" class="sg-side-link {% if active == 'adminhomepage' %}active{% endif %}"><i class="bi bi-grid-1x2"></i>Dashboard</a>
+    <a href="{% url 'adminvieworder' %}" class="sg-side-link {% if active == 'adminvieworder' or active == 'adminorderdetail' %}active{% endif %}"><i class="bi bi-receipt"></i>Orders</a>
+
+    <div class="sg-sidebar-label mt-3">People</div>
+    <a href="{% url 'adminservicemanlist' %}" class="sg-side-link {% if active == 'adminservicemanlist' or active == 'adminservicemandetail' %}active{% endif %}"><i class="bi bi-person-gear"></i>Professionals</a>
+    <a href="{% url 'adminusermanlist' %}" class="sg-side-link {% if active == 'adminusermanlist' or active == 'adminuserdetail' %}active{% endif %}"><i class="bi bi-people"></i>Home Owners</a>
+
+    <div class="sg-sidebar-label mt-3">Catalog</div>
+    <a href="{% url 'adminservicelist' %}" class="sg-side-link {% if active == 'adminservicelist' or active == 'adminservicedetail' %}active{% endif %}"><i class="bi bi-tools"></i>Services</a>
+    <a href="{% url 'admincreateservice' %}" class="sg-side-link {% if active == 'admincreateservice' %}active{% endif %}"><i class="bi bi-plus-square"></i>Create Service</a>
+    <a href="{% url 'admincreatesubservice' %}" class="sg-side-link {% if active == 'admincreatesubservice' %}active{% endif %}"><i class="bi bi-diagram-3"></i>Create Sub-Service</a>
+
+    <div class="sg-sidebar-label mt-3">Content</div>
+    <a href="{% url 'adminblog' %}" class="sg-side-link {% if active == 'adminblog' or active == 'adminblogdetail' %}active{% endif %}"><i class="bi bi-journal-text"></i>Blog</a>
+    <a href="{% url 'admincreateblog' %}" class="sg-side-link {% if active == 'admincreateblog' %}active{% endif %}"><i class="bi bi-journal-plus"></i>Create Blog</a>
+
+    <div class="sg-sidebar-label mt-3">Communication</div>
+    <a href="{% url 'adminmessage' %}" class="sg-side-link {% if active == 'adminmessage' %}active{% endif %}"><i class="bi bi-chat-dots"></i>Feedback</a>
+    <a href="{% url 'notify' %}" class="sg-side-link {% if active == 'notify' %}active{% endif %}"><i class="bi bi-megaphone"></i>Send Notification</a>
+  </aside>
+  <div class="sg-sidebar-backdrop" id="sgSidebarBackdrop"></div>
+
+  <div class="sg-admin-content">
+    {% block content %}
+    {% endblock %}
+  </div>
+</div>
+{% endwith %}
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block scripts %}
+<script>
+  (function () {
+    var shell = document.getElementById('sgAdminShell');
+    var toggle = document.getElementById('sgSidebarToggle');
+    var backdrop = document.getElementById('sgSidebarBackdrop');
+    var mq = window.matchMedia('(max-width: 991.98px)');
+    toggle.addEventListener('click', function () {
+      shell.classList.toggle(mq.matches ? 'sidebar-open' : 'sidebar-collapsed');
+    });
+    backdrop.addEventListener('click', function () {
+      shell.classList.remove('sidebar-open');
+    });
+  })();
+</script>
+{% endblock %}

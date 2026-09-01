@@ -1,53 +1,51 @@
-{% extends 'admin/bases.html'%}
+{% extends 'admin/bases.html' %}
 {% block content %}
 {% load static %}
-<!--Main layout-->
- <!-- Middle Section -->
- <main>
-<br>
-<div class="text-center my-5">
- <h3 class="display-5">Feedbacks</h3>
- <hr class="w-25 mx-auto"/>
+
+<div class="mb-4">
+  <h2 class="mb-1">Feedback</h2>
+  <p class="sg-muted mb-0">Comments and feedback posted by home owners and professionals.</p>
 </div>
-<div class="container mt-3 table-responsive">
-   <table class="table border table-hover">
-     <thead>
-       <tr>
-           <th scope="col">#</th>
-           <th scope="col">Name</th>
-           <th scope="col">Email</th>
-           <th scope="col">Message</th>
-           <th scope="col">Action</th>
-       </tr>
-     </thead>
-     <tbody>
-      {%for i in msg%}
-       <tr>
-           <th scope="row">{{i.msg_id}}</th>
-           {% if i.homeowner_id %}
-           <td>{{i.homeowner_id.full_name}}</td>
-           {% else %}
-           <td>{{i.professional_id.full_name}}</td>
-           {%endif%}
 
-           {% if i.homeowner_id %}
-           <td>{{i.homeowner_id.email}}</td>
-           {% else %}
-           <td>{{i.professional_id.email}}</td>
-           {%endif%}
-           
-           <td>{{i.message}}</td>
-           <td><a href="deletemsg/{{i.msg_id}}" type="submit"class="delete">Delete<a></td>
-       </tr>
-      {%endfor%}
-     </tbody>
-   </table>
- </div>
-
-<br>
-
-
-</main>
-<!--Main layout-->
+<div class="sg-table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Message</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in msg %}
+      <tr>
+        <th scope="row">{{ i.msg_id }}</th>
+        {% if i.homeowner_id %}
+        <td>{{ i.homeowner_id.full_name }} <span class="sg-chip sg-chip-book ms-1">Home Owner</span></td>
+        <td>{{ i.homeowner_id.email }}</td>
+        {% else %}
+        <td>{{ i.professional_id.full_name }} <span class="sg-chip sg-chip-accept ms-1">Professional</span></td>
+        <td>{{ i.professional_id.email }}</td>
+        {% endif %}
+        <td class="sg-muted">{{ i.message }}</td>
+        <td class="text-end">
+          <a href="deletemsg/{{ i.msg_id }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Delete this feedback?');">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="5">
+          <div class="sg-empty">
+            <i class="bi bi-chat-square"></i>
+            <h5>No feedback yet</h5>
+            <p>User comments will appear here.</p>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}
-  

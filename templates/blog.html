@@ -1,38 +1,37 @@
-{% extends 'hedfot.html'%}
+{% extends 'hedfot.html' %}
+{% block title %}Blog — SewaGhar{% endblock %}
 {% block content %}
 {% load static %}
 
-    <!-- About Sewa Ghar-->
-    <section class="main_heading my-5">
-      <div class="text-center container">
-        <h2 class="display-5"><b>Blog</b></h2>
-        <hr class="w-25 mx-auto"/>
+<section class="py-5">
+  <div class="container">
+    <div class="sg-section-head">
+      <span class="sg-eyebrow"><i class="bi bi-journal-text"></i> Insights &amp; updates</span>
+      <h1 class="mt-3">SewaGhar Blog</h1>
+      <p>Tips, guides and news from the world of home services.</p>
+    </div>
+
+    <div class="row g-4 mt-1">
+      {% for i in blog %}
+      <div class="col-12 col-md-6 col-lg-4 sg-reveal">
+        <article class="card sg-card-hover sg-subservice-card h-100">
+          <img src="/media/{{ i.photo }}" alt="{{ i.title }}" loading="lazy">
+          <div class="sg-subservice-body">
+            <h5>{{ i.title }}</h5>
+            <p>{{ i.desc }}</p>
+          </div>
+        </article>
       </div>
-
-{%for i in blog%}
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-6 col-md-6 col-12 col-xxl-6">  
-            <figure>
-              <img src="/media/{{i.photo}}" alt="About Us IMG" width="600" height="280" >
- 
-
-
-
-            </figure>
-          </div>
-
-          <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
-            <h1>{{i.title}}</h1>
-            <p>
-             {{i.desc}}
-            </p>
-          </div>
+      {% empty %}
+      <div class="col-12">
+        <div class="card sg-empty">
+          <i class="bi bi-journal-x"></i>
+          <h5>No blog posts yet</h5>
+          <p>Check back soon — new articles are on the way.</p>
         </div>
       </div>
-      
-{%endfor%}
-
-
-    </section>
-    {% endblock %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,61 +1,59 @@
-{% extends 'admin/bases.html'%}
+{% extends 'admin/bases.html' %}
 {% block content %}
 {% load static %}
-<!--Main layout-->
-<main>
-<br>
-<div class="text-center my-5">
- <h3 class="display-5">Service List</h3>
- <hr class="w-25 mx-auto"/>
-</div>
-<div class="container">
-  <div class="row justify-content-end">
-      <div class="col-md-6">
-          <form method="get" action="{% url 'adminservicelist' %}">
-              <div class="input-group mb-3">
-                  <input type="text" class="form-control" name="q" placeholder="Search Service by servicename, id, or subservice">
-                  <div class="input-group-append">
-                      <button class="btn btn-outline-success" type="submit">Search</button>
-                      <button class="btn btn-outline-secondary" type="submit">Clear search</button>
-                  </div>
-              </div>
-          </form>
-      </div> 
+
+<div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4">
+  <div>
+    <h2 class="mb-1">Services</h2>
+    <p class="sg-muted mb-0">The full catalog of services and sub-services.</p>
   </div>
-<div class="container mt-3 table-responsive">
-   <table class="table border table-hover">
-     <thead>
-       <tr>
-           <th scope="col">#</th>
-           <th scope="col">Name</th>
-           <th scope="col">Sub-service</th>
-           <th scope="col">Image</th>
-           <th scope="col">Description</th>
-           <th scope="col">Details</th>
-           <th scope="col">Action</th>
-       </tr>
-     </thead>
-     <tbody>
-      {%for i in serv%}
-       <tr>
-           <th scope="row">{{i.service_id}}</th>
-           <td>{{i.service}}</td>
-           <td>{{i.subservice}}</td>
-           <td><img src="/media/{{i.photo}}" width="70" height="70" alt=""></td> 
-           <td>{{i.desc}}</td>
-           
-           <td><a href="{%url 'adminservicedetail' pk=i.service_id%}" class="viewmore">View more</a></td>
-           <td><a href="deleteservice/{{i.service_id}}" type="submit"class="delete" >Delete<a></td>
-       </tr>
-       {%endfor%}
+  <form method="get" action="{% url 'adminservicelist' %}" class="flex-grow-1" style="max-width: 460px;">
+    <div class="input-group">
+      <input type="text" class="form-control" name="q" placeholder="Search by service name, id or sub-service...">
+      <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
+      <a class="btn btn-outline-secondary" href="{% url 'adminservicelist' %}">Clear</a>
+    </div>
+  </form>
+</div>
 
-     </tbody>
-   </table>
- </div>
-
-<br>
-
-
-</main>
-<!--Main layout-->
+<div class="sg-table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Service</th>
+        <th scope="col">Sub-Service</th>
+        <th scope="col">Image</th>
+        <th scope="col">Description</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in serv %}
+      <tr>
+        <th scope="row">{{ i.service_id }}</th>
+        <td>{{ i.service }}</td>
+        <td>{{ i.subservice }}</td>
+        <td><img src="/media/{{ i.photo }}" width="56" height="56" alt="{{ i.subservice }}"></td>
+        <td class="sg-muted">{{ i.desc|truncatechars:70 }}</td>
+        <td class="text-end">
+          <a href="{% url 'adminservicedetail' pk=i.service_id %}" class="btn btn-outline-primary btn-sm">Edit</a>
+          <a href="deleteservice/{{ i.service_id }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Delete this sub-service? This cannot be undone.');">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="6">
+          <div class="sg-empty">
+            <i class="bi bi-inboxes"></i>
+            <h5>No services found</h5>
+            <p>Create a service and sub-services to build your catalog.</p>
+            <a href="{% url 'admincreatesubservice' %}" class="btn btn-primary mt-3"><i class="bi bi-plus me-1"></i>Create Sub-Service</a>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}

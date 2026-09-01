@@ -1,75 +1,76 @@
-{% extends 'admin/bases.html'%}
+{% extends 'admin/bases.html' %}
 {% block content %}
 {% load static %}
-<!--Main layout-->
-<main>
-   <!-- Middle Section -->
-   <br><br>
-   <div class="text-center my-5">
-     <h3 class="display-5">Professional Detail</h3>
-     <hr class="w-25 mx-auto">
-   </div>
- 
-   
-   <div class="container">
-     <div class="row">
-       <div class="col-lg-5 col-md-5 col-12 col-xxl-5 d-flex flex-column">
-        <h5>Profile Picture</h5>      
-           <div class="professionals_image">
-               <img src="/media/{{po.photo}}" width="auto" height="auto" class="col-8 rounded float-start" alt="Professioanal Image">
-           </div>
-           <h5>Citizenship Front</h5>    
-           <div class="professionals_image">
-               <img src="/media/{{po.citizenship}}" class="col-8 rounded float-start" alt="Professioanal Image">
-           </div>
-           <h5>Citizenship back</h5>  
-           <div class="professionals_image">
-            <img src="/media/{{po.citizenships}}" class="col-8 rounded float-start" alt="Professioanal Image">
+
+<nav aria-label="breadcrumb" class="mb-2">
+  <ol class="breadcrumb" style="--bs-breadcrumb-divider: '›';">
+    <li class="breadcrumb-item"><a href="{% url 'adminservicemanlist' %}">Professionals</a></li>
+    <li class="breadcrumb-item active sg-muted" aria-current="page">{{ po.full_name }}</li>
+  </ol>
+</nav>
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
+  <div>
+    <h2 class="mb-1">Professional Detail</h2>
+    <p class="sg-muted mb-0">Verify documents and manage this professional's account.</p>
+  </div>
+  {% if po.status %}
+  <span class="sg-chip sg-chip-success">Active account</span>
+  {% else %}
+  <span class="sg-chip sg-chip-warning">Pending approval</span>
+  {% endif %}
+</div>
+
+<div class="row g-4">
+  <!-- Documents -->
+  <div class="col-12 col-lg-5">
+    <div class="card sg-card">
+      <h6 class="mb-2"><i class="bi bi-person-square me-2" style="color: var(--sg-primary);"></i>Profile Picture</h6>
+      <img src="/media/{{ po.photo }}" class="sg-doc-img mb-4" alt="Profile photo of {{ po.full_name }}">
+      <h6 class="mb-2"><i class="bi bi-card-image me-2" style="color: var(--sg-primary);"></i>Citizenship — Front</h6>
+      <img src="/media/{{ po.citizenship }}" class="sg-doc-img mb-4" alt="Citizenship front">
+      <h6 class="mb-2"><i class="bi bi-card-image me-2" style="color: var(--sg-primary);"></i>Citizenship — Back</h6>
+      <img src="/media/{{ po.citizenships }}" class="sg-doc-img" alt="Citizenship back">
+    </div>
+  </div>
+
+  <!-- Details + actions -->
+  <div class="col-12 col-lg-7">
+    <div class="card sg-card">
+      <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-2">
+        <h4 class="mb-0">{{ po.full_name }}</h4>
+        <div class="sg-stars">
+          {% for star in "12345" %}
+            {% if forloop.counter <= po.ratings %}<span class="star filled">&#9733;</span>{% else %}<span class="star">&#9734;</span>{% endif %}
+          {% endfor %}
         </div>
-       </div>
-       <div class="col-lg-7 col-md-7 col-12 col-xxl-7">
-           <div class="Professional_details">
-            <h5>Name: {{po.full_name}}</h5>
-            <h5>Username: {{po.username}}</h5>
-            <h5>Email: {{po.email}}</h5>
-            <h5>Mobile Number: {{po.number}}</h5>
-            <h5>Address: {{po.address}}</h5>
-            <h5>Age: {{po.age}}</h5>
-            <h5>Gender: {{po.gender}}</h5>
-            <h5>Service: {{po.service}}</h5>
-            <h5>Sub-service: {{po.subservice}}</h5>
-            <h5>Exprience: {{po.exprience}} -year</h5>
-            <h5>Online: {{po.online}}</h5>
-            <h5>Description: {{po.desc}}</h5>
-            {% comment %} {%if po.status %}{% endcomment %}
-
-
-            <h5>Rating:
-              <div class="star-rating" style="display: inline-block;">
-                {% for star in "12345" %}
-                  {% if forloop.counter <= po.ratings %}
-                    <span class="star filled-star">&#9733;</span>
-                  {% else %}
-                    <span class="star">&#9734;</span>
-                  {% endif %}
-                {% endfor %}
-              </div>
-            </h5>
-            <button><a href="../ordertable/{{po.professional_id}}" type="submit" class="btn btn-success">Generate Statement<a></button> 
-            
-
-            <br>
-            <div class="actionbtn">
-              <br>
-              {%if po.status %}
-              <button><a href="../activate/{{po.professional_id}}" type="submit" class="btn btn-warning">Deactivate<a></button>
-              {%else%}
-              <button><a href="../activate/{{po.professional_id}}" type="submit" class="btn btn-success">Accept<a></button>
-              {%endif%}
-              <button><a href="../deleteserviceman/{{po.professional_id}}" class="btn btn-danger" type="submit">Reject<a></button>
-            </div>
-          <br><br>
       </div>
-</main>
-<!--Main layout-->
+      <div class="sg-detail-list">
+        <div class="sg-detail-row"><span class="k">Username</span><span class="v">{{ po.username }}</span></div>
+        <div class="sg-detail-row"><span class="k">Email</span><span class="v">{{ po.email }}</span></div>
+        <div class="sg-detail-row"><span class="k">Mobile Number</span><span class="v">{{ po.number }}</span></div>
+        <div class="sg-detail-row"><span class="k">Address</span><span class="v">{{ po.address }}</span></div>
+        <div class="sg-detail-row"><span class="k">Age</span><span class="v">{{ po.age }}</span></div>
+        <div class="sg-detail-row"><span class="k">Gender</span><span class="v">{{ po.gender }}</span></div>
+        <div class="sg-detail-row"><span class="k">Service</span><span class="v">{{ po.service }}</span></div>
+        <div class="sg-detail-row"><span class="k">Sub-Service</span><span class="v">{{ po.subservice }}</span></div>
+        <div class="sg-detail-row"><span class="k">Experience</span><span class="v">{{ po.exprience }} year(s)</span></div>
+        <div class="sg-detail-row"><span class="k">Online</span><span class="v">{% if po.online %}Yes{% else %}No{% endif %}</span></div>
+        <div class="sg-detail-row"><span class="k">Description</span><span class="v">{{ po.desc }}</span></div>
+      </div>
+
+      <hr class="my-4">
+
+      <div class="d-flex flex-wrap gap-2">
+        <a href="../ordertable/{{ po.professional_id }}" class="btn btn-outline-primary"><i class="bi bi-file-earmark-spreadsheet me-2"></i>Generate Statement</a>
+        {% if po.status %}
+        <a href="../activate/{{ po.professional_id }}" class="btn btn-warning"><i class="bi bi-pause-circle me-2"></i>Deactivate</a>
+        {% else %}
+        <a href="../activate/{{ po.professional_id }}" class="btn btn-success"><i class="bi bi-check2-circle me-2"></i>Accept</a>
+        {% endif %}
+        <a href="../deleteserviceman/{{ po.professional_id }}" class="btn btn-outline-danger" onclick="return confirm('Reject and delete this professional? This cannot be undone.');"><i class="bi bi-x-circle me-2"></i>Reject</a>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

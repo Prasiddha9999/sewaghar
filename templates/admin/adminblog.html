@@ -1,59 +1,60 @@
-{% extends 'admin/bases.html'%}
+{% extends 'admin/bases.html' %}
 {% block content %}
 {% load static %}
-<!--Main layout-->
-<main>
-<br>
-<div class="text-center my-5">
- <h3 class="display-5">Blog </h3>
- <hr class="w-25 mx-auto"/>
-</div>
-<div class="container">
-  <div class="row justify-content-end">
-      <div class="col-md-6">
-          <form method="get" action="{% url 'adminblog' %}">
-              <div class="input-group mb-3">
-                  <input type="text" class="form-control" name="q" placeholder="Search Blog by title">
-                  <div class="input-group-append">
-                      <button class="btn btn-outline-success" type="submit">Search</button>
-                      <button class="btn btn-outline-secondary" type="submit">Clear search</button>
-                  </div>
-              </div>
-          </form>
-      </div> 
+
+<div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4">
+  <div>
+    <h2 class="mb-1">Blog</h2>
+    <p class="sg-muted mb-0">Manage published articles.</p>
   </div>
-<div class="container mt-3 table-responsive">
-   <table class="table border table-hover">
-     <thead>
-       <tr>
-           <th scope="col">#</th>
-           <th scope="col">Title</th>
-           <th scope="col">Image</th>
-           <th scope="col">Description</th>
-           <th scope="col">Details</th>
-           <th scope="col">Action</th>
-       </tr>
-     </thead>
-     <tbody>
-      {%for i in blog%}
-       <tr>
-           <th scope="row">{{i.blog_id}}</th>
-           <td>{{i.title}}</td>
-           <td><img src="/media/{{i.photo}}" width="120" height="100" alt=""></td> 
-           <td>{{i.desc}}</td>
-           
-           <td><a href="{%url 'adminblogdetail' pk=i.blog_id%}" class="viewmore">View more</a></td>
-           <td><a href="deleteblog/{{i.blog_id}}" type="submit" class="delete">Delete<a></td>
-       </tr>
-       {%endfor%}
+  <div class="d-flex gap-2 flex-grow-1 justify-content-end" style="max-width: 560px;">
+    <form method="get" action="{% url 'adminblog' %}" class="flex-grow-1">
+      <div class="input-group">
+        <input type="text" class="form-control" name="q" placeholder="Search blog by title or id...">
+        <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
+        <a class="btn btn-outline-secondary" href="{% url 'adminblog' %}">Clear</a>
+      </div>
+    </form>
+    <a href="{% url 'admincreateblog' %}" class="btn btn-primary text-nowrap"><i class="bi bi-plus me-1"></i>New Post</a>
+  </div>
+</div>
 
-     </tbody>
-   </table>
- </div>
-
-<br>
-
-
-</main>
-<!--Main layout-->
+<div class="sg-table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Title</th>
+        <th scope="col">Image</th>
+        <th scope="col">Description</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in blog %}
+      <tr>
+        <th scope="row">{{ i.blog_id }}</th>
+        <td>{{ i.title }}</td>
+        <td><img src="/media/{{ i.photo }}" width="86" height="56" alt="{{ i.title }}"></td>
+        <td class="sg-muted">{{ i.desc|truncatechars:80 }}</td>
+        <td class="text-end">
+          <a href="{% url 'adminblogdetail' pk=i.blog_id %}" class="btn btn-outline-primary btn-sm">Edit</a>
+          <a href="deleteblog/{{ i.blog_id }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Delete this blog post? This cannot be undone.');">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="5">
+          <div class="sg-empty">
+            <i class="bi bi-journal-x"></i>
+            <h5>No blog posts found</h5>
+            <p>Write your first article to engage your users.</p>
+            <a href="{% url 'admincreateblog' %}" class="btn btn-primary mt-3"><i class="bi bi-plus me-1"></i>Create Blog Post</a>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}

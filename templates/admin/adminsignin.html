@@ -1,69 +1,60 @@
-{% load static%}
-{% static "images" as baseUrl %}
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'professionals/css/signin.css' %}">
-    <script src="{% static 'javascript/home.js' %}"></script>
-    <title>Sewa Ghar</title>
-    <link  rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    <link rel="icon" href="{% static 'images/logo.png' %}">
-    <!-- Font Awesome 4-->
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
-</head>
-<body>
-    <!-- Nav Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top py-0">
-        <div class="container">
-          
-          <a class="navbar-brand" href="{% url 'home' %}">
-            <img src="{% static 'images/logo.png' %}" width="70" height="70" alt="">
-          </a>
+{% block title %}Admin Login — SewaGhar{% endblock %}
+
+{% block nav %}
+<nav class="navbar sg-navbar py-2">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'home' %}">
+      <img src="{% static 'images/logo.png' %}" alt="SewaGhar logo">
+      <span class="sg-brand-name">Sewa<span>Ghar</span></span>
+    </a>
+    <button class="sg-theme-toggle" type="button" onclick="sgToggleTheme()" aria-label="Toggle dark mode">
+      <i class="bi bi-moon-stars sg-icon-moon"></i>
+      <i class="bi bi-sun sg-icon-sun"></i>
+    </button>
+  </div>
+</nav>
+{% endblock %}
+
+{% block main %}
+<div class="sg-auth-wrap" style="min-height: calc(100vh - 300px);">
+  <div class="sg-auth sg-auth-single">
+    <div class="sg-auth-form">
+      <div class="text-center mb-2">
+        <span class="sg-eyebrow"><i class="bi bi-shield-lock"></i> Restricted area</span>
       </div>
-      </nav>
+      <h3 class="text-center">Admin Login</h3>
+      <p class="sg-auth-sub text-center">Sign in to manage the SewaGhar platform.</p>
 
+      <form action="{% url 'adminsignin' %}" method="post">
+        {% csrf_token %}
+        <div class="sg-field">
+          <label class="form-label" for="username">Username</label>
+          <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" required>
+        </div>
 
-    <!-- signip -->
-        <div class="container-fluid">
-            <div class="row login">
-              <div class="col-lg-12 col-md-12 col-12 col-xxl-12 shadow-lg mb-2 bg-body rounded">
-                <div class="text-center">
-                    <br><br><br><br>
-                    <h3 class="pt-10 mb-5 pb-1">Admin login</h3>
-                  </div>
-  
-                  <form  action="adminsignin" method="post">
-                    {% csrf_token %}
-                    <div class="form-outline mb-4">
-                    <label class="form-label" for="username">Username</label>
-                    <input type="text" id="username" name = "username" class="form-control" placeholder="Enter your Username" required/>
-                    </div>
-  
-                    <div class="form-outline mb-4">
-                    <label class="form-label" for="homepassword">Password</label>
-                    <input type="password" id="homepassword" name = "password" class="form-control" placeholder="Enter your Password" required/>
-                    </div>
-                   <!-- if user gives wrong data dispaly here -->
-                    <div class="errormsg">
-                      {% for message in messages%}
-                      <h5>{{message}}</h5>
-                      {% endfor%}
-                  </div>
-  
-                    <div class="text-center pt-1 mb-5 pb-1">
-                      <button class="btn btn-outline-danger my-5" type="submit">Login</button><br>
-                    </div>
-                  </form>
-           
+        <div class="sg-field">
+          <label class="form-label" for="homepassword">Password</label>
+          <div class="input-group">
+            <input type="password" id="homepassword" name="password" class="form-control" placeholder="Enter your password" required>
+            <button class="btn btn-outline-secondary sg-pass-toggle" type="button" data-target="homepassword" aria-label="Show password"><i class="bi bi-eye-slash"></i></button>
+          </div>
+        </div>
 
+        <div class="errormsg">
+          {% for message in messages %}
+          <h5>{{ message }}</h5>
+          {% endfor %}
+        </div>
 
-</body>
+        <div class="d-grid gap-2 mt-4">
+          <button class="btn btn-primary sg-btn-lg" type="submit"><i class="bi bi-box-arrow-in-right me-2"></i>Login</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
 
-</html>
+{% block footer %}{% endblock %}

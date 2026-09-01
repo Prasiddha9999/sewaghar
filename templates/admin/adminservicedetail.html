@@ -1,66 +1,55 @@
-{% extends 'admin/bases.html'%}
+{% extends 'admin/bases.html' %}
 {% block content %}
 {% load static %}
-<!--Main layout-->
-<main>
-    <!-- Middle Section -->
-    <br>
-    <div class="text-center my-5">
-      <h3 class="display-5">Service Detail</h3>
-      <hr class="w-25 mx-auto">
-    </div>
- 
-    <div class="container">
-      <div class="col-lg-12 col-md-12 col-12 col-xxl-12">
-          <div class="service_details">
-              <form method="post">
-                {% csrf_token %}
-                      <div class="form-outline mb-4">
-                        <div>
-                          <label>Service</label>
-                          <input value="{{serv.service}}"  class="form-control" name='service' id="exampleFormControlTextarea1" disabled></textarea>
-                      </div>
-                      </div>
 
-                      <div class="form-outline mb-4">
-                        <div>
-                          <label>Sub Service</label>
-                          <input value="{{serv.subservice}}" class="form-control" name='subservice' id="exampleFormControlTextarea1" ></textarea>
-                      </div>
-                      </div>
+<nav aria-label="breadcrumb" class="mb-2">
+  <ol class="breadcrumb" style="--bs-breadcrumb-divider: '›';">
+    <li class="breadcrumb-item"><a href="{% url 'adminservicelist' %}">Services</a></li>
+    <li class="breadcrumb-item active sg-muted" aria-current="page">{{ serv.subservice }}</li>
+  </ol>
+</nav>
 
-
-                <div class="mb-3">
-                  <div><img src="/media/{{serv.photo}}" width="150" height="150" alt=""></div> 
-                  <label for="photo" class="form-label">Upload Photo to Update</label>
-                    <input class="form-control" name="photo" type="file" id="photo" accept="image/*">
-                </div> 
-                <div>
-                      <label>Description</label><br>
-                      <textarea class="form-control" name="desc" id="exampleFormControlTextarea1" rows="3">{{serv.desc}}</textarea>
-
-                </div>
-                    </div>
-
-              <div class="editbtn text-end">
-                <br>
-                <button type="submit" class="btn btn-success">Update</button>
-                  <!-- if user gives wrong data dispaly here -->
-     <div class="errormsg">
-      {% for message in messages%}
-      <h5>{{message}}</h5>
-      {% endfor%}
-              </div>
-            <br><br>
-              </form>
-          </div>
-      </div>
-     
-  </div>
+<div class="mb-4">
+  <h2 class="mb-1">Service Detail</h2>
+  <p class="sg-muted mb-0">Update this sub-service's details.</p>
 </div>
 
+<div class="card sg-card" style="max-width: 720px;">
+  <form method="post">
+    {% csrf_token %}
+    <div class="sg-field">
+      <label class="form-label" for="service">Service</label>
+      <input value="{{ serv.service }}" class="form-control" name="service" id="service" disabled>
+      <div class="sg-form-hint">The parent service category cannot be changed here.</div>
+    </div>
 
+    <div class="sg-field">
+      <label class="form-label" for="subservice">Sub-Service</label>
+      <input value="{{ serv.subservice }}" class="form-control" name="subservice" id="subservice" required>
+    </div>
 
-</main>
-<!--Main layout-->
+    <div class="sg-field">
+      <label for="photo" class="form-label">Photo</label>
+      <div class="mb-2"><img src="/media/{{ serv.photo }}" class="sg-img-cover" style="max-width: 260px; height: 160px;" alt="{{ serv.subservice }}"></div>
+      <input class="form-control" name="photo" type="file" id="photo" accept="image/*">
+      <div class="sg-form-hint">Upload a new photo to replace the current one, or leave empty to keep it.</div>
+    </div>
+
+    <div class="sg-field">
+      <label class="form-label" for="desc">Description</label>
+      <textarea class="form-control" name="desc" id="desc" rows="3">{{ serv.desc }}</textarea>
+    </div>
+
+    <div class="errormsg">
+      {% for message in messages %}
+      <h5>{{ message }}</h5>
+      {% endfor %}
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 mt-3">
+      <button type="submit" class="btn btn-primary"><i class="bi bi-check2-circle me-2"></i>Update</button>
+      <a href="{% url 'adminservicelist' %}" class="btn btn-outline-secondary">Back to list</a>
+    </div>
+  </form>
+</div>
 {% endblock %}

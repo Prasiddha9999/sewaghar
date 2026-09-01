@@ -1,23 +1,30 @@
-<div class="text-center">
-    <h3>Give us valuable comment or feedback here....</h3>
-    <hr class="w-50 mx-auto"/>
-  </div>
-<form method="post" action="{%url 'usermessage'%}">
-    {%csrf_token%}
-    <div class="mb-3 mx-5">
-      <label for="exampleFormControlTextarea1" class="form-label"><b>Comment</b></label>
-      <textarea class="form-control" name="message" id="exampleFormControlTextarea1" rows="3"></textarea>
-      <br>
-      {% if messages %}
-      <div class="errormsg">
-        {% for message in messages %}
-        {% if 'rating' in message.tags or 'loginsucess' in message.tags %}
-          {%else%}
-          <h5>{{ message }}</h5>
-          {% endif %}
-        {% endfor %}
+<section class="py-4">
+  <div class="container">
+    <div class="card sg-card sg-comment-box">
+      <div class="d-flex align-items-center gap-3 mb-3">
+        <span class="sg-feature-icon" style="width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: var(--sg-primary-soft); color: var(--sg-primary); font-size: 1.2rem;"><i class="bi bi-chat-heart"></i></span>
+        <div>
+          <h5 class="mb-0">Share your feedback</h5>
+          <p class="sg-muted mb-0" style="font-size: 0.9rem;">Your comments help us make SewaGhar better for everyone.</p>
+        </div>
       </div>
-      {% endif %}
-      <button class="btn btn-primary" type="submit">Post</button>
+      <form method="post" action="{% url 'usermessage' %}">
+        {% csrf_token %}
+        <textarea class="form-control" name="message" id="feedbackMessage" rows="3" placeholder="Write your comment or feedback here..."></textarea>
+        {% if messages %}
+        <div class="errormsg mt-2">
+          {% for message in messages %}
+            {% if 'rating' in message.tags or 'loginsucess' in message.tags %}
+            {% else %}
+            <h5>{{ message }}</h5>
+            {% endif %}
+          {% endfor %}
+        </div>
+        {% endif %}
+        <div class="text-end mt-3">
+          <button class="btn btn-primary" type="submit"><i class="bi bi-send me-2"></i>Post Feedback</button>
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
+</section>

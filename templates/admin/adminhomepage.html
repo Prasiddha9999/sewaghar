@@ -1,55 +1,72 @@
-{% extends 'admin/bases.html'%}
+{% extends 'admin/bases.html' %}
 {% block content %}
 {% load static %}
-<!--Main layout-->
-<main style="margin-top: 58px">
-  <div class="container pt-4" >
-    <div class="row">
-      <div class="col-lg-3 col-6">
-      
-      <div class="small-box bg-info">
-      <div class="inner">
-      <h3>{{h}}</h3>
-      <p>Register User</p>
-      </div>
-      <div class="icon">
-      <i class="ion ion-bag"></i>
-      </div>
-      <a href="{% url 'adminusermanlist' %}" class="small-box-footer moreinfo">More info</a>
-      </div>
-      </div>
-      
-      <div class="col-lg-3 col-6">
-      
-      <div class="small-box bg-success">
-      <div class="inner">
-        <h3>{{p}}</h3>
-      <p>Total Service Man</p>
-      </div>
-      <div class="icon">
-      <i class="ion ion-stats-bars"></i>
-      </div>
-      <a href="{% url 'adminservicemanlist' %}" class="small-box-footer moreinfo">More info </a>
-      </div>
-      </div>
-      
-      <div class="col-lg-3 col-6">
-      
-      <div class="small-box bg-warning">
-      <div class="inner">
-      <h3>{{s}}</h3>
-      <p>Service Categories</p>
-      </div>
-      <div class="icon">
-      <i class="ion ion-person-add"></i>
-      </div>
-      <a href="{% url 'adminservicelist' %}" class="small-box-footer moreinfo">More info</i></a>
-      </div>
-      </div>
-      
-      </div>
 
+<div class="d-flex flex-wrap align-items-end justify-content-between gap-2 mb-4">
+  <div>
+    <h2 class="mb-1">Dashboard</h2>
+    <p class="sg-muted mb-0">Welcome back, {{ user.username }} — here's how SewaGhar is doing.</p>
   </div>
-</main>
-<!--Main layout-->
+</div>
+
+<div class="row g-3">
+  <div class="col-12 col-sm-6 col-xl-4">
+    <div class="card sg-stat sg-stat-blue">
+      <span class="sg-stat-icon"><i class="bi bi-people"></i></span>
+      <div>
+        <div class="sg-stat-value">{{ h }}</div>
+        <div class="sg-stat-label">Registered Home Owners</div>
+      </div>
+      <a href="{% url 'adminusermanlist' %}" class="sg-stat-link" aria-label="View home owners"><i class="bi bi-arrow-right-circle"></i></a>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-xl-4">
+    <div class="card sg-stat sg-stat-teal">
+      <span class="sg-stat-icon"><i class="bi bi-person-gear"></i></span>
+      <div>
+        <div class="sg-stat-value">{{ p }}</div>
+        <div class="sg-stat-label">Total Professionals</div>
+      </div>
+      <a href="{% url 'adminservicemanlist' %}" class="sg-stat-link" aria-label="View professionals"><i class="bi bi-arrow-right-circle"></i></a>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-xl-4">
+    <div class="card sg-stat sg-stat-amber">
+      <span class="sg-stat-icon"><i class="bi bi-tools"></i></span>
+      <div>
+        <div class="sg-stat-value">{{ s }}</div>
+        <div class="sg-stat-label">Service Categories</div>
+      </div>
+      <a href="{% url 'adminservicelist' %}" class="sg-stat-link" aria-label="View services"><i class="bi bi-arrow-right-circle"></i></a>
+    </div>
+  </div>
+</div>
+
+<h5 class="mt-5 mb-3">Quick actions</h5>
+<div class="row g-3">
+  <div class="col-12 col-sm-6 col-xl-3">
+    <a href="{% url 'adminvieworder' %}" class="card sg-card-hover sg-feature text-decoration-none">
+      <span class="sg-feature-icon"><i class="bi bi-receipt"></i></span>
+      <div><h6>Review Orders</h6><p>Track every booking on the platform.</p></div>
+    </a>
+  </div>
+  <div class="col-12 col-sm-6 col-xl-3">
+    <a href="{% url 'admincreatesubservice' %}" class="card sg-card-hover sg-feature text-decoration-none">
+      <span class="sg-feature-icon"><i class="bi bi-plus-square"></i></span>
+      <div><h6>Add Sub-Service</h6><p>Expand the service catalog.</p></div>
+    </a>
+  </div>
+  <div class="col-12 col-sm-6 col-xl-3">
+    <a href="{% url 'notify' %}" class="card sg-card-hover sg-feature text-decoration-none">
+      <span class="sg-feature-icon"><i class="bi bi-megaphone"></i></span>
+      <div><h6>Send Notification</h6><p>Broadcast a message to users.</p></div>
+    </a>
+  </div>
+  <div class="col-12 col-sm-6 col-xl-3">
+    <a href="{% url 'adminmessage' %}" class="card sg-card-hover sg-feature text-decoration-none">
+      <span class="sg-feature-icon"><i class="bi bi-chat-dots"></i></span>
+      <div><h6>Read Feedback</h6><p>See what users are saying.</p></div>
+    </a>
+  </div>
+</div>
 {% endblock %}

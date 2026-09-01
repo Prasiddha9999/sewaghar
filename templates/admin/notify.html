@@ -1,87 +1,62 @@
-{% extends 'admin/bases.html'%}
+{% extends 'admin/bases.html' %}
 {% block content %}
 {% load static %}
-<!--Main layout-->
-<main>
-    <!-- Middle Section -->
-    <br>
-    <div class="text-center my-5">
-      <h3 class="display-5">Notify to Others</h3>
-      <hr class="w-25 mx-auto">
-    </div>
- 
-    
-    <div class="container">
-        <div class="col-lg-12 col-md-12 col-12 col-xxl-12">
-            <div class="notify">
-                <form action="{% url 'notify' %}" method="post">
-                  {% csrf_token %}
 
-                  <div class="form-outline mb-4">
-                    <div>
-                      <label>Notification</label>
-                      <input type="text" class="form-control" name='notification' id="exampleFormControlTextarea1" ></textarea>
-                    </div>
-                  </div>
-
-                  <div class="form-outline mb-4">
-                    <div>
-                      <label>Choose Classification</label>
-                      <select class="form-select" id="classification" name="classification" aria-describedby="classification">
-                        <option selected disabled value="">Choose...</option>
-                        {% for i in classificationss %}
-                        <option>{{i}}</option>
-                        {% endfor %}
-                      </select>
-                    </div>
-                  </div>
-                  
-                  <div class="form-outline mb-4">
-                    <div>
-                      <label>Choose HomeOwner</label>
-                      <select class="form-select select2" id="choosehomeowner" name="homeowner" aria-describedby="homeowner" optional="true">
-                        <option selected disabled value="">Choose...</option>
-                        {% for i in homeownerss %}
-                          {% if i.homeowner_id %}
-                          <option>{{ i.homeowner_id }}</option>
-                          {% endif %}
-                        {% endfor %}
-                      </select>
-                    </div>
-                  </div>
-                  
-                  
-                  <div class="form-outline mb-4">
-                    <div>
-                      <label>Choose Professional</label>
-                      <select class="form-select" id="chooseprofessional" name="professional" aria-describedby="professional" optional="true">
-                        <option selected disabled value="">Choose...</option>
-                        {% for i in professionalss %}
-                          {% if i.professional_id %}
-                          <option>{{ i.professional_id }}</option>
-                          {% endif %}
-                        {% endfor %}
-                      </select>
-                    </div>
-                  </div>
-
-     <!-- if user gives wrong data dispaly here -->
-     <div class="errormsg">
-      {% for message in messages%}
-      <h5>{{message}}</h5>
-      {% endfor%}
-  </div>
-                <div class="editbtn text-end">
-                  <br>
-                  <button type="submit" class="btn btn-success">Create</button>
-                </div>
-              <br><br>
-                </form>
-            </div>
-        </div>
-       
-    </div>
+<div class="mb-4">
+  <h2 class="mb-1">Send Notification</h2>
+  <p class="sg-muted mb-0">Notify a specific user, a group, or everyone on the platform.</p>
 </div>
-</main>
-<!--Main layout-->
+
+<div class="card sg-card" style="max-width: 720px;">
+  <form action="{% url 'notify' %}" method="post">
+    {% csrf_token %}
+
+    <div class="sg-field">
+      <label class="form-label" for="notification">Notification message</label>
+      <input type="text" class="form-control" name="notification" id="notification" placeholder="Write the notification text..." required>
+    </div>
+
+    <div class="sg-field">
+      <label class="form-label" for="classification">Send to</label>
+      <select class="form-select" id="classification" name="classification" required>
+        <option selected disabled value="">Choose audience...</option>
+        {% for i in classificationss %}
+        <option>{{ i }}</option>
+        {% endfor %}
+      </select>
+      <div class="sg-form-hint">Pick "HomeOwner" or "Professional" and select the specific person below — or choose an "All..." option to broadcast.</div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-12 col-sm-6 sg-field">
+        <label class="form-label" for="choosehomeowner">Home Owner <span class="sg-muted">(optional)</span></label>
+        <select class="form-select" id="choosehomeowner" name="homeowner">
+          <option selected disabled value="">Choose...</option>
+          {% for i in homeownerss %}
+          <option>{{ i.username }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-12 col-sm-6 sg-field">
+        <label class="form-label" for="chooseprofessional">Professional <span class="sg-muted">(optional)</span></label>
+        <select class="form-select" id="chooseprofessional" name="professional">
+          <option selected disabled value="">Choose...</option>
+          {% for i in professionalss %}
+          <option>{{ i.username }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="errormsg">
+      {% for message in messages %}
+      <h5>{{ message }}</h5>
+      {% endfor %}
+    </div>
+
+    <div class="mt-3">
+      <button type="submit" class="btn btn-primary"><i class="bi bi-megaphone me-2"></i>Send Notification</button>
+    </div>
+  </form>
+</div>
 {% endblock %}

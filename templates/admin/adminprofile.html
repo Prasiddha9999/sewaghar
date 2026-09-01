@@ -1,61 +1,29 @@
-{% extends 'admin/bases.html'%}
+{% extends 'admin/bases.html' %}
 {% block content %}
 {% load static %}
-<!--Main layout-->
-<main>
-  <br>
-  <div class="text-center my-5">
-    <h3 class="display-5">My Profile</h3>
-    <hr class="w-25 mx-auto">
-  </div>
-  <br>
-  
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-5 col-md-5 col-12 col-xxl-5 d-flex flex-column">
-          <div class="professionals_image">
-              <img src="{% static 'images/admin.png'%}" class="col-8 rounded float-start" alt="Professioanal Image">
-          </div>
-      </div>
-      <div class="col-lg-7 col-md-7 col-12 col-xxl-7">
-          <div class="Homeowner_details">
-            <div class="form-outline mb-4">
-              <label class="form-label" for="name">Username</label>
-              <input type="text" id="name" name = "full_name" class="form-control" disabled="notEditMode" placeholder="{{ user.username }}" required/>
-              </div>
 
-                <div class="form-outline mb-4">
-                <label class="form-label" for="homeemail">Email</label>
-                <input type="email" id="homeemail" name = "email" class="form-control" disabled="notEditMode" placeholder="{{ user.email }}" required/>
-                </div>
-
-                <div class="form-outline mb-4">
-                  <label class="form-label" for="password">Password</label>
-                  <input type="password" id="password" name = "password" class="form-control"  value="admin@##" required/>
-                  <input type="checkbox" onclick="myFunction()">Show Password
-                </div>
-
-             
-      </div>
-<script>
-  // for show password
-function myFunction() {
-  var x = document.getElementById("password");
-  if (x.type === "password") {
-    x.type = "text";
-  } else {
-    x.type = "password";
-  }
-  }
-</script>
-      <br><br>
-  </div>
+<div class="mb-4">
+  <h2 class="mb-1">My Profile</h2>
+  <p class="sg-muted mb-0">Your administrator account details.</p>
 </div>
 
-
-
-
-
-</main>
-<!--Main layout-->
+<div class="card sg-card" style="max-width: 720px;">
+  <div class="row g-4 align-items-start">
+    <div class="col-12 col-md-4 text-center">
+      <img src="{% static 'images/admin.png' %}" class="sg-photo" alt="Administrator avatar">
+      <span class="sg-chip sg-chip-accept mt-3"><i class="bi bi-shield-check me-1"></i>Administrator</span>
+    </div>
+    <div class="col-12 col-md-8">
+      <div class="sg-field">
+        <label class="form-label" for="name">Username</label>
+        <input type="text" id="name" name="full_name" class="form-control" disabled placeholder="{{ user.username }}">
+      </div>
+      <div class="sg-field">
+        <label class="form-label" for="homeemail">Email</label>
+        <input type="email" id="homeemail" name="email" class="form-control" disabled placeholder="{{ user.email }}">
+      </div>
+      <div class="sg-alert sg-alert-info"><i class="bi bi-info-circle"></i>Admin credentials are managed through the Django administration site.</div>
+    </div>
+  </div>
+</div>
 {% endblock %}

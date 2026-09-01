@@ -1,62 +1,60 @@
-{% extends 'admin/bases.html'%}
+{% extends 'admin/bases.html' %}
 {% block content %}
 {% load static %}
-<!--Main layout-->
- <main>
 
-<br>
-<div class="text-center my-5">
- <h3 class="display-5">Order List</h3>
- <hr class="w-25 mx-auto"/>
-</div>
-<div class="container">
-  <div class="row justify-content-end">
-      <div class="col-md-6">
-          <form method="get" action="{% url 'adminvieworder' %}">
-              <div class="input-group mb-3">
-                  <input type="text" class="form-control" name="q" placeholder="Search Order by order id,  service or status">
-                  <div class="input-group-append">
-                      <button class="btn btn-outline-success" type="submit">Search</button>
-                      <button class="btn btn-outline-secondary" type="submit">Clear search</button>
-                  </div>
-              </div>
-          </form>
-      </div> 
+<div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4">
+  <div>
+    <h2 class="mb-1">Orders</h2>
+    <p class="sg-muted mb-0">Every booking made on the platform.</p>
   </div>
-<div class="container mt-3 table-responsive">
-   <table class="table border table-hover">
-     <thead>
-       <tr>
-           <th scope="col">#</th>
-           <th scope="col">Professional</th>
-           <th scope="col">HomeOwner</th>
-           <th scope="col">Date</th>
-           <th scope="col">Time</th>
-           <th scope="col">Status</th>
-           <th scope="col">Details</th>
-           <th scope="col">Action</th>
-       </tr>
-     </thead>
-     <tbody>
-      {%for i in ord%}
-       <tr>
-           <th scope="row">{{i.order_id}}</th>
-           <td>{{i.professional_id.full_name}}</td>
-           <td>{{i.homeowner_id.full_name}}</td>
-           <td>{{i.date}}</td>
-           <td>{{i.time}}</td>
-           <td>{{i.status}}</td>
-           <td><a href="{%url 'adminorderdetail' ok=i.order_id%}"class="viewmore">View More<a></td>
-           <td><a href="deleteorder/{{i.order_id}}" type="submit"class="delete">Delete<a></td>
-       </tr>
-       {%endfor%}
-     </tbody>
-   </table>
- </div>
+  <form method="get" action="{% url 'adminvieworder' %}" class="flex-grow-1" style="max-width: 460px;">
+    <div class="input-group">
+      <input type="text" class="form-control" name="q" placeholder="Search by order id, status or date...">
+      <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
+      <a class="btn btn-outline-secondary" href="{% url 'adminvieworder' %}">Clear</a>
+    </div>
+  </form>
+</div>
 
-<br>
-
-
-</main>
-<!--Main layout-->
+<div class="sg-table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Professional</th>
+        <th scope="col">Home Owner</th>
+        <th scope="col">Date</th>
+        <th scope="col">Time</th>
+        <th scope="col">Status</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in ord %}
+      <tr>
+        <th scope="row">{{ i.order_id }}</th>
+        <td>{{ i.professional_id.full_name }}</td>
+        <td>{{ i.homeowner_id.full_name }}</td>
+        <td>{{ i.date }}</td>
+        <td>{{ i.time }}</td>
+        <td><span class="sg-chip sg-chip-{{ i.status }}">{% if i.status == 'cancelbyprofessional' %}Cancelled by pro{% else %}{{ i.status }}{% endif %}</span></td>
+        <td class="text-end">
+          <a href="{% url 'adminorderdetail' ok=i.order_id %}" class="btn btn-outline-primary btn-sm">View</a>
+          <a href="deleteorder/{{ i.order_id }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Delete this order? This cannot be undone.');">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="7">
+          <div class="sg-empty">
+            <i class="bi bi-receipt"></i>
+            <h5>No orders found</h5>
+            <p>Bookings will appear here as home owners place them.</p>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}

@@ -1,95 +1,108 @@
-{% extends 'professionals/pbases.html'%}
+{% extends 'professionals/pbases.html' %}
+{% block title %}Request #{{ ord.order_id }} — SewaGhar{% endblock %}
 {% block content %}
 {% load static %}
 
-    <!-- Middle Section -->
-    <br><br>
-    <div class="text-center my-5">
-      <h3 class="display-5">Request Details</u></h3>
-      <hr class="w-25 mx-auto"/>
+<section class="py-4">
+  <div class="container" style="max-width: 1000px;">
+    <nav aria-label="breadcrumb" class="mb-2">
+      <ol class="breadcrumb" style="--bs-breadcrumb-divider: '›';">
+        <li class="breadcrumb-item"><a href="{% url 'request' %}">My Requests</a></li>
+        <li class="breadcrumb-item active sg-muted" aria-current="page">Request #{{ ord.order_id }}</li>
+      </ol>
+    </nav>
+
+    <div class="sg-section-head">
+      <span class="sg-eyebrow"><i class="bi bi-receipt"></i> Request #{{ ord.order_id }}</span>
+      <h1 class="mt-3">Request Details</h1>
+      <p>
+        {{ ord.date }} · {{ ord.time }} &nbsp;
+        <span class="sg-chip sg-chip-{{ ord.status }}">{% if ord.status == 'cancelbyprofessional' %}Cancelled by you{% else %}{{ ord.status }}{% endif %}</span>
+      </p>
     </div>
-    <br>
-    
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-5 col-md-5 col-12 col-xxl-5 d-flex flex-column">
-            <div class="professionals_image">
-                <img src="/media/{{ord.professional_id.photo}}" width="250" height="300"  class="col-8 rounded float-start" alt="Professioanal Image">
-            </div>
+
+    <div class="row g-4">
+      <!-- Customer info -->
+      <div class="col-12 col-lg-6">
+        <div class="card sg-card h-100">
+          <h5 class="mb-3"><i class="bi bi-person me-2" style="color: var(--sg-primary);"></i>Customer &amp; appointment</h5>
+          <div class="sg-detail-list">
+            <div class="sg-detail-row"><span class="k">Name</span><span class="v">{{ ord.homeowner_id.full_name }}</span></div>
+            <div class="sg-detail-row"><span class="k">Date</span><span class="v">{{ ord.date }}</span></div>
+            <div class="sg-detail-row"><span class="k">Time</span><span class="v">{{ ord.time }}</span></div>
+            <div class="sg-detail-row"><span class="k">Location</span><span class="v">{{ ord.address }}</span></div>
+            <div class="sg-detail-row"><span class="k">House No.</span><span class="v">{{ ord.houseno }}</span></div>
+            <div class="sg-detail-row"><span class="k">Mobile No.</span><span class="v">{{ ord.number }}</span></div>
+            <div class="sg-detail-row"><span class="k">Service</span><span class="v">{{ ord.professional_id.service }} · {{ ord.professional_id.subservice }}</span></div>
+          </div>
+          <a href="{{ ord.googlemap }}" target="_blank" rel="noopener" class="sg-gmap-link align-self-start mt-3">
+            <i class="bi bi-geo-alt-fill"></i>View location on the map
+          </a>
         </div>
-        <div class="col-lg-7 col-md-7 col-12 col-xxl-7">
-          <!-- appointment date time show -->
-          <div class="profes_details">
-            <div class="row">
-                <div class="col"><h5>Date: {{ord.date}}</h5></div>
-                <div class="col"><h5>Time: {{ord.time}}</h5></div>         
-            </div>
-              <hr>
-        <h3>Name: {{ord.homeowner_id.full_name}}</h3>
-        <h5>Location: {{ord.address}}</h5>
-        <h5>Home no: {{ord.houseno}}</h5>
-        <h5>Mobile no: {{ord.number}}</h5>
-        <h5>Service: {{ord.professional_id.service}} - {{ord.professional_id.subservice}}</h5><br>
-        <a href="{{ ord.googlemap }}" target="_blank" ><img class="gmaplogo" src="{% static 'images/gmap.png' %}" target="blank" alt="Google Maps Logo" width="90" height="50"></a></td><label for="Gmap">Click the side logo to View Location</label><br>
-        </div>
-        <br>
-        <div class="bookbtn text-center">
+      </div>
+
+      <!-- Actions -->
+      <div class="col-12 col-lg-6">
+        <div class="card sg-card h-100">
+          <h5 class="mb-3"><i class="bi bi-lightning-charge me-2" style="color: var(--sg-primary);"></i>Actions</h5>
+
           <form method="post" action="{% url 'activates' ord.order_id %}">
             {% csrf_token %}
             {% if ord.status == 'book' %}
-                <p>If cancelled write reason for cancel</p>
-                <textarea name="messagess" class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea><br>
-                <button type="submit" name="status" value="accept" class="btn btn-success">Accept Request</button>
-                <button type="submit" name="status" value="cancelbyprofessional" class="btn btn-danger">Cancel Request</button>
-               
+              <div class="sg-alert sg-alert-info"><i class="bi bi-info-circle"></i>New booking request — accept it to get started, or write a reason and cancel.</div>
+              <label class="form-label" for="messagess">Reason (only needed if you cancel)</label>
+              <textarea name="messagess" class="form-control" id="messagess" rows="2" placeholder="e.g. Not available at that time"></textarea>
+              <div class="d-flex flex-wrap gap-2 mt-3">
+                <button type="submit" name="status" value="accept" class="btn btn-primary"><i class="bi bi-check2-circle me-2"></i>Accept Request</button>
+                <button type="submit" name="status" value="cancelbyprofessional" class="btn btn-outline-danger"><i class="bi bi-x-circle me-2"></i>Cancel Request</button>
+              </div>
 
             {% elif ord.status == 'accept' %}
-            <br>
-       <p><b>Note: Please do best work for increasing your rating</b></p>
-        <p>After Completing your work, please click the solve button.</p>
-        <br>
-        <input type="number" id="totalhour" class="form-control" min="1" step="any" name="totalhour" placeholder="Enter the total time taken to solve the problem" required />
-            <button type="submit" name="status" value="solve" class="btn btn-warning">Solve</button>
-            
+              <div class="sg-alert sg-alert-success"><i class="bi bi-check-circle"></i><span><strong>Request accepted.</strong> Do your best work to grow your rating! After completing the job, enter the time taken and press Solve.</span></div>
+              <label class="form-label" for="totalhour">Total time taken (hours)</label>
+              <input type="number" id="totalhour" class="form-control" min="1" step="any" name="totalhour" placeholder="e.g. 2.5" required>
+              <div class="mt-3">
+                <button type="submit" name="status" value="solve" class="btn btn-primary"><i class="bi bi-patch-check me-2"></i>Mark as Solved</button>
+              </div>
+
             {% elif ord.status == 'cancel' %}
-            <p>Due to : <b>{{ord.message}}<b></p>
-            <button type="submit" name="status" value="cancel" disabled="notEditMode" class="btn btn-danger">Order Cancelled</button>
+              <div class="sg-alert sg-alert-error"><i class="bi bi-x-circle"></i>The home owner cancelled this order due to: <strong>{{ ord.message }}</strong></div>
 
             {% elif ord.status == 'cancelbyprofessional' %}
-            <p>You cancelled the request due to : <b>{{ord.message}}<b></p>
-            <button type="submit" name="status" value="cancel" disabled="notEditMode" class="btn btn-danger">Order Cancelled by You</button>
- 
+              <div class="sg-alert sg-alert-error"><i class="bi bi-x-circle"></i>You cancelled this request due to: <strong>{{ ord.message }}</strong></div>
 
-            {%else%}
-
-            <p>Thankyou for your valuable work</p>
-            {% if ord.payment_amount is null %}
-            <p>Total Time-taken: {{ord.totaltimehour}} hour</p>
-            <script>
-              let x = {{ ord.totaltimehour }};
-              let y = {{ ord.professional_id.rateperhour }};
-              let z = x * y;
-              console.log(z);
-            </script>
-          <p>Total Amount to pay: Rs. <script>document.write(z)</script></p> 
-            <button type="submit" name="status" value="book" disabled="notEditMode" class="btn btn-success">Solved</button>
-            <p>Pending for Payment..</p>
-        </form>
-        {% else %}
-            <p>Payment Sucessfull via {% if ord.payment_method == 'Cash' %}Cash{% else %}Khalti{% endif %}</p>
-            <p>Total Time-taken: {{ord.totaltimehour}} hour</p>
-            <p>Total Payable amount: Rs.{{ord.payment_amount}}</p>
-        {% endif %}
-
-
-
-          {%endif%}
+            {% else %}
+              <div class="sg-alert sg-alert-success"><i class="bi bi-patch-check"></i>Thank you for your valuable work!</div>
+              {% if ord.payment_amount is None %}
+                <div class="sg-detail-list mb-3">
+                  <div class="sg-detail-row"><span class="k">Time taken</span><span class="v">{{ ord.totaltimehour }} hour(s)</span></div>
+                  <div class="sg-detail-row"><span class="k">Amount to receive</span><span class="v">Rs. <span id="totalamount"></span></span></div>
+                </div>
+                <span class="sg-chip sg-chip-warning"><i class="bi bi-hourglass-split me-1"></i>Pending for payment</span>
+              {% else %}
+                <div class="sg-detail-list mb-3">
+                  <div class="sg-detail-row"><span class="k">Payment</span><span class="v">Successful via {% if ord.payment_method == 'Cash' %}Cash{% else %}Khalti{% endif %}</span></div>
+                  <div class="sg-detail-row"><span class="k">Time taken</span><span class="v">{{ ord.totaltimehour }} hour(s)</span></div>
+                  <div class="sg-detail-row"><span class="k">Amount received</span><span class="v">Rs. {{ ord.payment_amount }}</span></div>
+                </div>
+                <span class="sg-chip sg-chip-success"><i class="bi bi-check2 me-1"></i>Paid</span>
+              {% endif %}
+            {% endif %}
+          </form>
         </div>
-       </div>
+      </div>
     </div>
   </div>
+</section>
 
-  <br>
-  <hr>
-  {% endblock %}
-  
+<script>
+  // Amount pending = hours taken x hourly rate (guarded for missing values).
+  (function () {
+    var el = document.getElementById('totalamount');
+    if (!el) return;
+    var x = Number("{{ ord.totaltimehour|default:'0' }}") || 0;
+    var y = Number("{{ ord.professional_id.rateperhour|default:'0' }}") || 0;
+    el.innerHTML = x * y;
+  })();
+</script>
+{% endblock %}

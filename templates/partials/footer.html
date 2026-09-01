@@ -1,0 +1,52 @@
+{% load static %}
+<footer class="sg-footer">
+  <div class="container py-5">
+    <div class="row g-4">
+      <div class="col-12 col-sm-6 col-lg-4">
+        <div class="sg-footer-brand">
+          <img src="{% static 'images/logo.png' %}" alt="SewaGhar logo">
+          <span class="sg-brand-name">Sewa<span>Ghar</span></span>
+        </div>
+        <p>Your trusted home services marketplace. Book verified electricians, plumbers, carpenters, painters and more — right at your doorstep.</p>
+        <div class="sg-footer-social">
+          <a href="https://www.facebook.com/profile.php?id=100091409652130&is_tour_dismissed=true" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=sewagharservice@gmail.com&su=SUBJECT&body=BODY" aria-label="Email"><i class="bi bi-envelope-fill"></i></a>
+        </div>
+      </div>
+      <div class="col-6 col-sm-6 col-lg-2">
+        <h6>Company</h6>
+        <ul>
+          <li><a href="{% url 'aboutus' %}">About Us</a></li>
+          <li><a href="{% url 'blog' %}">Blog</a></li>
+          <li><a href="{% url 'privacypolicy' %}">Privacy Policy</a></li>
+          <li><a href="{% url 'termsandcondition' %}">Terms &amp; Conditions</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-sm-6 col-lg-3">
+        <h6>Popular Services</h6>
+        <ul>
+          <li>Home Repairs</li>
+          <li>Carpenter</li>
+          <li>Painter</li>
+          <li>Computer Repair</li>
+          <li>Electrician</li>
+          <li>Plumber</li>
+        </ul>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3">
+        <h6>Contact</h6>
+        <ul>
+          <li><i class="bi bi-geo-alt me-2"></i>Balaju "8", Kathmandu</li>
+          <li><i class="bi bi-envelope me-2"></i>sajilosewa@gmail.com</li>
+          <li><i class="bi bi-telephone me-2"></i>9863144095</li>
+        </ul>
+        <a href="https://goo.gl/maps/7aoK13241tkdsdJx5" class="d-block mt-3">
+          <img src="{% static 'images/map.png' %}" class="sg-footer-map" alt="Map of SewaGhar office">
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="sg-footer-bottom">
+    <div class="container">© 2023 SewaGhar · All rights reserved</div>
+  </div>
+</footer>

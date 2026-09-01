@@ -1,0 +1,47 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SewaGhar — book trusted home service professionals: electricians, plumbers, carpenters, painters and more.">
+    <title>{% block title %}SewaGhar — Trusted Home Services{% endblock %}</title>
+    <link rel="icon" href="{% static 'images/logo.png' %}">
+
+    {# Apply saved theme before first paint to avoid a flash of the wrong theme #}
+    <script>
+      (function () {
+        var theme = 'light';
+        try { theme = localStorage.getItem('sg-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch (e) {}
+        document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
+      })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sewaghar.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+    {% block nav %}{% endblock %}
+
+    {% block messages %}{% endblock %}
+
+    <main class="sg-main">
+      {% block main %}{% endblock %}
+    </main>
+
+    {% block footer %}
+      {% include 'partials/footer.html' %}
+    {% endblock %}
+
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/sewaghar.js' %}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

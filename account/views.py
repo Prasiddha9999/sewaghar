@@ -145,7 +145,14 @@ def psignin(request):
         return render(request, "professionals/psignin.html")
     
 def psignup(request):
-     service = All_Service.objects.all().distinct('service')
+     # One representative row (with its service_id) per service name,
+     # done in Python so it works on any database backend.
+     service = []
+     seen_services = set()
+     for row in All_Service.objects.order_by('service', 'service_id'):
+         if row.service not in seen_services:
+             seen_services.add(row.service)
+             service.append(row)
      if request.method == 'POST':
         full_name = request.POST['full_name']
         email = request.POST['email']

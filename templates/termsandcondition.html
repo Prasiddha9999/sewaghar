@@ -1,11 +1,17 @@
 {% extends 'hedfot.html'%}
+{% block title %}Terms & Conditions — SewaGhar{% endblock %}
 {% block content %}
 {% load static %}
-<h1 class="display-5 mx-auto text-center"><u style="text-decoration: underline black 1px;">Terms & Condition</u></h1>
 
-    <!-- About Sewa Ghar-->
-    <section class="main_heading my-5 mx-5">
-      <p>Our Terms and Conditions were last updated on 2023/05/01.</p>
+<section class="py-5">
+  <div class="container">
+    <div class="sg-section-head">
+      <span class="sg-eyebrow"><i class="bi bi-file-earmark-text"></i> The fine print</span>
+      <h1 class="mt-3">Terms &amp; Conditions</h1>
+      <p>Last updated on 2023/05/01</p>
+    </div>
+
+    <div class="card sg-card sg-prose mt-4">
       <p>Please read these terms and conditions carefully before using Our Service.</p>
       <p><strong>Interpretation and Definitions</strong></p>
       <p><strong>Interpretation</strong></p>
@@ -148,6 +154,7 @@
       <li>By visiting this page on our website: sewagharservice.com.np</li>
       <li>By sending us an email: sewagharservice@gmail.com</li>
       </ul>
-      <p></p>
-    </section>
-    {% endblock %}
+    </div>
+  </div>
+</section>
+{% endblock %}

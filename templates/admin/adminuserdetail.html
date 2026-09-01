@@ -1,41 +1,41 @@
-{% extends 'admin/bases.html'%}
+{% extends 'admin/bases.html' %}
 {% block content %}
 {% load static %}
-<!--Main layout-->
-<main>
-   <!-- Middle Section -->
-   <br><br>
-   <div class="text-center my-5">
-     <h3 class="display-5">HomeOwner Detail</h3>
-     <hr class="w-25 mx-auto">
-   </div>
- 
-   
-   <div class="container">
-     <div class="row">
-       <div class="col-lg-5 col-md-5 col-12 col-xxl-5 d-flex flex-column">
-        <h5>Profile Picture</h5>      
-           <div class="professionals_image">
-            <div><img src="/media/{{ho.photo}}" width="300" height="350" alt=""></div> 
-           </div>
-       </div>
-       <div class="col-lg-7 col-md-7 col-12 col-xxl-7">
-           <div class="Professional_details">
-            <br>
-            <h5>Name:  {{ho.full_name}}</h5>
-            <h5>Email:  {{ho.email}}</h5>
-            <h5>Mobile Number:  {{ho.number}}</h5>
-            <h5>Address:  {{ho.address}}</h5>
-            <h5>Username:  {{ho.username}}</h5>
-            <br>
-            <div class="actionbtn">
-              <br>
-              <td><a href="../deleteuser/{{ho.homeowner_id}}" class="btn btn-danger" type="submit">Delete<a></td>
-              
-            </div>
-          <br><br>
+
+<nav aria-label="breadcrumb" class="mb-2">
+  <ol class="breadcrumb" style="--bs-breadcrumb-divider: '›';">
+    <li class="breadcrumb-item"><a href="{% url 'adminusermanlist' %}">Home Owners</a></li>
+    <li class="breadcrumb-item active sg-muted" aria-current="page">{{ ho.full_name }}</li>
+  </ol>
+</nav>
+
+<div class="mb-4">
+  <h2 class="mb-1">Home Owner Detail</h2>
+  <p class="sg-muted mb-0">Account details of this home owner.</p>
+</div>
+
+<div class="row g-4">
+  <div class="col-12 col-lg-5">
+    <div class="card sg-card text-center">
+      <img src="/media/{{ ho.photo }}" class="sg-photo mx-auto" alt="Profile photo of {{ ho.full_name }}">
+      <h5 class="mt-3 mb-0">{{ ho.full_name }}</h5>
+      <p class="sg-muted">@{{ ho.username }}</p>
+    </div>
+  </div>
+  <div class="col-12 col-lg-7">
+    <div class="card sg-card">
+      <div class="sg-detail-list">
+        <div class="sg-detail-row"><span class="k">Name</span><span class="v">{{ ho.full_name }}</span></div>
+        <div class="sg-detail-row"><span class="k">Username</span><span class="v">{{ ho.username }}</span></div>
+        <div class="sg-detail-row"><span class="k">Email</span><span class="v">{{ ho.email }}</span></div>
+        <div class="sg-detail-row"><span class="k">Mobile Number</span><span class="v">{{ ho.number }}</span></div>
+        <div class="sg-detail-row"><span class="k">Address</span><span class="v">{{ ho.address }}</span></div>
       </div>
-</main>
-<!--Main layout-->
+      <hr class="my-4">
+      <div>
+        <a href="../deleteuser/{{ ho.homeowner_id }}" class="btn btn-outline-danger" onclick="return confirm('Delete this home owner? This cannot be undone.');"><i class="bi bi-trash me-2"></i>Delete Account</a>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
-  

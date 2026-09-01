@@ -1,41 +1,48 @@
-{% extends 'admin/bases.html'%}
+{% extends 'admin/bases.html' %}
 {% block content %}
 {% load static %}
-<!--Main layout-->
-<main>
-<br><br>
-<div class="text-center my-5">
-  <h3 class="display-5">Notifications</h3>
-  <hr class="w-25 mx-auto"/>
+
+<div class="mb-4">
+  <h2 class="mb-1">Notifications</h2>
+  <p class="sg-muted mb-0">{{ num }} unread — tap a notification to mark it as read.</p>
 </div>
 
-
-<div class="container mt-3">
-  <div class="table-responsive" style="max-height: 300px; overflow-y: scroll;">
-    <table class="table border table-light table-hover">
-      <tbody>
-        {% for i in msg %}
-        <tr {% if i.view is True %}style="color: #392C42B2;"{% endif %} onclick="submitForm('{{ i.not_id }}')">
-          <th scope="row">{{ i.notification }}</th>
-          <td style="text-align: right;">{{ i.time }}</td>
-        </tr>
-        <form id="form_{{ i.not_id }}" method="post" action="{% url 'aupdate_notification_view' %}">
-          {% csrf_token %}
-          <input type="hidden" name="not_id" value="{{ i.not_id }}">
-        </form>
+<div class="sg-table-wrap sg-table-scroll" style="max-width: 960px;">
+  <table class="table" style="min-width: 0;">
+    <tbody>
+      {% for i in msg %}
+      <tr class="sg-notification-row {% if i.view %}is-read{% endif %}" onclick="submitForm('{{ i.not_id }}')">
+        <td>
+          <i class="bi {% if i.view %}bi-envelope-open{% else %}bi-envelope-fill{% endif %} me-2" style="color: var(--sg-primary);"></i>
+          {{ i.notification }}
+        </td>
+        <td class="text-end sg-notif-time">{{ i.time }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td>
+          <div class="sg-empty">
+            <i class="bi bi-bell-slash"></i>
+            <h5>No notifications</h5>
+            <p>Platform events will appear here.</p>
+          </div>
+        </td>
+      </tr>
       {% endfor %}
-      
-      <script>
-        function submitForm(notId) {
-          document.getElementById("form_" + notId).submit();
-        }
-      </script>
-      </tbody>
-    </table>
-  </div>
+    </tbody>
+  </table>
 </div>
-</main>
-<!--Main layout-->
+
+{% for i in msg %}
+<form id="form_{{ i.not_id }}" method="post" action="{% url 'aupdate_notification_view' %}">
+  {% csrf_token %}
+  <input type="hidden" name="not_id" value="{{ i.not_id }}">
+</form>
+{% endfor %}
+
+<script>
+  function submitForm(notId) {
+    document.getElementById('form_' + notId).submit();
+  }
+</script>
 {% endblock %}
-
-

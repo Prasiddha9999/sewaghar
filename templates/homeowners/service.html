@@ -1,140 +1,63 @@
-{% extends 'homeowners/hbases.html'%}
+{% extends 'homeowners/hbases.html' %}
+{% block title %}Services — SewaGhar{% endblock %}
 {% block content %}
 {% load static %}
 
+<section class="py-4">
+  <div class="container">
+    <div class="sg-section-head">
+      <span class="sg-eyebrow"><i class="bi bi-grid"></i> Browse &amp; book</span>
+      <h1 class="mt-3">Our Services</h1>
+      <p>Pick a category to see its sub-services and available professionals.</p>
+    </div>
 
-
-
-
-
-
-      <!-- Middle Section -->
-      <br><br>
-      <div class="text-center my-5">
-        <h3 class="display-5"><b>Services</b></h3>
-        <hr class="w-25 mx-auto"/>
+    <!-- Search -->
+    <form class="mx-auto mb-4" style="max-width: 560px;" method="get" action="{% url 'service' %}">
+      <div class="input-group">
+        <span class="input-group-text" style="background: var(--sg-surface); border-color: var(--sg-border-strong); color: var(--sg-text-faint);"><i class="bi bi-search"></i></span>
+        <input type="search" class="form-control" placeholder="Search services..." id="searchBar" name="q" value="{{ query|default:'' }}" aria-label="Search services">
+        <button type="submit" class="btn btn-primary">Search</button>
       </div>
-<!-- Search bar -->
-<form class="input-group px-3 py-2">
-  <input type="search" class="form-control rounded" placeholder="Search" id="searchBar" aria-label="Search" aria-describedby="search-addon" />
-  <button type="button" class="btn btn-outline-primary" onclick="searchServices()">Search</button>
-</form>
+    </form>
 
-<!-- Services -->
-<div class="container-fluid px-3 py-2">
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-2">
-    {% for i in serv %}
-    <div class="col">
-      <div class="card h-100 servicecart">
-        <a href="{% url 'subservice' sk=i.service %}" class="card-body text-center text-decoration-none">
-          <h5 class="card-title"><span style="color: black">{{ i.service }}</span></h5>
+    <!-- Service categories -->
+    <div class="row g-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4" id="serviceGrid">
+      {% for i in serv %}
+      <div class="col sg-service-col">
+        <a href="{% url 'subservice' sk=i.service %}" class="card sg-card-hover sg-service-card">
+          <span class="sg-service-icon"><i class="bi bi-tools"></i></span>
+          <h5 class="card-title">{{ i.service }}</h5>
+          <span class="sg-muted" style="font-size: 0.85rem;">View sub-services <i class="bi bi-arrow-right"></i></span>
         </a>
       </div>
-    </div>
-    {% empty %}
-    <div class="errormsg">
-      <h5>Sorry! Service Not Found.</h5>
-    </div>
-    {% endfor %}
-  </div>
-</div>
-  </div>
-</div>
-<br><br>
-
-{% comment %} <div class="text-center">
-  <h3>Some Important Facts</h3>
-  <hr class="w-25 mx-auto"/>
-</div>
-
-
-
-<div class="container mp-5">
-
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
-        <p><em><u>
-          It gives freedom to choose the best professionals.It gives freedom to choose the best professionals.
-        </p>
+      {% empty %}
+      <div class="col-12">
+        <div class="card sg-empty">
+          <i class="bi bi-search"></i>
+          <h5>Sorry! Service not found</h5>
+          <p>Try a different search term or browse all services.</p>
+        </div>
       </div>
-      <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
-        <!-- No field -->
-      </div>
+      {% endfor %}
     </div>
   </div>
+</section>
 
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
-        <!-- No field -->
-      </div>
-      <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
-        <p>
-          Easily chat with homeowners and professionals.Easily chat with homeowners and professionals.
-        </p>
-      </div>
-    </div>
-  </div>
+{% include 'homeowners/comment.html' %}
 
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
-        <p>
-          Homeowners can view their history.Homeowners can view their history.
-        </p>
-      </div>
-      <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
-        <!-- No field -->
-      </div>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
-        <!-- No field -->
-      </div>
-      <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
-        <p>
-          It will be faster and more user-friendly.It will be faster and more user-friendly.
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
-        <p>
-          Home Owners can fare for Price.Home Owners can fare for Price.
-      </p>
-      </div>
-      <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
-        <!-- No field -->
-      </div>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
-        <!-- No field -->
-      </div>
-      <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
-        <p>
-          Home Owners can find professionals at the nearest Location. Home Owners can find professionals at the nearest Location
-       </p>
-      </div>
-    </div>
-  </div>
-</em></u>
-</div> {% endcomment %}
-    <br>
-    <hr>
-    <br>
-
-
-
-    {% include 'homeowners/comment.html' %} 
-    {% endblock %}
+<script>
+  // Instant client-side filtering as you type (server search still works on submit).
+  (function () {
+    var searchBar = document.getElementById('searchBar');
+    var cols = document.querySelectorAll('.sg-service-col');
+    if (!searchBar || !cols.length) return;
+    searchBar.addEventListener('input', function () {
+      var q = searchBar.value.toLowerCase();
+      cols.forEach(function (col) {
+        var name = col.querySelector('.card-title').textContent.toLowerCase();
+        col.style.display = name.indexOf(q) !== -1 ? '' : 'none';
+      });
+    });
+  })();
+</script>
+{% endblock %}

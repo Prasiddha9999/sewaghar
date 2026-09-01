@@ -1,62 +1,58 @@
-{% extends 'admin/bases.html'%}
+{% extends 'admin/bases.html' %}
 {% block content %}
 {% load static %}
-<!--Main layout-->
- <!-- Middle Section -->
- <main>
 
-<br>
-<div class="text-center my-5">
- <h3 class="display-5">HomeOwners</h3>
- <hr class="w-25 mx-auto"/>
-</div>
-<div class="container">
-  <div class="row justify-content-end">
-      <div class="col-md-6">
-          <form method="get" action="{% url 'adminusermanlist' %}">
-              <div class="input-group mb-3">
-                  <input type="text" class="form-control" name="q" placeholder="Search users by username, id, email, or name">
-                  <div class="input-group-append">
-                      <button class="btn btn-outline-success" type="submit">Search</button>
-                      <button class="btn btn-outline-secondary" type="submit">Clear search</button>
-                  </div>
-              </div>
-          </form>
-      </div>
+<div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4">
+  <div>
+    <h2 class="mb-1">Home Owners</h2>
+    <p class="sg-muted mb-0">All registered home owners on the platform.</p>
   </div>
-<div class="container mt-3 table-responsive">
-   <table class="table border table-hover">
-     <thead>
-       <tr>
-           <th scope="col">#</th>
-           <th scope="col">Name</th>
-           <th scope="col">Email</th>
-           <th scope="col">Contact</th>
-           <th scope="col">Address</th>
-           <th scope="col">Details</th>
-           <th scope="col">Action</th>
-       </tr>
-     </thead>
-     <tbody>
-      {%for i in ho %}
-       <tr>
-           <th scope="row">{{i.homeowner_id}}</th>
-           <td>{{i.full_name}}</td>
-           <td>{{i.email}}</td>
-           <td>{{i.number}}</td>
-           <td>{{i.address}}</td>
-           <td><a href="{%url 'adminuserdetail' hk=i.homeowner_id%}"class="viewmore">View More<a></td>
-            <td><a href="deleteuser/{{i.homeowner_id}}" type="submit"class="delete">Delete<a></td>
-       </tr>
-      {% endfor%}
-     </tbody>
-   </table>
- </div>
+  <form method="get" action="{% url 'adminusermanlist' %}" class="flex-grow-1" style="max-width: 460px;">
+    <div class="input-group">
+      <input type="text" class="form-control" name="q" placeholder="Search by username, id, email or name...">
+      <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
+      <a class="btn btn-outline-secondary" href="{% url 'adminusermanlist' %}">Clear</a>
+    </div>
+  </form>
+</div>
 
-<br>
-
-
-</main>
-<!--Main layout-->
+<div class="sg-table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Contact</th>
+        <th scope="col">Address</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in ho %}
+      <tr>
+        <th scope="row">{{ i.homeowner_id }}</th>
+        <td>{{ i.full_name }}</td>
+        <td>{{ i.email }}</td>
+        <td>{{ i.number }}</td>
+        <td>{{ i.address }}</td>
+        <td class="text-end">
+          <a href="{% url 'adminuserdetail' hk=i.homeowner_id %}" class="btn btn-outline-primary btn-sm">View</a>
+          <a href="deleteuser/{{ i.homeowner_id }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Delete this home owner? This cannot be undone.');">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="6">
+          <div class="sg-empty">
+            <i class="bi bi-person-x"></i>
+            <h5>No home owners found</h5>
+            <p>Try a different search term.</p>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}
-  

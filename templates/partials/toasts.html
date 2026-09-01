@@ -1,0 +1,12 @@
+{% if messages %}
+<div class="sg-toast-stack" id="sg-toast-stack" aria-live="polite">
+  {% for message in messages %}
+  <div class="sg-toast">
+    {% if 'error' in message.tags %}<i class="bi bi-exclamation-circle-fill" style="color: var(--sg-danger);"></i>
+    {% elif 'info' in message.tags %}<i class="bi bi-info-circle-fill" style="color: var(--sg-info);"></i>
+    {% else %}<i class="bi bi-check-circle-fill"></i>{% endif %}
+    <div>{{ message }}</div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}

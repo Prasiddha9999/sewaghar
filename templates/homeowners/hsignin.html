@@ -1,54 +1,52 @@
-{% extends 'hedfot.html'%}
+{% extends 'hedfot.html' %}
+{% block title %}Home Owner Login — SewaGhar{% endblock %}
 {% block content %}
 {% load static %}
 
+<div class="sg-auth-wrap">
+  <div class="sg-auth">
+    <div class="sg-auth-form">
+      <span class="sg-eyebrow"><i class="bi bi-house-heart"></i> Home Owner</span>
+      <h3 class="mt-3">Welcome back</h3>
+      <p class="sg-auth-sub">Log in to book trusted professionals for your home.</p>
 
-      <!-- signup -->
-        <div class="container-fluid">
-            <div class="row login">
-              <div class="col-lg-6 col-md-6 col-12 col-xxl-6 shadow-lg p-3 mb-5 bg-body rounded">
-                <div class="text-center">
-                    <br><br><br><br>
-                    <h3 class="pt-10 mb-5 pb-1">Login for Home Owner</h3>
-                  </div>
-  
-                  <form  action="hsignin" method="post">
-                    {% csrf_token %}
-                    <div class="form-outline mb-4">
-                    <label class="form-label" for="homeemail">Username</label>
-                    <input type="text" id="username" name = "username" class="form-control" placeholder="Enter the Unique Username " required/>
-                    </div>
-  
-                    <div class="form-outline mb-4">
-                    <label class="form-label" for="homepassword">Password</label>
-                    <div class="input-group">
-                    <input type="password" id="homepassword" name = "password" class="form-control" placeholder="Enter your Password" required/>
-                    <button class="btn btn-outline-secondary" type="button" onclick="togglePassword()"><i id="password-icon" class="bi bi-eye-slash"></i></button>
-                    </div>
-                  </div>
+      <form action="{% url 'hsignin' %}" method="post">
+        {% csrf_token %}
+        <div class="sg-field">
+          <label class="form-label" for="username">Username</label>
+          <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" required>
+        </div>
 
-                   <!-- if user gives wrong data dispaly here -->
-                    <div class="errormsg">
-                      {% for message in messages%}
-                      <h5>{{message}}</h5>
-                      {% endfor%}
-                  </div>
-
-                    <div class="text-center pt-1 mb-5 pb-1">
-                      <button class="btn btn-outline-danger my-5" type="Submit">Login</button><br>
-                      <a class="text-muted" href="{% url 'hforgetpassword' %}">Forgot password?</a>
-                    </div>
-                  </form>
-              </div>
-    
-              <div class="col-lg-6 col-md-6 col-12 col-xxl-6 text-center shadow p-3 mb-5 rounded" style="background-color: #f07147d2">
-                <br><br><br><br><br><br><br><br>
-                <h3 class="mb-4">New Here?</h3><br>
-                <p class="medium mb-0">Sign up and get new exprience on Sewa ghar.</p><br>
-                <button type="button" class="btn btn-outline-secondary my-5 signup"><a href="{% url 'hsignup' %}" style="text-decoration: none; color: black;">SignUp</a></button>
-
-              </div>
-            </div>  
+        <div class="sg-field">
+          <label class="form-label" for="homepassword">Password</label>
+          <div class="input-group">
+            <input type="password" id="homepassword" name="password" class="form-control" placeholder="Enter your password" required>
+            <button class="btn btn-outline-secondary sg-pass-toggle" type="button" data-target="homepassword" aria-label="Show password"><i class="bi bi-eye-slash"></i></button>
           </div>
-                      
-          {% endblock %}
+        </div>
+
+        <div class="errormsg">
+          {% for message in messages %}
+          <h5>{{ message }}</h5>
+          {% endfor %}
+        </div>
+
+        <div class="d-grid gap-2 mt-4">
+          <button class="btn btn-primary sg-btn-lg" type="submit"><i class="bi bi-box-arrow-in-right me-2"></i>Login</button>
+        </div>
+        <div class="text-center mt-3">
+          <a class="sg-muted" href="{% url 'hforgetpassword' %}">Forgot password?</a>
+        </div>
+      </form>
+    </div>
+
+    <div class="sg-auth-side">
+      <span class="sg-eyebrow" style="background: rgba(255,255,255,0.15); color: #fff;"><i class="bi bi-stars"></i> New here?</span>
+      <h3>Get your home fixed the smart way</h3>
+      <p>Sign up and get a new experience on SewaGhar — compare rated professionals, book in minutes, and pay only when the job is done.</p>
+      <a href="{% url 'hsignup' %}" class="btn mt-2"><i class="bi bi-person-plus me-2"></i>Create an Account</a>
+      <p class="small mt-3 mb-0" style="opacity: 0.75;">Are you a professional? <a href="{% url 'psignin' %}" class="text-white text-decoration-underline">Login here</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

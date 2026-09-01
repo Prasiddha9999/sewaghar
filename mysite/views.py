@@ -47,11 +47,13 @@ def service(request):
     # import ipdb;ipdb.set_trace()
     if request.user.is_homeowner is True:
         query = request.GET.get('q')
+        # One entry per service name. values().distinct() is portable SQL
+        # (plain SELECT DISTINCT) unlike the PostgreSQL-only distinct('field').
         if query:
-            serv = All_Service.objects.filter(service__icontains=query).distinct('service')
+            serv = All_Service.objects.filter(service__icontains=query).values('service').distinct().order_by('service')
         else:
-            serv = All_Service.objects.all().distinct('service')
-        
+            serv = All_Service.objects.values('service').distinct().order_by('service')
+
         return render(request, "homeowners/service.html", {'serv': serv, 'query': query})
     else:
         return redirect('404')
@@ -212,7 +214,9 @@ def activates(request, order_id):
         instance = get_object_or_404(Order, order_id=order_id)
         status = request.POST.get('status')
         message = request.POST.get('messagess')
-        totalhour = request.POST.get('totalhour')
+        # An absent or empty field must become None: totaltimehour is a
+        # FloatField and saving '' would raise a 500.
+        totalhour = request.POST.get('totalhour') or None
         
         if status == 'cancel':
             instance.status = 'cancel'
@@ -635,7 +639,7 @@ def adminhomepage(request):
 @login_required(login_url="adminsignin")
 def admincreateservice(request):
     if request.user.is_admin is True:
-        servs = Service_List.objects.all().distinct('service_list') 
+        servs = Service_List.objects.all().order_by('service_list')
         if request.method =="POST":
             service_list = request.POST.get('service_list')
             if Service_List.objects.filter(service_list=service_list).exists():
@@ -654,7 +658,7 @@ def admincreateservice(request):
 @login_required(login_url="adminsignin")
 def admincreatesubservice(request):
     if request.user.is_admin is True:
-        servs = Service_List.objects.all().distinct('service_list') 
+        servs = Service_List.objects.all().order_by('service_list')
         if request.method =="POST":
             service = request.POST.get('service')
             subservice = request.POST.get('subservice')
@@ -893,9 +897,9 @@ def ordertable(request,professional_id):
 def notify(request):
     if request.user.is_admin is True:
         classificationss = [choice[1] for choice in Notification.CLASSIFICATION_CHOICES]
-        homeownerss = Notification.objects.all().distinct('homeowner_id')
-        professionalss = Notification.objects.all().distinct('professional_id')
-        
+        homeownerss = Account_HomeOwner.objects.all().order_by('username')
+        professionalss = Account_Professional.objects.all().order_by('username')
+
         if request.method == "POST":
             notification = request.POST.get('notification')
             classification = request.POST.get('classification')

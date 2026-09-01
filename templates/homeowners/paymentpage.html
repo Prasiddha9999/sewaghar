@@ -1,7 +1,20 @@
-{% extends 'homeowners/hbases.html'%}
+{% extends 'homeowners/hbases.html' %}
+{% block title %}Khalti Payment — SewaGhar{% endblock %}
 {% block content %}
 {% load static %}
-<br> <br> <br> <br> 
-<center><h1>Khalti Payment</h1></center>
- <br> <br> <br> <br> <br> 
+
+<section class="py-5">
+  <div class="container" style="max-width: 620px;">
+    <div class="card sg-card text-center py-5">
+      <div class="mx-auto mb-3" style="width: 64px; height: 64px; border-radius: 18px; display: flex; align-items: center; justify-content: center; background: var(--sg-primary-soft); color: var(--sg-primary); font-size: 1.8rem;">
+        <i class="bi bi-wallet2"></i>
+      </div>
+      <h2>Khalti Payment</h2>
+      <p class="sg-muted mb-0">Complete your payment in the Khalti window.<br>If the window closed, go back to your booking and try again.</p>
+      <div class="mt-4">
+        <a href="{% url 'bookings' %}" class="btn btn-outline-primary"><i class="bi bi-arrow-left me-2"></i>Back to My Bookings</a>
+      </div>
+    </div>
+  </div>
+</section>
 {% endblock %}

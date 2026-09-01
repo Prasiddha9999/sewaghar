@@ -1,95 +1,93 @@
 {% extends 'admin/bases.html' %}
-
 {% block content %}
-  {% load static %}
-  <!-- Main layout -->
-  <main>
-    <!-- Middle Section -->
-    <br><br>
-    <div class="text-center my-5">
-      <h3 class="display-5">Order List</h3>
-      <hr class="w-25 mx-auto">
-    </div>
+{% load static %}
 
+<div class="mb-4">
+  <h2 class="mb-1">Professional Statement</h2>
+  <p class="sg-muted mb-0">All orders and earnings for this professional.</p>
+</div>
 
-    <div class="container">
-      <table class="table-bordered text-center">
-        <thead>
-          <tr>
-            <th>Order ID</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Status</th>
-            <th>House No</th>
-            <th>Message</th>
-            <th>Payment Amount</th>
-            <th>Payment Date</th>
-            <th>Payment Method</th>
-            <th>Total Time (Hour)</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for order in orders %}
-          <tr>
-            <td>{{ order.order_id }}</td>
-            <td>{{ order.date }}</td>
-            <td>{{ order.time }}</td>
-            <td>{{ order.status }}</td>
-            <td>{{ order.houseno }}</td>
-            <td>{{ order.message }}</td>
-            <td>{{ order.payment_amount }}</td>
-            <td>{{ order.payment_date }}</td>
-            <td>{{ order.payment_method }}</td>
-            <td>{{ order.totaltimehour }}</td>
-          </tr>
-          
-          {% endfor %}
-          <td>Total Earn</td>
-          <td>Rs. {{amount}}</td>
-        </tbody>
-      </table>
-    </div>
+<h5 class="mb-3"><i class="bi bi-receipt me-2" style="color: var(--sg-primary);"></i>All orders</h5>
+<div class="sg-table-wrap mb-3">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Status</th>
+        <th>House No</th>
+        <th>Message</th>
+        <th>Payment Amount</th>
+        <th>Payment Date</th>
+        <th>Payment Method</th>
+        <th>Total Time (Hour)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for order in orders %}
+      <tr>
+        <td>#{{ order.order_id }}</td>
+        <td>{{ order.date }}</td>
+        <td>{{ order.time }}</td>
+        <td><span class="sg-chip sg-chip-{{ order.status }}">{% if order.status == 'cancelbyprofessional' %}Cancelled by pro{% else %}{{ order.status }}{% endif %}</span></td>
+        <td>{{ order.houseno }}</td>
+        <td class="sg-muted">{% if order.message %}{{ order.message }}{% else %}—{% endif %}</td>
+        <td>{% if order.payment_amount %}Rs. {{ order.payment_amount }}{% else %}—{% endif %}</td>
+        <td>{% if order.payment_date %}{{ order.payment_date }}{% else %}—{% endif %}</td>
+        <td>{% if order.payment_method %}{{ order.payment_method }}{% else %}—{% endif %}</td>
+        <td>{% if order.totaltimehour %}{{ order.totaltimehour }}{% else %}—{% endif %}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="10"><div class="sg-empty"><i class="bi bi-receipt"></i><h5>No orders</h5><p>This professional has no orders yet.</p></div></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="card sg-total-banner mb-5">
+  <span class="sg-total-label"><i class="bi bi-cash-stack me-2"></i>Total earned (all methods)</span>
+  <span class="sg-total-value">Rs. {{ amount|floatformat:"-2" }}</span>
+</div>
 
-<br><br>
-    <h4>Payment Method = Khalti</h4>
-    <div class="container">
-      <table class="table-bordered text-center">
-        <thead>
-          <tr>
-            <th>Order ID</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Status</th>
-            <th>House No</th>
-            <th>Message</th>
-            <th>Payment Amount</th>
-            <th>Payment Date</th>
-            <th>Payment Method</th>
-            <th>Total Time (Hour)</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for order in korders %}
-          <tr>
-            <td>{{ order.order_id }}</td>
-            <td>{{ order.date }}</td>
-            <td>{{ order.time }}</td>
-            <td>{{ order.status }}</td>
-            <td>{{ order.houseno }}</td>
-            <td>{{ order.message }}</td>
-            <td>{{ order.payment_amount }}</td>
-            <td>{{ order.payment_date }}</td>
-            <td>{{ order.payment_method }}</td>
-            <td>{{ order.totaltimehour }}</td>
-          </tr>
-          
-          {% endfor %}
-          <td>Total Earn via Khalti</td>
-          <td>Rs. {{kamount}}</td>
-        </tbody>
-      </table>
-    </div>
-    <br><br>
-  </main>
-  <!-- Main layout -->
+<h5 class="mb-3"><i class="bi bi-wallet2 me-2" style="color: var(--sg-primary);"></i>Paid via Khalti</h5>
+<div class="sg-table-wrap mb-3">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Status</th>
+        <th>House No</th>
+        <th>Message</th>
+        <th>Payment Amount</th>
+        <th>Payment Date</th>
+        <th>Payment Method</th>
+        <th>Total Time (Hour)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for order in korders %}
+      <tr>
+        <td>#{{ order.order_id }}</td>
+        <td>{{ order.date }}</td>
+        <td>{{ order.time }}</td>
+        <td><span class="sg-chip sg-chip-{{ order.status }}">{{ order.status }}</span></td>
+        <td>{{ order.houseno }}</td>
+        <td class="sg-muted">{% if order.message %}{{ order.message }}{% else %}—{% endif %}</td>
+        <td>{% if order.payment_amount %}Rs. {{ order.payment_amount }}{% else %}—{% endif %}</td>
+        <td>{% if order.payment_date %}{{ order.payment_date }}{% else %}—{% endif %}</td>
+        <td>{{ order.payment_method }}</td>
+        <td>{% if order.totaltimehour %}{{ order.totaltimehour }}{% else %}—{% endif %}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="10"><div class="sg-empty"><i class="bi bi-wallet2"></i><h5>No Khalti payments</h5><p>No orders were paid via Khalti yet.</p></div></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="card sg-total-banner">
+  <span class="sg-total-label"><i class="bi bi-wallet2 me-2"></i>Total earned via Khalti</span>
+  <span class="sg-total-value">Rs. {{ kamount|floatformat:"-2" }}</span>
+</div>
 {% endblock %}

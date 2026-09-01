@@ -1,13 +1,17 @@
-{% extends 'hedfot.html'%}
+{% extends 'hedfot.html' %}
+{% block title %}Page Not Found — SewaGhar{% endblock %}
 {% block content %}
 {% load static %}
 
-<br><br><br><br>
-<div class=center style="text-align: center;">
-  <h1>404!</h1>
-  <h1>Page not found</h1>
-  <p>The requested page could not be found.</p>
-  <br><br><br><br>
-</div>
+<section class="sg-404">
+  <div class="container">
+    <div class="sg-404-code">404</div>
+    <h2 class="mt-3">Page not found</h2>
+    <p class="sg-muted mb-4">The page you are looking for doesn't exist, was moved, or you don't have access to it.</p>
+    <div class="d-flex flex-wrap gap-2 justify-content-center">
+      <a href="{% url 'home' %}" class="btn btn-primary"><i class="bi bi-house me-2"></i>Go Home</a>
+      <a href="javascript:history.back()" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-2"></i>Go Back</a>
+    </div>
+  </div>
+</section>
 {% endblock %}
-

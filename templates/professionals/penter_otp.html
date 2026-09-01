@@ -1,40 +1,38 @@
-{% extends 'hedfot.html'%}
+{% extends 'hedfot.html' %}
+{% block title %}Enter OTP — SewaGhar{% endblock %}
 {% block content %}
 {% load static %}
 
+<div class="sg-auth-wrap">
+  <div class="sg-auth sg-auth-single">
+    <div class="sg-auth-form">
+      <div class="text-center mb-2">
+        <span class="sg-eyebrow"><i class="bi bi-envelope-check"></i> Check your inbox</span>
+      </div>
+      <h3 class="text-center">Enter the OTP code</h3>
+      <p class="sg-auth-sub text-center">We've sent a one-time password to your registered email address.</p>
 
-      <!-- signup -->
-        <!-- signip -->
-        <div class="container-fluid">
-          <div class="row login">
-            <div class="col-lg-12 col-md-12 col-12 col-xxl-12 shadow-lg mb-2 bg-body rounded">
-              <div class="text-center">
-                  <br><br><br><br>
-                  <h3 class="pt-10 mb-5 pb-1"><u>Enter Otp for recover Forget Password</u></h3>
-                </div>
+      <form action="{% url 'penter_otp' %}" method="post">
+        {% csrf_token %}
+        <div class="sg-field">
+          <label class="form-label" for="otp">OTP Code</label>
+          <input type="text" id="otp" name="otp" class="form-control text-center" style="letter-spacing: 0.4em; font-weight: 700;" placeholder="•••••" required>
+        </div>
 
-                <form  action="penter_otp" method="post">
-                  {% csrf_token %}
-                  <div class="form-outline mb-4">
-                  <label class="form-label" for="otp">Username</label>
-                  <input type="text" id="otp" name = "otp" class="form-control" placeholder="Enter the OTP code here" required/>
-                  </div>
+        <div class="errormsg">
+          {% for message in messages %}
+          <h5>{{ message }}</h5>
+          {% endfor %}
+        </div>
 
-                 <!-- if user gives wrong data dispaly here -->
-                  <div class="errormsg">
-                    {% for message in messages%}
-                    <h5>{{message}}</h5>
-                    {% endfor%}
-                </div>
-
-                  <div class="text-center pt-1 mb-5 pb-1">
-                    <button class="btn btn-outline-success my-5" type="submit">Submit OTP</button><br>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-     
-
-                      
-          {% endblock %}
+        <div class="d-grid gap-2 mt-4">
+          <button class="btn btn-primary sg-btn-lg" type="submit"><i class="bi bi-check2-circle me-2"></i>Verify OTP</button>
+        </div>
+        <div class="text-center mt-3">
+          <a class="sg-muted" href="{% url 'pforgetpassword' %}"><i class="bi bi-arrow-left me-1"></i>Resend OTP</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

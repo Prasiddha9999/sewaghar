@@ -1,125 +1,47 @@
-{% extends 'homeowners/hbases.html'%}
+{% extends 'homeowners/hbases.html' %}
+{% block title %}{{ s }} Services — SewaGhar{% endblock %}
 {% block content %}
 {% load static %}
 
-    <!-- Middle Section -->
-    <br><br>
- <div class="text-center my-5">
-        <h3 class="display-5"><b>SubSystem: <u>{{s}}</u></b></h3>
-        <hr class="w-25 mx-auto"/>
-      </div>
-<!-- Services -->
-<div class="container-fluid px-3 py-2 ">
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-2">
-    {% for subservice in servs %}
-    <div class="col">
-      <div class="card h-100 subservicecart">
-        <a href="{% url 'servicemanlist' slk=subservice.subservice %}" class="card-body text-center text-decoration-none d-flex flex-column justify-content-between">
-          <h5 class="card-title"><span style="color: black"><u>{{ subservice.subservice }}</u></span></h5>
-          <figure><img src="/media/{{subservice.photo}}" width="250" height="180" alt="Service Image"></figure>
-          <h5 class="card-title"><span style="color: #808080">{{ subservice.desc }}</span></h5>
+<section class="py-4">
+  <div class="container">
+    <nav aria-label="breadcrumb" class="mb-2">
+      <ol class="breadcrumb" style="--bs-breadcrumb-divider: '›';">
+        <li class="breadcrumb-item"><a href="{% url 'service' %}">Services</a></li>
+        <li class="breadcrumb-item active sg-muted" aria-current="page">{{ s }}</li>
+      </ol>
+    </nav>
+
+    <div class="sg-section-head">
+      <span class="sg-eyebrow"><i class="bi bi-tools"></i> {{ s }}</span>
+      <h1 class="mt-3">{{ s }} Sub-Services</h1>
+      <p>Choose exactly what you need — then pick your professional.</p>
+    </div>
+
+    <div class="row g-4">
+      {% for subservice in servs %}
+      <div class="col-12 col-sm-6 col-lg-4">
+        <a href="{% url 'servicemanlist' slk=subservice.subservice %}" class="card sg-card-hover sg-subservice-card h-100">
+          <img src="/media/{{ subservice.photo }}" alt="{{ subservice.subservice }}" loading="lazy">
+          <div class="sg-subservice-body">
+            <h5>{{ subservice.subservice }}</h5>
+            <p>{{ subservice.desc }}</p>
+            <span class="sg-link-more">View professionals <i class="bi bi-arrow-right"></i></span>
+          </div>
         </a>
       </div>
-    </div>
-    {% empty %}
-    <div class="errormsg">
-      <h5>Sorry! Service Not Found.</h5>
-    </div>
-    {% endfor %}
-  </div>
-</div>
-
-
-
-</div>
-</div>
-<br><br>
-{% comment %} <hr>
-<br><br>
-  <div class="text-center">
-    <h3>Some Important Facts</h3>
-    <hr class="w-25 mx-auto"/>
-  </div>
-<div class="container">
-  <div class="row">
-    <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
-      <p><em><u>
-        It gives freedom to choose the best professionals.It gives freedom to choose the best professionals.
-      </p>
-    </div>
-    <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
-      <!-- No field -->
+      {% empty %}
+      <div class="col-12">
+        <div class="card sg-empty">
+          <i class="bi bi-inboxes"></i>
+          <h5>Sorry! No sub-services found</h5>
+          <p>This category doesn't have any sub-services yet.</p>
+        </div>
+      </div>
+      {% endfor %}
     </div>
   </div>
-</div>
+</section>
 
-<div class="container">
-  <div class="row">
-    <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
-      <!-- No field -->
-    </div>
-    <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
-      <p>
-        Easily chat with homeowners and professionals.Easily chat with homeowners and professionals.
-      </p>
-    </div>
-  </div>
-</div>
-
-<div class="container">
-  <div class="row">
-    <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
-      <p>
-        Homeowners can view their history.Homeowners can view their history.
-      </p>
-    </div>
-    <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
-      <!-- No field -->
-    </div>
-  </div>
-</div>
-
-<div class="container">
-  <div class="row">
-    <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
-      <!-- No field -->
-    </div>
-    <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
-      <p>
-        It will be faster and more user-friendly.It will be faster and more user-friendly.
-      </p>
-    </div>
-  </div>
-</div>
-
-<div class="container">
-  <div class="row">
-    <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
-      <p>
-        Home Owners can fare for Price.Home Owners can fare for Price.
-      </p>
-    </div>
-    <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
-      <!-- No field -->
-    </div>
-  </div>
-</div>
-
-<div class="container">
-  <div class="row">
-    <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
-      <!-- No field -->
-    </div>
-    <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex justify-content-center align-items-start flex-column">
-      <p>
-        Home Owners can find professionals at the nearest Location. Home Owners can find professionals at the nearest Location
-      </p>
-    </div>
-  </div>
-</div> {% endcomment %}
-
-  <br>
-  <hr>
-  <br>
-  {% include 'homeowners/comment.html' %} 
+{% include 'homeowners/comment.html' %}
 {% endblock %}

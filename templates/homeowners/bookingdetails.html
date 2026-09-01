@@ -1,177 +1,170 @@
-{% extends 'homeowners/hbases.html'%}
+{% extends 'homeowners/hbases.html' %}
+{% block title %}Booking #{{ ord.order_id }} — SewaGhar{% endblock %}
 {% block content %}
 {% load static %}
-    <!-- Middle Section -->
-    <br><br>
-    <div class="text-center my-5">
-      <h3 class="display-5"><b>Service: <u>{{servicedata.service}} - {{servicedata.subservice}}</u></b></h3>
-      <hr class="w-25 mx-auto"/>
-    </div>
-    <br>
-    
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-6 col-md-6 col-12 col-xxl-6 d-flex flex-column">
-          <div class="card h-100">
-            <div class="card-body text-center text-decoration-none d-flex flex-column justify-content-between">
-              <h3>{{servicedata.service}} : {{servicedata.subservice}}</h3>
-              <figure><img src="/media/{{servicedata.photo}}"  width="300" height="200" class="img-fluid" alt="Service Image"></figure>
-              <h5 class="card-title"><span style="color: #808080">{{ servicedata.desc }}</span></h5>
-            </div>
-          </div>
-          {% comment %} <div class="nextprevious">
-            <a href="{{request.META.HTTP_REFERER}}" class="btn btn-danger back" role="button">Back</a>
-          </div> {% endcomment %}
-        </div>
 
-        <div class="col-lg-6 col-md-6 col-12 col-xxl-6">
-          <div class="professionals_image">
-            <img src="/media/{{ord.professional_id.photo}}" alt="Professioanal Image" width="200" height="200" class="col-4 rounded float-start">
-          </div>
-          <div class="profes_details" style="display: inline-block; margin-left: 1rem;">
-            <h3>Name: {{ord.professional_id.full_name}}</h3>
-            <h5>Age: {{ord.professional_id.age}}</h5>
-            <h5>Location: {{ord.professional_id.address}}</h5>
-            <h5>Service Charge Per Hour: {{ord.professional_id.rateperhour}}</h5>
-            <h5>Rating:
-              <div class="star-rating" style="display: inline-block;">
+<section class="py-4">
+  <div class="container">
+    <nav aria-label="breadcrumb" class="mb-2">
+      <ol class="breadcrumb" style="--bs-breadcrumb-divider: '›';">
+        <li class="breadcrumb-item"><a href="{% url 'bookings' %}">My Bookings</a></li>
+        <li class="breadcrumb-item active sg-muted" aria-current="page">Booking #{{ ord.order_id }}</li>
+      </ol>
+    </nav>
+
+    <div class="sg-section-head">
+      <span class="sg-eyebrow"><i class="bi bi-receipt"></i> Booking #{{ ord.order_id }}</span>
+      <h1 class="mt-3">{{ servicedata.service }} — {{ servicedata.subservice }}</h1>
+      <p>
+        {{ ord.date }} · {{ ord.time }} &nbsp;
+        <span class="sg-chip sg-chip-{{ ord.status }}">{% if ord.status == 'cancelbyprofessional' %}Cancelled by professional{% else %}{{ ord.status }}{% endif %}</span>
+      </p>
+    </div>
+
+    <div class="row g-4">
+      <!-- Service summary -->
+      <div class="col-12 col-lg-5">
+        <div class="card sg-card h-100">
+          <img src="/media/{{ servicedata.photo }}" class="sg-img-cover mb-3" alt="{{ servicedata.subservice }}">
+          <h4>{{ servicedata.service }} · {{ servicedata.subservice }}</h4>
+          <p class="sg-muted mb-0">{{ servicedata.desc }}</p>
+        </div>
+      </div>
+
+      <!-- Professional + actions -->
+      <div class="col-12 col-lg-7">
+        <div class="card sg-card">
+          <div class="d-flex flex-column flex-sm-row gap-4 align-items-start">
+            <img src="/media/{{ ord.professional_id.photo }}" class="sg-photo" style="max-width: 160px; aspect-ratio: 1;" alt="{{ ord.professional_id.full_name }}">
+            <div class="flex-grow-1 w-100">
+              <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+                <h4 class="mb-1">{{ ord.professional_id.full_name }}</h4>
+                <span class="sg-price-tag">Rs. {{ ord.professional_id.rateperhour }}<small>/hour</small></span>
+              </div>
+              <div class="sg-stars mb-3">
                 {% for star in "12345" %}
-                  {% if forloop.counter <= ord.professional_id.ratings %}
-                    <span class="star filled-star">&#9733;</span>
-                  {% else %}
-                    <span class="star">&#9734;</span>
-                  {% endif %}
+                  {% if forloop.counter <= ord.professional_id.ratings %}<span class="star filled">&#9733;</span>{% else %}<span class="star">&#9734;</span>{% endif %}
                 {% endfor %}
               </div>
-            </h5>
-            
-            
-            
-            <h5>Mobile Number: {{ord.number}}</h5>
-            
-          </div>
-          <br><br>
-          
-          <p>{{ord.professional_id.desc}}</p>
-          <a href="{{ ord.googlemap }}" target="_blank" ><img class="gmaplogo" src="{% static 'images/gmap.png' %}" target="blank" alt="Google Maps Logo" width="90" height="50"></a></td><label for="Gmap">Click the side logo to open map</label><br>
-       
-
-          <div class="bookbtn text-center">
-            <form method="post" action="{% url 'activates' ord.order_id %}">
-    
-              {% csrf_token %}
-              {% if ord.status == 'book' %}
-              <p>Reason for Cancellation</p>
-              {% comment %} <textarea type="text"  class="form-control" name="message" required id="exampleFormControlTextarea1" rows="1"></textarea><br> {% endcomment %}
-              <input type="text" id="messagess" class="form-control" name="messagess" required />
-              <button type="submit" name="status" value="cancel" class="btn btn-warning">Cancel Request</button>
-
-              {% elif ord.status == 'accept' %}
-              <p>Thankyou for Booking Professionals</p>
-              <button name="status" disabled="notEditMode" class="btn btn-success">Accepted</button>
-
-              {% elif ord.status == 'cancel' %}
-              Due to: {{ord.message}}<br>
-              <button name="status" disabled="notEditMode" class="btn btn-success">Successfully Canceled</button>
-
-              {% elif ord.status == 'cancelbyprofessional' %}
-              Professioanal Cancelled the request due to : {{ord.message}}<br>
-              <button  name="status" disabled="notEditMode" class="btn btn-danger">Canceled</button>
-             
-              {% else %}
-              <button name="status" disabled="notEditMode" class="btn btn-info">Solved</button>
-              <br><br>
-              </form>
-              <div class="col-md">
-                
-                <form method="POST" action="{% url 'rate_professional' prof_id=ord.professional_id.professional_id ord_id=ord.order_id  %}">
-                  {% csrf_token %}
-                  <div class="form-floating">
-                      <select class="form-select" type="integer" id="rating" name="rating" aria-label="Floating label select example" required>
-                          <option value="" selected>Choose Rating</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                      </select>
-                      <label for="rating">Rate this professional:</label>
-                  </div>
-                  <!-- Messages for rating form -->
-                  {% if messages %}
-                  <div class="errormsg">
-                    {% for message in messages %}
-                      {% if 'rating' in message.tags %}
-                      <h5>{{ message }}</h5>
-                      {% endif %}
-                    {% endfor %}
-                  </div>
-                  {% endif %}
-          
-                  <button type="submit" class="btn btn-primary">Submit Rating</button>
-              </form>
-              
+              <div class="sg-detail-list">
+                <div class="sg-detail-row"><span class="k">Age</span><span class="v">{{ ord.professional_id.age }}</span></div>
+                <div class="sg-detail-row"><span class="k">Location</span><span class="v">{{ ord.professional_id.address }}</span></div>
+                <div class="sg-detail-row"><span class="k">Booking contact</span><span class="v">{{ ord.number }}</span></div>
               </div>
-              <br>
+            </div>
+          </div>
 
+          <p class="sg-muted mt-3">{{ ord.professional_id.desc }}</p>
+          <a href="{{ ord.googlemap }}" target="_blank" rel="noopener" class="sg-gmap-link align-self-start">
+            <i class="bi bi-geo-alt-fill"></i>Open booking location on the map
+          </a>
 
-              {% if ord.payment_amount is none %}
-              <p>Total Time taken to solve problem: {{ord.totaltimehour}} hour</p> 
-            <p>Total Amount to pay: Rs. <span id="totalamount"></span></p> 
+          <hr class="my-4">
 
-              <h3>Payment Method</h3>
-              <form action="/khalti/config" method="POST">
-                {% csrf_token %}
+          {% if ord.status == 'book' %}
+          <form method="post" action="{% url 'activates' ord.order_id %}">
+            {% csrf_token %}
+            <div class="sg-alert sg-alert-success"><i class="bi bi-check-circle"></i>Your booking request has been sent. The professional will accept it shortly.</div>
+            <label class="form-label" for="messagess">Changed your mind? Tell us why before cancelling:</label>
+            <input type="text" id="messagess" class="form-control" name="messagess" placeholder="Reason for cancellation" required>
+            <div class="mt-3">
+              <button type="submit" name="status" value="cancel" class="btn btn-warning"><i class="bi bi-x-circle me-2"></i>Cancel Request</button>
+            </div>
+          </form>
+
+          {% elif ord.status == 'accept' %}
+          <div class="sg-alert sg-alert-success"><i class="bi bi-check-circle"></i>Thank you for booking! Your request has been <strong>accepted</strong> by the professional.</div>
+
+          {% elif ord.status == 'cancel' %}
+          <div class="sg-alert sg-alert-info"><i class="bi bi-info-circle"></i>Booking cancelled — reason: {{ ord.message }}</div>
+
+          {% elif ord.status == 'cancelbyprofessional' %}
+          <div class="sg-alert sg-alert-error"><i class="bi bi-x-circle"></i>The professional cancelled this request due to: {{ ord.message }}</div>
+
+          {% else %}
+          <div class="sg-alert sg-alert-success"><i class="bi bi-patch-check"></i>Problem <strong>solved</strong> — thank you for using SewaGhar!</div>
+
+          <!-- Rating -->
+          {% if ord.ratingcheck %}
+          <p class="sg-muted"><i class="bi bi-star-fill me-1" style="color: var(--sg-accent);"></i>You have already rated this professional. Thank you!</p>
+          {% else %}
+          <form method="POST" action="{% url 'rate_professional' prof_id=ord.professional_id.professional_id ord_id=ord.order_id %}" class="mb-3">
+            {% csrf_token %}
+            <label class="form-label" for="rating">Rate this professional</label>
+            <div class="row g-2">
+              <div class="col-8 col-sm-6">
+                <select class="form-select" id="rating" name="rating" required>
+                  <option value="" selected>Choose rating...</option>
+                  <option value="1">1 — Poor</option>
+                  <option value="2">2 — Fair</option>
+                  <option value="3">3 — Good</option>
+                  <option value="4">4 — Very Good</option>
+                  <option value="5">5 — Excellent</option>
+                </select>
+              </div>
+              <div class="col-4 col-sm-3 d-grid">
+                <button type="submit" class="btn btn-outline-primary">Submit</button>
+              </div>
+            </div>
+            {% if messages %}
+            <div class="errormsg mt-2">
+              {% for message in messages %}
+                {% if 'rating' in message.tags %}<h5>{{ message }}</h5>{% endif %}
+              {% endfor %}
+            </div>
+            {% endif %}
+          </form>
+          {% endif %}
+
+          <!-- Payment -->
+          {% if ord.payment_amount is none %}
+          <div class="card" style="background: var(--sg-surface-2); border-color: var(--sg-border);">
+            <div class="card-body">
+              <h5 class="mb-3"><i class="bi bi-credit-card me-2" style="color: var(--sg-primary);"></i>Payment</h5>
+              <div class="sg-detail-list mb-3">
+                <div class="sg-detail-row"><span class="k">Time taken</span><span class="v">{{ ord.totaltimehour }} hour(s)</span></div>
+                <div class="sg-detail-row"><span class="k">Total amount</span><span class="v">Rs. <span id="totalamount"></span></span></div>
+              </div>
+              <div class="d-flex flex-wrap gap-2">
+                <form action="/khalti/config" method="POST">
+                  {% csrf_token %}
                   <input type="hidden" name="orderid" value="{{ ord.order_id }}">
-                  <input type="hidden"  id="amounts" name="amount">
-                  <button class="btn btn-outline-success" id="payment-button" type="submit">Pay Via Khalti</button>
-            
-              </form>
-              <br>
-              <form method="post" action="{% url 'bookingdetails' od=ord.order_id %}">
-                {% csrf_token %}
-                <input type="hidden" name="orderid" value="{{ ord.order_id }}">
-      
-                <input type="hidden" id="amount" name="amount">
-           
-                <button class="btn btn-outline-success" type="submit">Pay Via Cash</button>
-              </form>
-            
-              {% elif ord.payment_amount is not None %}
-              <h5>Thank You for your Payment amount: Rs.{{ ord.payment_amount }} via {{ord.payment_method}}</h5>
-              {% endif %}
-       </div>
-     </div>
-   </div> 
-       
-    {% endif %}
-
-     
-</div>
-<br>
+                  <input type="hidden" id="amounts" name="amount">
+                  <button class="btn btn-primary" id="payment-button" type="submit"><i class="bi bi-wallet2 me-2"></i>Pay via Khalti</button>
+                </form>
+                <form method="post" action="{% url 'bookingdetails' od=ord.order_id %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="orderid" value="{{ ord.order_id }}">
+                  <input type="hidden" id="amount" name="amount">
+                  <button class="btn btn-outline-primary" type="submit"><i class="bi bi-cash-coin me-2"></i>Pay via Cash</button>
+                </form>
+              </div>
+            </div>
+          </div>
+          {% else %}
+          <div class="sg-alert sg-alert-success"><i class="bi bi-check-circle"></i>Thank you for your payment of <strong>Rs. {{ ord.payment_amount }}</strong> via {{ ord.payment_method }}.</div>
+          {% endif %}
+          {% endif %}
         </div>
       </div>
     </div>
   </div>
-    
-  <br>
-  <hr>
-  <br>
-  <script>
-    let x = {{ ord.totaltimehour }};
-    let y = {{ ord.professional_id.rateperhour }};
-    let z = x * y;
-    console.log(z);
-    // JavaScript code for cash payment
-    let amountInput = document.getElementById("amount"); // get the input element
-    amountInput.value = z; // set the value of the input element to z
-    // JavaScript code for khalti payment
-    let amountsInput = document.getElementById("amounts"); // get the input element
-    amountsInput.value = z; // set the value of the input element to z
+</section>
 
-    let outputElement = document.getElementById("totalamount");
-		outputElement.innerHTML = z;
+{% include 'homeowners/comment.html' %}
 
-  </script>
-
-  {% endblock %}
+<script>
+  // Total payable = hours taken x hourly rate (guarded for missing values).
+  (function () {
+    var x = Number("{{ ord.totaltimehour|default:'0' }}") || 0;
+    var y = Number("{{ ord.professional_id.rateperhour|default:'0' }}") || 0;
+    var z = x * y;
+    var amountInput = document.getElementById('amount');
+    if (amountInput) amountInput.value = z;
+    var amountsInput = document.getElementById('amounts');
+    if (amountsInput) amountsInput.value = z;
+    var outputElement = document.getElementById('totalamount');
+    if (outputElement) outputElement.innerHTML = z;
+  })();
+</script>
+{% endblock %}
