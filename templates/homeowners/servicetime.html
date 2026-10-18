@@ -114,7 +114,9 @@
   })();
 
   // Map pin picker (Leaflet + OpenStreetMap, free — no API key).
-  (function () {
+  // Runs on DOMContentLoaded: sgLoadLeaflet/sgOsmTiles come from sewaghar.js,
+  // which is loaded at the end of <body>, after this inline script.
+  document.addEventListener('DOMContentLoaded', function () {
     var gmapInput = document.getElementById('gmap');
     var hint = document.getElementById('map-pin-hint');
     var results = document.getElementById('map-results');
@@ -204,6 +206,6 @@
         document.getElementById('sg-pick-map').scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
-  })();
+  });
 </script>
 {% endblock %}
