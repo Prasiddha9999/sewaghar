@@ -41,6 +41,7 @@ urlpatterns = [
     
     
     path("notification",views.notification, name="notification"),
+    path('api/notifications/status', views.notification_status, name='notification_status'),
     # path('notificationnumber/', views.notificationnumber, name='notificationnumber'),
     
     path('pupdate_notification_view/', views.pupdate_notification_view, name='pupdate_notification_view'),

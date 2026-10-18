@@ -83,10 +83,145 @@
     }, { passive: true });
   }
 
+  /* ---------- Programmatic toasts ---------- */
+  window.sgToast = function (text, iconClass) {
+    var stack = document.getElementById('sg-toast-stack');
+    if (!stack) {
+      stack = document.createElement('div');
+      stack.className = 'sg-toast-stack';
+      stack.id = 'sg-toast-stack';
+      stack.setAttribute('aria-live', 'polite');
+      document.body.appendChild(stack);
+    }
+    var toast = document.createElement('div');
+    toast.className = 'sg-toast';
+    var icon = document.createElement('i');
+    icon.className = 'bi ' + (iconClass || 'bi-check-circle-fill');
+    var body = document.createElement('div');
+    body.textContent = text;
+    toast.appendChild(icon);
+    toast.appendChild(body);
+    stack.appendChild(toast);
+    setTimeout(function () {
+      toast.classList.add('is-hiding');
+      setTimeout(function () { toast.remove(); }, 400);
+    }, 6000);
+  };
+
+  /* ---------- Live notifications (polling) ---------- */
+  // Polls /api/notifications/status every 5s on any page that shows the bell,
+  // updates the badge in place and pops a toast when something new arrives.
+  function wireNotificationPolling() {
+    var bells = document.querySelectorAll('.sg-bell');
+    if (!bells.length) return;
+
+    function setBadge(count) {
+      bells.forEach(function (bell) {
+        var badge = bell.querySelector('.sg-bell-badge');
+        if (count > 0) {
+          if (!badge) {
+            badge = document.createElement('span');
+            badge.className = 'sg-bell-badge';
+            bell.appendChild(badge);
+          }
+          badge.textContent = count > 99 ? '99+' : String(count);
+        } else if (badge) {
+          badge.remove();
+        }
+      });
+    }
+
+    function poll() {
+      fetch('/api/notifications/status', { credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
+        .then(function (res) {
+          var type = res.headers.get('content-type') || '';
+          if (!res.ok || type.indexOf('json') === -1) return null;
+          return res.json();
+        })
+        .then(function (data) {
+          if (!data) return;
+          setBadge(data.count || 0);
+          var stored = null;
+          try { stored = sessionStorage.getItem('sg-last-note-id'); } catch (e) {}
+          if (stored !== null && data.latest_id > parseInt(stored || '0', 10) && data.latest_text) {
+            window.sgToast(data.latest_text, 'bi-bell-fill');
+          }
+          try { sessionStorage.setItem('sg-last-note-id', String(data.latest_id || 0)); } catch (e) {}
+        })
+        .catch(function () { /* offline or session expired — try again next tick */ });
+    }
+
+    poll();
+    setInterval(poll, 5000);
+  }
+
+  /* ---------- Maps (Leaflet + OpenStreetMap) ---------- */
+  var leafletPromise = null;
+  window.sgLoadLeaflet = function () {
+    if (leafletPromise) return leafletPromise;
+    leafletPromise = new Promise(function (resolve, reject) {
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';
+      document.head.appendChild(link);
+      var script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
+      script.onload = function () { resolve(window.L); };
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+    return leafletPromise;
+  };
+
+  window.sgOsmTiles = function (L) {
+    return L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+  };
+
+  // Extract lat/lng from an OpenStreetMap or Google Maps URL. Returns null for
+  // links without coordinates (e.g. the old default "google.com/maps/").
+  window.sgParseMapCoords = function (url) {
+    if (!url) return null;
+    var m = url.match(/[?&]mlat=(-?\d+\.?\d*)&mlon=(-?\d+\.?\d*)/);
+    if (!m) m = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+    if (!m) m = url.match(/[?&](?:q|ll)=(-?\d+\.\d+),\s*(-?\d+\.\d+)/);
+    if (!m) return null;
+    var lat = parseFloat(m[1]);
+    var lng = parseFloat(m[2]);
+    if (isNaN(lat) || isNaN(lng) || Math.abs(lat) > 90 || Math.abs(lng) > 180) return null;
+    return { lat: lat, lng: lng };
+  };
+
+  // Read-only mini maps: <div class="sg-map" data-sg-map="{{ order.googlemap }}"></div>
+  function wireMiniMaps() {
+    var els = document.querySelectorAll('[data-sg-map]');
+    if (!els.length) return;
+    var pending = [];
+    els.forEach(function (el) {
+      var coords = window.sgParseMapCoords(el.getAttribute('data-sg-map'));
+      if (coords) pending.push({ el: el, coords: coords });
+      else el.style.display = 'none';
+    });
+    if (!pending.length) return;
+    window.sgLoadLeaflet().then(function (L) {
+      pending.forEach(function (item) {
+        var map = L.map(item.el, { scrollWheelZoom: false }).setView([item.coords.lat, item.coords.lng], 16);
+        window.sgOsmTiles(L).addTo(map);
+        L.marker([item.coords.lat, item.coords.lng]).addTo(map);
+      });
+    }).catch(function () {
+      pending.forEach(function (item) { item.el.style.display = 'none'; });
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     wirePasswordToggles();
     wireToasts();
     wireReveal();
     wireBackToTop();
+    wireNotificationPolling();
+    wireMiniMaps();
   });
 })();

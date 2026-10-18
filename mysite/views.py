@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from account.models import Account_HomeOwner
 from account.models import Account_Professional
 from account.models import Order
@@ -1331,6 +1331,43 @@ def aupdate_notification_view(request):
         return redirect(request.META['HTTP_REFERER'])
     else:
         return redirect('404')
+
+@login_required(login_url="hsignin")
+def notification_status(request):
+    """JSON feed polled by the navbar bell: unread count + newest notification.
+
+    Serves whichever role the logged-in user has, reusing the same
+    classification filters as the three notification pages.
+    """
+    user = request.user
+    qs = None
+    if user.is_homeowner:
+        owner = Account_HomeOwner.objects.filter(username=user.username).first()
+        if owner:
+            qs = Notification.objects.filter(
+                Q(classification="All") | Q(classification="All_HomeOwner") |
+                Q(classification="HomeOwner", homeowner_id=owner)
+            )
+    elif user.is_professional:
+        prof = Account_Professional.objects.filter(username=user.username).first()
+        if prof:
+            qs = Notification.objects.filter(
+                Q(classification="All") | Q(classification="All_Professional") |
+                Q(classification="Professional", professional_id=prof)
+            )
+    elif user.is_admin:
+        qs = Notification.objects.filter(Q(classification="All") | Q(classification="Admin"))
+
+    if qs is None:
+        return JsonResponse({'count': 0, 'latest_id': 0, 'latest_text': ''})
+
+    newest = qs.order_by('-not_id').values_list('not_id', 'notification').first()
+    return JsonResponse({
+        'count': qs.filter(view=False).count(),
+        'latest_id': newest[0] if newest else 0,
+        'latest_text': newest[1] if newest else '',
+    })
+
 
 @login_required(login_url="psignin")
 def online(request, usernames):

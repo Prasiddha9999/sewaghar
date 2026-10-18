@@ -766,3 +766,33 @@ html.sg-anim .sg-reveal.visible { opacity: 1; transform: none; }
   .sg-detail-row .k { flex-basis: 100%; }
   .sg-toast-stack { top: 78px; }
 }
+
+/* ---------- Maps (Leaflet) ---------- */
+.sg-map {
+  height: 240px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--sg-border);
+  margin-top: 0.9rem;
+  width: 100%;
+  background: var(--sg-surface-2);
+  z-index: 0;
+}
+.sg-map-picker { height: 320px; margin-top: 0.6rem; }
+.sg-map-results {
+  position: relative;
+  z-index: 2;
+}
+.sg-map-results .list-group-item {
+  cursor: pointer;
+  font-size: 0.85rem;
+  background: var(--sg-surface);
+  color: var(--sg-text);
+  border-color: var(--sg-border);
+}
+.sg-map-results .list-group-item:hover { background: var(--sg-primary-soft); }
+.leaflet-container { font: inherit; }
+@media (max-width: 576px) {
+  .sg-map { height: 200px; }
+  .sg-map-picker { height: 260px; }
+}

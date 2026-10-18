@@ -64,13 +64,16 @@
             </div>
 
             <div class="sg-field">
-              <label class="form-label" for="gmap">Google Maps Link to Your Home</label>
-              <input id="gmap" name="gmap" type="text" class="form-control" placeholder="Paste the link of your house from Google Maps" required>
-              <div class="sg-form-hint mt-2">
-                <a href="https://www.google.com/maps/" target="_blank" rel="noopener" class="sg-gmap-link">
-                  <i class="bi bi-geo-alt-fill"></i>Open Google Maps &amp; copy your home's link
-                </a>
+              <label class="form-label">Pin Your Home on the Map</label>
+              <div class="d-flex gap-2">
+                <input id="map-search" type="search" class="form-control" placeholder="Search your area, e.g. Baneshwor" autocomplete="off">
+                <button type="button" id="map-search-btn" class="btn btn-outline-primary flex-shrink-0"><i class="bi bi-search"></i></button>
+                <button type="button" id="map-locate-btn" class="btn btn-outline-primary flex-shrink-0" title="Use my current location"><i class="bi bi-crosshair"></i></button>
               </div>
+              <div id="map-results" class="list-group sg-map-results mt-1"></div>
+              <div id="sg-pick-map" class="sg-map sg-map-picker"></div>
+              <div class="sg-form-hint mt-2" id="map-pin-hint"><i class="bi bi-hand-index"></i> Tap the map to drop a pin on your home. You can drag the pin to adjust.</div>
+              <input id="gmap" name="gmap" type="hidden" required>
             </div>
 
             {% if error_message %}
@@ -108,6 +111,99 @@
 
     datePicker.min = getDate();
     datePicker.max = getDate(15);
+  })();
+
+  // Map pin picker (Leaflet + OpenStreetMap, free — no API key).
+  (function () {
+    var gmapInput = document.getElementById('gmap');
+    var hint = document.getElementById('map-pin-hint');
+    var results = document.getElementById('map-results');
+    var searchInput = document.getElementById('map-search');
+    var marker = null;
+    var mapRef = null;
+
+    function fillLink(lat, lng) {
+      lat = lat.toFixed(6);
+      lng = lng.toFixed(6);
+      gmapInput.value = 'https://www.openstreetmap.org/?mlat=' + lat + '&mlon=' + lng + '#map=18/' + lat + '/' + lng;
+      hint.innerHTML = '<i class="bi bi-check-circle-fill" style="color: var(--sg-success);"></i> Location pinned. Drag the pin if you need to adjust it.';
+    }
+
+    function setPoint(lat, lng, zoom) {
+      if (!mapRef) return;
+      if (!marker) {
+        marker = L.marker([lat, lng], { draggable: true }).addTo(mapRef);
+        marker.on('dragend', function () {
+          var p = marker.getLatLng();
+          fillLink(p.lat, p.lng);
+        });
+      } else {
+        marker.setLatLng([lat, lng]);
+      }
+      if (zoom) mapRef.setView([lat, lng], zoom);
+      fillLink(lat, lng);
+    }
+
+    sgLoadLeaflet().then(function (L) {
+      mapRef = L.map('sg-pick-map').setView([27.7172, 85.3240], 13); // Kathmandu
+      sgOsmTiles(L).addTo(mapRef);
+      mapRef.on('click', function (e) { setPoint(e.latlng.lat, e.latlng.lng); });
+    }).catch(function () {
+      document.getElementById('sg-pick-map').style.display = 'none';
+      hint.textContent = 'Map could not load — please try refreshing the page.';
+    });
+
+    // "Use my location"
+    document.getElementById('map-locate-btn').addEventListener('click', function () {
+      if (!navigator.geolocation) return;
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        setPoint(pos.coords.latitude, pos.coords.longitude, 17);
+      }, function () {
+        if (window.sgToast) sgToast('Could not get your location — please allow location access or pin manually.', 'bi-exclamation-circle-fill');
+      }, { enableHighAccuracy: true, timeout: 8000 });
+    });
+
+    // Free address search via OpenStreetMap Nominatim
+    function runSearch() {
+      var q = searchInput.value.trim();
+      if (!q) return;
+      fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5&countrycodes=np&q=' + encodeURIComponent(q), {
+        headers: { 'Accept': 'application/json' }
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (items) {
+          results.innerHTML = '';
+          if (!items.length) {
+            results.innerHTML = '<div class="list-group-item">No results — try a nearby landmark.</div>';
+            return;
+          }
+          items.forEach(function (item) {
+            var row = document.createElement('button');
+            row.type = 'button';
+            row.className = 'list-group-item list-group-item-action';
+            row.textContent = item.display_name;
+            row.addEventListener('click', function () {
+              results.innerHTML = '';
+              setPoint(parseFloat(item.lat), parseFloat(item.lon), 16);
+            });
+            results.appendChild(row);
+          });
+        })
+        .catch(function () { results.innerHTML = ''; });
+    }
+    document.getElementById('map-search-btn').addEventListener('click', runSearch);
+    searchInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); runSearch(); }
+    });
+
+    // A hidden input skips HTML5 "required" — enforce the pin ourselves.
+    gmapInput.form.addEventListener('submit', function (e) {
+      if (!gmapInput.value) {
+        e.preventDefault();
+        hint.innerHTML = '<i class="bi bi-exclamation-circle-fill" style="color: var(--sg-danger);"></i> Please pin your home location on the map before booking.';
+        document.getElementById('sg-pick-map').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
   })();
 </script>
 {% endblock %}
