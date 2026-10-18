@@ -1,5 +1,5 @@
 asgiref==3.9.1
-Django==5.1.11
+Django==5.1.15
 django-extensions==4.1
 django-khalti==1.0
 djangorestframework==3.17.2
