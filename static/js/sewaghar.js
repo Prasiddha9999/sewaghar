@@ -317,18 +317,34 @@
       return row;
     }
 
-    var closeBtn = document.getElementById('sg-assistant-close');
-    if (closeBtn) closeBtn.addEventListener('click', function () {
+    var backdrop = document.getElementById('sg-assistant-backdrop');
+    function closePanel() {
       panel.classList.remove('open');
+      if (backdrop) backdrop.classList.remove('open');
       fab.style.display = '';
+    }
+    function openPanel() {
+      panel.classList.add('open');
+      if (backdrop) backdrop.classList.add('open');
+      fab.style.display = 'none';
+    }
+    var closeBtn = document.getElementById('sg-assistant-close');
+    if (closeBtn) closeBtn.addEventListener('click', closePanel);
+    if (backdrop) backdrop.addEventListener('click', closePanel);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && panel.classList.contains('open')) closePanel();
+    });
+    // tap anywhere outside the panel closes it
+    document.addEventListener('click', function (e) {
+      if (panel.classList.contains('open') && !panel.contains(e.target) && !fab.contains(e.target)) closePanel();
     });
     fab.addEventListener('click', function () {
-      panel.classList.toggle('open');
-      fab.style.display = panel.classList.contains('open') ? 'none' : '';
-      if (panel.classList.contains('open') && !body.children.length) {
+      if (panel.classList.contains('open')) { closePanel(); return; }
+      openPanel();
+      if (!body.children.length) {
         addMsg('assistant', 'Namaste! I am SewaGhar Sahayogi. Ask me anything about booking a service, creating an account, payments or ratings. \u0928\u0947\u092a\u093e\u0932\u0940\u092e\u093e \u092a\u0928\u093f \u0938\u094b\u0927\u094d\u0928 \u0938\u0915\u094d\u0928\u0941\u0939\u0941\u0928\u094d\u091b\u0964');
       }
-      if (panel.classList.contains('open')) input.focus();
+      if (window.innerWidth > 768) input.focus();
     });
 
     form.addEventListener('submit', function (e) {
