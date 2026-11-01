@@ -2,19 +2,64 @@
 {% block content %}
 {% load static %}
 
-<div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4">
+<div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-3">
   <div>
     <h2 class="mb-1">Orders</h2>
-    <p class="sg-muted mb-0">Every booking made on the platform.</p>
+    <p class="sg-muted mb-0">Every booking made on the platform — filter it any way you need.</p>
   </div>
-  <form method="get" action="{% url 'adminvieworder' %}" class="flex-grow-1" style="max-width: 460px;">
-    <div class="input-group">
-      <input type="text" class="form-control" name="q" placeholder="Search by order id, status or date...">
-      <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
-      <a class="btn btn-outline-secondary" href="{% url 'adminvieworder' %}">Clear</a>
-    </div>
-  </form>
 </div>
+
+<form method="get" action="{% url 'adminvieworder' %}" class="card sg-card mb-3" id="order-filters">
+  <div class="row g-2 align-items-end">
+    <div class="col-12 col-md-3">
+      <label class="form-label small mb-1">Search</label>
+      <input type="text" class="form-control form-control-sm" name="q" value="{{ f.q }}" placeholder="Name, status, location...">
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label small mb-1">Status</label>
+      <select class="form-select form-select-sm" name="status" onchange="this.form.submit()">
+        <option value="">All</option>
+        <option value="book" {% if f.status == 'book' %}selected{% endif %}>Booked</option>
+        <option value="accept" {% if f.status == 'accept' %}selected{% endif %}>Accepted</option>
+        <option value="solve" {% if f.status == 'solve' %}selected{% endif %}>Solved</option>
+        <option value="cancel" {% if f.status == 'cancel' %}selected{% endif %}>Cancelled by owner</option>
+        <option value="cancelbyprofessional" {% if f.status == 'cancelbyprofessional' %}selected{% endif %}>Cancelled by pro</option>
+      </select>
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label small mb-1">Payment</label>
+      <select class="form-select form-select-sm" name="payment" onchange="this.form.submit()">
+        <option value="">All</option>
+        <option value="paid" {% if f.payment == 'paid' %}selected{% endif %}>Paid</option>
+        <option value="waiting" {% if f.payment == 'waiting' %}selected{% endif %}>Waiting for payment</option>
+        <option value="Cash" {% if f.payment == 'Cash' %}selected{% endif %}>Paid via Cash</option>
+        <option value="Khalti" {% if f.payment == 'Khalti' %}selected{% endif %}>Paid via Khalti</option>
+      </select>
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label small mb-1">From</label>
+      <input type="date" class="form-control form-control-sm" name="from" value="{{ f.from }}" onchange="this.form.submit()">
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label small mb-1">To</label>
+      <input type="date" class="form-control form-control-sm" name="to" value="{{ f.to }}" onchange="this.form.submit()">
+    </div>
+    <div class="col-6 col-md-2">
+      <label class="form-label small mb-1">Sort</label>
+      <select class="form-select form-select-sm" name="sort" onchange="this.form.submit()">
+        <option value="newest" {% if f.sort == 'newest' %}selected{% endif %}>Newest first</option>
+        <option value="oldest" {% if f.sort == 'oldest' %}selected{% endif %}>Oldest first</option>
+        <option value="amount" {% if f.sort == 'amount' %}selected{% endif %}>Highest amount</option>
+      </select>
+    </div>
+    <div class="col-6 col-md-1 d-grid">
+      <button class="btn btn-primary btn-sm" type="submit"><i class="bi bi-search"></i></button>
+    </div>
+    <div class="col-6 col-md-12">
+      <a class="small" href="{% url 'adminvieworder' %}">Clear all filters</a>
+    </div>
+  </div>
+</form>
 
 <div class="sg-table-wrap">
   <table class="table">
@@ -23,8 +68,8 @@
         <th scope="col">#</th>
         <th scope="col">Professional</th>
         <th scope="col">Home Owner</th>
-        <th scope="col">Date</th>
-        <th scope="col">Time</th>
+        <th scope="col">Date &amp; Time</th>
+        <th scope="col">Amount</th>
         <th scope="col">Status</th>
         <th scope="col"></th>
       </tr>
@@ -35,8 +80,14 @@
         <th scope="row">{{ i.order_id }}</th>
         <td>{{ i.professional_id.full_name }}</td>
         <td>{{ i.homeowner_id.full_name }}</td>
-        <td>{{ i.date }}</td>
-        <td>{{ i.time }}</td>
+        <td>{{ i.date }} — {{ i.time }}</td>
+        <td>
+          {% if i.payment_amount %}
+          <span class="sg-chip sg-chip-paid">Rs. {{ i.payment_amount }} · {{ i.payment_method }}</span>
+          {% elif i.status == 'solve' %}
+          <span class="sg-chip sg-chip-waiting">Waiting</span>
+          {% else %}<span class="sg-muted">—</span>{% endif %}
+        </td>
         <td><span class="sg-chip sg-chip-{{ i.status }}">{% if i.status == 'cancelbyprofessional' %}Cancelled by pro{% else %}{{ i.status }}{% endif %}</span></td>
         <td class="text-end">
           <a href="{% url 'adminorderdetail' ok=i.order_id %}" class="btn btn-outline-primary btn-sm">View</a>
@@ -49,7 +100,7 @@
           <div class="sg-empty">
             <i class="bi bi-receipt"></i>
             <h5>No orders found</h5>
-            <p>Bookings will appear here as home owners place them.</p>
+            <p>Try removing some filters.</p>
           </div>
         </td>
       </tr>

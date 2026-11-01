@@ -11,7 +11,7 @@
       <p>Booking requests from home owners for your service.</p>
     </div>
 
-    <div class="sg-table-wrap">
+    <div class="sg-table-wrap" data-sg-autorefresh>
       <table class="table">
         <thead>
           <tr>
@@ -19,7 +19,7 @@
             <th scope="col">Home Owner</th>
             <th scope="col">Location</th>
             <th scope="col">Date &amp; Time</th>
-            <th scope="col">Earned</th>
+            <th scope="col">Payment</th>
             <th scope="col">Status</th>
             <th scope="col"></th>
           </tr>
@@ -31,7 +31,13 @@
             <td>{{ i.homeowner_id.full_name }}</td>
             <td>{{ i.address }}</td>
             <td>{{ i.date }} — {{ i.time }}</td>
-            <td>{% if i.payment_amount %}Rs. {{ i.payment_amount }}{% else %}<span class="sg-muted">—</span>{% endif %}</td>
+            <td>
+              {% if i.payment_amount %}
+              <span class="sg-chip sg-chip-paid"><i class="bi bi-check2-circle me-1"></i>Rs. {{ i.payment_amount }}</span>
+              {% elif i.status == 'solve' %}
+              <span class="sg-chip sg-chip-waiting"><i class="bi bi-hourglass-split me-1"></i>Waiting for payment</span>
+              {% else %}<span class="sg-muted">—</span>{% endif %}
+            </td>
             <td><span class="sg-chip sg-chip-{{ i.status }}">{% if i.status == 'cancelbyprofessional' %}Cancelled by you{% else %}{{ i.status }}{% endif %}</span></td>
             <td class="text-end"><a href="{% url 'requestdetails' rd=i.order_id %}" class="btn btn-outline-primary btn-sm">View More</a></td>
           </tr>
@@ -57,5 +63,4 @@
   </div>
 </section>
 
-{% include 'homeowners/comment.html' %}
 {% endblock %}

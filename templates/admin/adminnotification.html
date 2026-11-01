@@ -2,16 +2,21 @@
 {% block content %}
 {% load static %}
 
-<div class="mb-4">
+<div class="mb-4" data-sg-autoread>
   <h2 class="mb-1">Notifications</h2>
-  <p class="sg-muted mb-0">{{ num }} unread — tap a notification to mark it as read.</p>
+  <p class="sg-muted mb-0"><span id="sg-unread-count">{{ num }}</span> unread — marked read automatically while you view this page.</p>
+</div>
+
+<form class="d-none">{% csrf_token %}</form>
+<div class="text-end mb-2" style="max-width: 960px;">
+  <button type="button" class="btn btn-outline-primary btn-sm" id="sg-mark-all"><i class="bi bi-check2-all me-1"></i>Mark all as read</button>
 </div>
 
 <div class="sg-table-wrap sg-table-scroll" style="max-width: 960px;">
   <table class="table" style="min-width: 0;">
     <tbody>
       {% for i in msg %}
-      <tr class="sg-notification-row {% if i.view %}is-read{% endif %}" onclick="submitForm('{{ i.not_id }}')">
+      <tr class="sg-notification-row {% if i.view %}is-read{% endif %}">
         <td>
           <i class="bi {% if i.view %}bi-envelope-open{% else %}bi-envelope-fill{% endif %} me-2" style="color: var(--sg-primary);"></i>
           {{ i.notification }}
@@ -24,7 +29,7 @@
           <div class="sg-empty">
             <i class="bi bi-bell-slash"></i>
             <h5>No notifications</h5>
-            <p>Platform events will appear here.</p>
+            <p>You're all caught up!</p>
           </div>
         </td>
       </tr>
@@ -33,16 +38,16 @@
   </table>
 </div>
 
-{% for i in msg %}
-<form id="form_{{ i.not_id }}" method="post" action="{% url 'aupdate_notification_view' %}">
-  {% csrf_token %}
-  <input type="hidden" name="not_id" value="{{ i.not_id }}">
-</form>
-{% endfor %}
-
 <script>
-  function submitForm(notId) {
-    document.getElementById('form_' + notId).submit();
-  }
+  document.addEventListener('DOMContentLoaded', function () {
+    var btn = document.getElementById('sg-mark-all');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      fetch('/api/notifications/mark-all-read', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'X-CSRFToken': sgCsrf() }
+      }).then(function () { window.location.reload(); });
+    });
+  });
 </script>
 {% endblock %}

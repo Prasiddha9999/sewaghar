@@ -1,5 +1,30 @@
 {% extends 'hedfot.html' %}
-{% block title %}SewaGhar — Book Trusted Home Service Professionals{% endblock %}
+{% block title %}SewaGhar — Book Trusted Home Service Professionals in Nepal | Kathmandu{% endblock %}
+{% block extra_head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "SewaGhar",
+  "description": "Nepal's home services marketplace: book verified electricians, plumbers, carpenters, painters, cleaners, appliance repair and more across Kathmandu valley.",
+  "url": "https://sewaghar.regmicode.com/",
+  "logo": "https://sewaghar.regmicode.com/static/images/logo.png",
+  "email": "sewagharservice@gmail.com",
+  "telephone": "+977-9863144095",
+  "address": {"@type": "PostalAddress", "addressLocality": "Kathmandu", "addressCountry": "NP"},
+  "areaServed": "Kathmandu Valley, Nepal",
+  "priceRange": "Rs. 300 - Rs. 800 per hour",
+  "makesOffer": [
+    {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Electrician"}},
+    {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Plumber"}},
+    {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Carpenter"}},
+    {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Painter"}},
+    {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Home Cleaning"}},
+    {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Appliance Repair"}}
+  ]
+}
+</script>
+{% endblock %}
 {% block content %}
 {% load static %}
 
@@ -175,6 +200,56 @@
       <div class="d-flex flex-wrap gap-2 justify-content-center">
         <a href="{% url 'hsignup' %}" class="btn"><i class="bi bi-person-plus me-2"></i>Sign up as Home Owner</a>
         <a href="{% url 'psignup' %}" class="btn"><i class="bi bi-briefcase me-2"></i>Sign up as Professional</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Us -->
+<section class="py-5" id="contact">
+  <div class="container">
+    <div class="sg-section-head">
+      <span class="sg-eyebrow"><i class="bi bi-envelope-paper"></i> Get in touch</span>
+      <h2 class="mt-3">Contact Us</h2>
+      <p>Questions, suggestions or a problem with a booking? Write to us — we reply quickly.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-12 col-lg-5">
+        <div class="card sg-card h-100">
+          <h5 class="mb-3"><i class="bi bi-geo-alt me-2" style="color: var(--sg-primary);"></i>Reach us directly</h5>
+          <div class="sg-detail-list">
+            <div class="sg-detail-row"><span class="k">Address</span><span class="v">Balaju-8, Kathmandu, Nepal</span></div>
+            <div class="sg-detail-row"><span class="k">Email</span><span class="v">sewagharservice@gmail.com</span></div>
+            <div class="sg-detail-row"><span class="k">Phone</span><span class="v">+977 9863144095</span></div>
+          </div>
+          <p class="sg-muted mt-3 mb-0">Or tap the chat bubble at the bottom-right — our AI assistant answers instantly, day or night.</p>
+        </div>
+      </div>
+      <div class="col-12 col-lg-7">
+        <div class="card sg-card">
+          <form method="post" action="{% url 'contact_us' %}">
+            {% csrf_token %}
+            <div class="row g-3">
+              <div class="col-12 col-sm-6 sg-field">
+                <label class="form-label" for="c-name">Your Name</label>
+                <input type="text" id="c-name" name="name" class="form-control" placeholder="Full name" required>
+              </div>
+              <div class="col-12 col-sm-6 sg-field">
+                <label class="form-label" for="c-phone">Phone <span class="sg-muted">(or email below)</span></label>
+                <input type="tel" id="c-phone" name="phone" class="form-control" placeholder="98XXXXXXXX">
+              </div>
+            </div>
+            <div class="sg-field">
+              <label class="form-label" for="c-email">Email</label>
+              <input type="email" id="c-email" name="email" class="form-control" placeholder="you@example.com">
+            </div>
+            <div class="sg-field">
+              <label class="form-label" for="c-message">Describe your question or problem</label>
+              <textarea id="c-message" name="message" class="form-control" rows="3" maxlength="1000" placeholder="Tell us how we can help..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-send me-2"></i>Send Message</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>

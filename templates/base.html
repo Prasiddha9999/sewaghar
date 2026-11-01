@@ -4,8 +4,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="SewaGhar — book trusted home service professionals: electricians, plumbers, carpenters, painters and more.">
-    <title>{% block title %}SewaGhar — Trusted Home Services{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}SewaGhar — Nepal's trusted home services marketplace. Book verified electricians, plumbers, carpenters, painters, cleaners and more in Kathmandu valley. Transparent ratings, fair prices, pay after the work is done.{% endblock %}">
+    <meta name="keywords" content="home services Nepal, electrician Kathmandu, plumber Kathmandu, carpenter Nepal, painter Nepal, home cleaning Kathmandu, appliance repair Nepal, pest control Kathmandu, SewaGhar, ghar sewa">
+    <meta name="robots" content="index, follow">
+    <meta name="geo.region" content="NP">
+    <meta name="geo.placename" content="Kathmandu, Nepal">
+    <link rel="canonical" href="https://sewaghar.regmicode.com{{ request.path }}">
+    <meta property="og:site_name" content="SewaGhar">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{% block og_title %}SewaGhar — Trusted Home Services in Nepal{% endblock %}">
+    <meta property="og:description" content="Book verified home service professionals across Kathmandu valley. Compare ratings and prices, pick your time, pay when the job is done.">
+    <meta property="og:url" content="https://sewaghar.regmicode.com{{ request.path }}">
+    <meta property="og:image" content="https://sewaghar.regmicode.com{% static 'images/logo.png' %}">
+    <meta name="twitter:card" content="summary">
+    <title>{% block title %}SewaGhar — Home Services in Nepal | Electrician, Plumber, Cleaner in Kathmandu{% endblock %}</title>
     <link rel="icon" href="{% static 'images/logo.png' %}">
 
     {# Apply saved theme before first paint to avoid a flash of the wrong theme #}
@@ -39,6 +51,8 @@
     {% block footer %}
       {% include 'partials/footer.html' %}
     {% endblock %}
+
+    {% include 'partials/assistant.html' %}
 
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'js/sewaghar.js' %}"></script>

@@ -66,6 +66,10 @@
     <div class="sg-sidebar-label mt-3">Communication</div>
     <a href="{% url 'adminmessage' %}" class="sg-side-link {% if active == 'adminmessage' %}active{% endif %}"><i class="bi bi-chat-dots"></i>Feedback</a>
     <a href="{% url 'notify' %}" class="sg-side-link {% if active == 'notify' %}active{% endif %}"><i class="bi bi-megaphone"></i>Send Notification</a>
+    <a href="{% url 'admincontacts' %}" class="sg-side-link {% if active == 'admincontacts' %}active{% endif %}"><i class="bi bi-envelope-paper"></i>Contact Messages</a>
+
+    <div class="sg-sidebar-label mt-3">Settings</div>
+    <a href="{% url 'adminaisettings' %}" class="sg-side-link {% if active == 'adminaisettings' %}active{% endif %}"><i class="bi bi-stars"></i>AI Assistant</a>
   </aside>
   <div class="sg-sidebar-backdrop" id="sgSidebarBackdrop"></div>
 

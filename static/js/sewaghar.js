@@ -219,6 +219,136 @@
     });
   }
 
+  /* ---------- CSRF helper ---------- */
+  window.sgCsrf = function () {
+    var input = document.querySelector('input[name=csrfmiddlewaretoken]');
+    if (input) return input.value;
+    var m = document.cookie.match(/(?:^|;\s*)csrftoken=([^;]+)/);
+    return m ? m[1] : '';
+  };
+
+  /* ---------- Clickable star rating ---------- */
+  // <div class="sg-star-input" data-target="inputId"> with 5 buttons inside.
+  function wireStarInputs() {
+    document.querySelectorAll('.sg-star-input').forEach(function (box) {
+      var input = document.getElementById(box.getAttribute('data-target'));
+      var stars = box.querySelectorAll('button');
+      function paint(n) {
+        stars.forEach(function (s, i) { s.classList.toggle('on', i < n); });
+      }
+      stars.forEach(function (star, i) {
+        star.addEventListener('click', function () {
+          if (input) input.value = i + 1;
+          paint(i + 1);
+        });
+        star.addEventListener('mouseenter', function () { paint(i + 1); });
+      });
+      box.addEventListener('mouseleave', function () { paint(input ? Number(input.value) || 0 : 0); });
+      if (input && input.form) {
+        input.form.addEventListener('submit', function (e) {
+          if (!input.value) {
+            e.preventDefault();
+            if (window.sgToast) sgToast('Please tap a star to choose your rating.', 'bi-star');
+          }
+        });
+      }
+    });
+  }
+
+  /* ---------- Auto refresh (bookings / requests) ---------- */
+  // Re-fetches the page every 5s and swaps [data-sg-autorefresh] if it changed.
+  function wireAutoRefresh() {
+    var el = document.querySelector('[data-sg-autorefresh]');
+    if (!el) return;
+    setInterval(function () {
+      fetch(window.location.href, { credentials: 'same-origin' })
+        .then(function (r) { return r.ok ? r.text() : null; })
+        .then(function (html) {
+          if (!html) return;
+          var doc = new DOMParser().parseFromString(html, 'text/html');
+          var fresh = doc.querySelector('[data-sg-autorefresh]');
+          if (fresh && fresh.innerHTML !== el.innerHTML) el.innerHTML = fresh.innerHTML;
+        })
+        .catch(function () {});
+    }, 5000);
+  }
+
+  /* ---------- Notifications auto-read ---------- */
+  // On a page marked [data-sg-autoread], mark everything read after 3 seconds
+  // of viewing - no clicks needed.
+  function wireNotificationAutoRead() {
+    var page = document.querySelector('[data-sg-autoread]');
+    if (!page) return;
+    setTimeout(function () {
+      fetch('/api/notifications/mark-all-read', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'X-CSRFToken': window.sgCsrf() }
+      }).then(function (res) {
+        if (!res.ok) return;
+        document.querySelectorAll('.sg-notification-row').forEach(function (row) {
+          row.classList.add('is-read');
+          var icon = row.querySelector('i.bi-envelope-fill');
+          if (icon) icon.className = icon.className.replace('bi-envelope-fill', 'bi-envelope-open');
+        });
+        var counter = document.getElementById('sg-unread-count');
+        if (counter) counter.textContent = '0';
+      }).catch(function () {});
+    }, 3000);
+  }
+
+  /* ---------- Help assistant (Gemini) ---------- */
+  function wireAssistant() {
+    var root = document.getElementById('sg-assistant');
+    if (!root) return;
+    var fab = document.getElementById('sg-assistant-fab');
+    var panel = document.getElementById('sg-assistant-panel');
+    var body = document.getElementById('sg-assistant-body');
+    var form = document.getElementById('sg-assistant-form');
+    var input = document.getElementById('sg-assistant-input');
+    var history = [];
+
+    function addMsg(role, text) {
+      var row = document.createElement('div');
+      row.className = 'sg-chat-msg ' + (role === 'user' ? 'from-user' : 'from-bot');
+      row.textContent = text;
+      body.appendChild(row);
+      body.scrollTop = body.scrollHeight;
+      return row;
+    }
+
+    fab.addEventListener('click', function () {
+      panel.classList.toggle('open');
+      if (panel.classList.contains('open') && !body.children.length) {
+        addMsg('assistant', 'Namaste! I am SewaGhar Sahayogi. Ask me anything about booking a service, creating an account, payments or ratings. \u0928\u0947\u092a\u093e\u0932\u0940\u092e\u093e \u092a\u0928\u093f \u0938\u094b\u0927\u094d\u0928 \u0938\u0915\u094d\u0928\u0941\u0939\u0941\u0928\u094d\u091b\u0964');
+      }
+      if (panel.classList.contains('open')) input.focus();
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var text = input.value.trim();
+      if (!text) return;
+      input.value = '';
+      addMsg('user', text);
+      history.push({ role: 'user', text: text });
+      var typing = addMsg('assistant', '...');
+      fetch('/api/assistant', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, history: history.slice(0, -1) })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          typing.textContent = data.reply || 'Sorry, something went wrong.';
+          history.push({ role: 'assistant', text: typing.textContent });
+          body.scrollTop = body.scrollHeight;
+        })
+        .catch(function () { typing.textContent = 'Sorry, I could not reach the assistant. Please try again.'; });
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     wirePasswordToggles();
     wireToasts();
@@ -226,5 +356,9 @@
     wireBackToTop();
     wireNotificationPolling();
     wireMiniMaps();
+    wireStarInputs();
+    wireAutoRefresh();
+    wireNotificationAutoRead();
+    wireAssistant();
   });
 })();

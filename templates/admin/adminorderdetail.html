@@ -37,6 +37,9 @@
         <div class="sg-detail-row"><span class="k">Mobile No.</span><span class="v">{{ ord.number }}</span></div>
         <div class="sg-detail-row"><span class="k">House No.</span><span class="v">{{ ord.houseno }}</span></div>
         <div class="sg-detail-row"><span class="k">Service</span><span class="v">{{ ord.professional_id.service }}</span></div>
+        {% if ord.jobdesc %}<div class="sg-detail-row"><span class="k">Work description</span><span class="v">{{ ord.jobdesc }}</span></div>{% endif %}
+        {% if ord.offered_rate %}<div class="sg-detail-row"><span class="k">Customer's offer</span><span class="v">Rs. {{ ord.offered_rate|floatformat:"-2" }}/hour</span></div>{% endif %}
+        {% if ord.quoted_amount %}<div class="sg-detail-row"><span class="k">Fixed amount billed</span><span class="v">Rs. {{ ord.quoted_amount|floatformat:"-2" }}</span></div>{% endif %}
         <div class="sg-detail-row"><span class="k">Sub-Service</span><span class="v">{{ ord.professional_id.subservice }}</span></div>
         <div class="sg-detail-row"><span class="k">Professional</span><span class="v">{{ ord.professional_id }}</span></div>
         <div class="sg-detail-row"><span class="k">Earned</span><span class="v">{% if ord.payment_amount %}Rs. {{ ord.payment_amount }}{% else %}—{% endif %}</span></div>

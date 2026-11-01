@@ -4,7 +4,7 @@
 {% block nav %}
 <nav class="navbar navbar-expand-lg sg-navbar py-2">
   <div class="container">
-    <a class="navbar-brand" href="{% url 'home' %}">
+    <a class="navbar-brand" href="{% if user.is_authenticated and user.is_homeowner %}{% url 'service' %}{% elif user.is_authenticated and user.is_professional %}{% url 'request' %}{% else %}{% url 'home' %}{% endif %}">
       <img src="{% static 'images/logo.png' %}" alt="SewaGhar logo">
       <span class="sg-brand-name">Sewa<span>Ghar</span></span>
     </a>
@@ -19,6 +19,50 @@
     </div>
     <div class="navbar-collapse collapse order-lg-1" id="navbar">
       <ul class="navbar-nav ms-auto me-lg-3 align-items-lg-center gap-lg-1">
+        {% if user.is_authenticated and user.is_homeowner %}
+        {# Same header the home owner sees everywhere else #}
+        <li class="nav-item"><a class="nav-link" href="{% url 'service' %}">Services</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'bookings' %}">My Bookings</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'blog' %}active{% endif %}" href="{% url 'blog' %}">Blog</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'aboutus' %}active{% endif %}" href="{% url 'aboutus' %}">About Us</a></li>
+        <li class="nav-item d-none d-lg-block">
+          <a class="nav-link sg-bell" href="{% url 'notification' %}" aria-label="Notifications"><i class="bi bi-bell"></i></a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle d-inline-flex align-items-center gap-2" href="#" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle fs-5"></i><span class="d-lg-none">Account</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            <li><div class="sg-dropdown-user"><i class="bi bi-person me-1"></i>{{ user.username }}</div></li>
+            <li><a class="dropdown-item" href="{% url 'viewprofile' %}"><i class="bi bi-person-badge me-2"></i>My Profile</a></li>
+            <li><a class="dropdown-item" href="{% url 'changepassword' %}"><i class="bi bi-shield-lock me-2"></i>Change Password</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{% url 'user_logout' %}"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+          </ul>
+        </li>
+
+        {% elif user.is_authenticated and user.is_professional %}
+        {# Same header the professional sees everywhere else #}
+        <li class="nav-item"><a class="nav-link" href="{% url 'request' %}">My Requests</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'blog' %}active{% endif %}" href="{% url 'blog' %}">Blog</a></li>
+        <li class="nav-item"><a class="nav-link {% if request.resolver_match.url_name == 'aboutus' %}active{% endif %}" href="{% url 'aboutus' %}">About Us</a></li>
+        <li class="nav-item d-none d-lg-block">
+          <a class="nav-link sg-bell" href="{% url 'professionalnotification' %}" aria-label="Notifications"><i class="bi bi-bell"></i></a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle d-inline-flex align-items-center gap-2" href="#" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle fs-5"></i><span class="d-lg-none">Account</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            <li><div class="sg-dropdown-user"><i class="bi bi-person me-1"></i>{{ user.username }}</div></li>
+            <li><a class="dropdown-item" href="{% url 'professionalviewprofile' %}"><i class="bi bi-person-badge me-2"></i>My Profile</a></li>
+            <li><a class="dropdown-item" href="{% url 'professionalchangepassword' %}"><i class="bi bi-shield-lock me-2"></i>Change Password</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{% url 'user_logout' %}"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+          </ul>
+        </li>
+
+        {% else %}
         <li class="nav-item">
           <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">Home</a>
         </li>
@@ -37,10 +81,15 @@
         <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
           <a class="btn btn-primary btn-sm px-3 py-2" href="{% url 'hsignin' %}"><i class="bi bi-calendar-check me-1"></i>Book a Service</a>
         </li>
+        {% endif %}
       </ul>
     </div>
   </div>
 </nav>
+{% endblock %}
+
+{% block messages %}
+  {% include 'partials/toasts.html' %}
 {% endblock %}
 
 {% block main %}

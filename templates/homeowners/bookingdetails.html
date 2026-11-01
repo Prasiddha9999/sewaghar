@@ -91,21 +91,17 @@
           {% else %}
           <form method="POST" action="{% url 'rate_professional' prof_id=ord.professional_id.professional_id ord_id=ord.order_id %}" class="mb-3">
             {% csrf_token %}
-            <label class="form-label" for="rating">Rate this professional</label>
-            <div class="row g-2">
-              <div class="col-8 col-sm-6">
-                <select class="form-select" id="rating" name="rating" required>
-                  <option value="" selected>Choose rating...</option>
-                  <option value="1">1 — Poor</option>
-                  <option value="2">2 — Fair</option>
-                  <option value="3">3 — Good</option>
-                  <option value="4">4 — Very Good</option>
-                  <option value="5">5 — Excellent</option>
-                </select>
+            <label class="form-label d-block">Rate this professional — tap the stars</label>
+            <input type="hidden" id="rating" name="rating">
+            <div class="d-flex align-items-center gap-3 flex-wrap">
+              <div class="sg-star-input" data-target="rating">
+                <button type="button" aria-label="1 star">&#9733;</button>
+                <button type="button" aria-label="2 stars">&#9733;</button>
+                <button type="button" aria-label="3 stars">&#9733;</button>
+                <button type="button" aria-label="4 stars">&#9733;</button>
+                <button type="button" aria-label="5 stars">&#9733;</button>
               </div>
-              <div class="col-4 col-sm-3 d-grid">
-                <button type="submit" class="btn btn-outline-primary">Submit</button>
-              </div>
+              <button type="submit" class="btn btn-outline-primary">Submit Rating</button>
             </div>
             {% if messages %}
             <div class="errormsg mt-2">
@@ -121,22 +117,23 @@
           {% if ord.payment_amount is none %}
           <div class="card" style="background: var(--sg-surface-2); border-color: var(--sg-border);">
             <div class="card-body">
-              <h5 class="mb-3"><i class="bi bi-credit-card me-2" style="color: var(--sg-primary);"></i>Payment</h5>
+              <h5 class="mb-2"><i class="bi bi-credit-card me-2" style="color: var(--sg-primary);"></i>Payment</h5>
+              <span class="sg-chip sg-chip-waiting mb-3"><i class="bi bi-hourglass-split me-1"></i>Waiting for payment</span>
               <div class="sg-detail-list mb-3">
-                <div class="sg-detail-row"><span class="k">Time taken</span><span class="v">{{ ord.totaltimehour }} hour(s)</span></div>
-                <div class="sg-detail-row"><span class="k">Total amount</span><span class="v">Rs. <span id="totalamount"></span></span></div>
+                {% if ord.totaltimehour %}<div class="sg-detail-row"><span class="k">Time taken</span><span class="v">{{ ord.totaltimehour }} hour(s)</span></div>{% endif %}
+                <div class="sg-detail-row"><span class="k">Total amount</span><span class="v">Rs. {{ payable|floatformat:"-2" }}</span></div>
               </div>
               <div class="d-flex flex-wrap gap-2">
                 <form action="/khalti/config" method="POST">
                   {% csrf_token %}
                   <input type="hidden" name="orderid" value="{{ ord.order_id }}">
-                  <input type="hidden" id="amounts" name="amount">
+                  <input type="hidden" name="amount" value="{{ payable }}">
                   <button class="btn btn-primary" id="payment-button" type="submit"><i class="bi bi-wallet2 me-2"></i>Pay via Khalti</button>
                 </form>
                 <form method="post" action="{% url 'bookingdetails' od=ord.order_id %}">
                   {% csrf_token %}
                   <input type="hidden" name="orderid" value="{{ ord.order_id }}">
-                  <input type="hidden" id="amount" name="amount">
+                  <input type="hidden" name="amount" value="{{ payable }}">
                   <button class="btn btn-outline-primary" type="submit"><i class="bi bi-cash-coin me-2"></i>Pay via Cash</button>
                 </form>
               </div>
@@ -152,20 +149,5 @@
   </div>
 </section>
 
-{% include 'homeowners/comment.html' %}
 
-<script>
-  // Total payable = hours taken x hourly rate (guarded for missing values).
-  (function () {
-    var x = Number("{{ ord.totaltimehour|default:'0' }}") || 0;
-    var y = Number("{{ ord.professional_id.rateperhour|default:'0' }}") || 0;
-    var z = x * y;
-    var amountInput = document.getElementById('amount');
-    if (amountInput) amountInput.value = z;
-    var amountsInput = document.getElementById('amounts');
-    if (amountsInput) amountsInput.value = z;
-    var outputElement = document.getElementById('totalamount');
-    if (outputElement) outputElement.innerHTML = z;
-  })();
-</script>
 {% endblock %}

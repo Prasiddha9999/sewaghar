@@ -1,0 +1,31 @@
+{% extends 'admin/bases.html' %}
+{% block content %}
+{% load static %}
+
+<div class="mb-4">
+  <h2 class="mb-1">AI Assistant Settings</h2>
+  <p class="sg-muted mb-0">The floating help bot on the site answers SewaGhar questions using Google Gemini.</p>
+</div>
+
+<div class="card sg-card" style="max-width: 680px;">
+  <form method="post">
+    {% csrf_token %}
+    <div class="sg-field">
+      <label class="form-label" for="gemini_api_key">Gemini API Key</label>
+      <input type="text" id="gemini_api_key" name="gemini_api_key" class="form-control" value="{{ config.gemini_api_key }}" placeholder="AIza...">
+      <div class="sg-form-hint mt-1">Create a free key at <strong>aistudio.google.com</strong> → Get API key. Leave empty to show a fallback message instead of the bot.</div>
+    </div>
+    <div class="sg-field">
+      <label class="form-label" for="gemini_model">Gemini Model</label>
+      <input type="text" id="gemini_model" name="gemini_model" class="form-control" value="{{ config.gemini_model }}" placeholder="gemini-2.0-flash">
+      <div class="sg-form-hint mt-1">e.g. gemini-2.0-flash (fast &amp; free tier) or gemini-1.5-pro. Change anytime — takes effect immediately.</div>
+    </div>
+    <div class="form-check form-switch mb-3">
+      <input class="form-check-input" type="checkbox" id="assistant_enabled" name="assistant_enabled" {% if config.assistant_enabled %}checked{% endif %}>
+      <label class="form-check-label" for="assistant_enabled">Assistant enabled on the website</label>
+    </div>
+    <button type="submit" class="btn btn-primary"><i class="bi bi-save me-2"></i>Save Settings</button>
+    {% if config.updated %}<div class="sg-form-hint mt-2">Last updated: {{ config.updated }}</div>{% endif %}
+  </form>
+</div>
+{% endblock %}

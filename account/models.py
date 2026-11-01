@@ -111,6 +111,9 @@ class Order(models.Model):
     payment_method = models.CharField(max_length=255, null=True, blank=True)
     totaltimehour = models.FloatField(null=True, blank=True)
     ratingcheck = models.BooleanField(default=False)
+    offered_rate = models.FloatField(null=True, blank=True)
+    jobdesc = models.TextField(null=True, blank=True, max_length=500)
+    quoted_amount = models.FloatField(null=True, blank=True)
     
     
 class Message(models.Model):
@@ -139,6 +142,35 @@ class Notification(models.Model):
     classification = models.CharField(max_length=50, choices=CLASSIFICATION_CHOICES)
     time = models.DateTimeField(auto_now_add=True)
     view = models.BooleanField(default=False)
+
+
+class ContactMessage(models.Model):
+    """Messages from the public Contact Us form on the home page."""
+    contact_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    email = models.EmailField(max_length=100, blank=True, default="")
+    phone = models.CharField(max_length=20, blank=True, default="")
+    message = models.TextField(max_length=1000)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('-created',)
+
+
+class SiteConfig(models.Model):
+    """Singleton-style settings editable from the SewaGhar admin panel."""
+    config_id = models.AutoField(primary_key=True)
+    gemini_api_key = models.CharField(max_length=255, blank=True, default="")
+    gemini_model = models.CharField(max_length=100, default="gemini-2.0-flash")
+    assistant_enabled = models.BooleanField(default=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    @classmethod
+    def get(cls):
+        obj = cls.objects.first()
+        if obj is None:
+            obj = cls.objects.create()
+        return obj
 
 
 class Blog(models.Model):

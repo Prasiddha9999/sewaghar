@@ -40,11 +40,20 @@
               <div class="col-12 col-sm-6 sg-field">
                 <label class="form-label" for="date-picker">Date</label>
                 <input id="date-picker" type="date" name="date" class="form-control" autocomplete="off" required>
+                <div class="d-flex gap-2 mt-2">
+                  <button type="button" class="sg-quick-chip" data-days="0">Today</button>
+                  <button type="button" class="sg-quick-chip" data-days="1">Tomorrow</button>
+                </div>
               </div>
               <div class="col-12 col-sm-6 sg-field">
                 <label class="form-label" for="Time">Time</label>
                 <input id="Time" name="time" type="time" class="form-control" required>
+                <div class="d-flex gap-2 mt-2">
+                  <button type="button" class="sg-quick-chip" id="time-now">Now</button>
+                  <button type="button" class="sg-quick-chip" id="time-plus1h">In 1 hour</button>
+                </div>
               </div>
+              <div class="col-12" id="slot-msg" style="display: none;"></div>
             </div>
 
             <div class="sg-field">
@@ -61,6 +70,17 @@
                 <label class="form-label" for="HouseNumber">House Number <span class="sg-muted">(optional)</span></label>
                 <input id="HouseNumber" name="houseno" type="text" class="form-control" placeholder="e.g. 12-A">
               </div>
+            </div>
+
+            <div class="sg-field">
+              <label class="form-label" for="jobdesc">Describe the Work <span class="sg-muted">(what needs fixing, roughly how many hours, which room/place)</span></label>
+              <textarea id="jobdesc" name="jobdesc" class="form-control" rows="2" maxlength="500" placeholder="e.g. Kitchen sink is leaking, approx 2 hours, ground floor" required></textarea>
+            </div>
+
+            <div class="sg-field">
+              <label class="form-label" for="offered_rate">Your Price Offer <span class="sg-muted">(Rs. per hour — optional)</span></label>
+              <input id="offered_rate" name="offered_rate" type="number" step="1" class="form-control" placeholder="{{ sk.rateperhour }}">
+              <div class="sg-form-hint mt-1" id="offer-hint"></div>
             </div>
 
             <div class="sg-field">
@@ -90,7 +110,6 @@
   </div>
 </section>
 
-{% include 'homeowners/comment.html' %}
 
 <script>
   // Restrict appointment dates: today up to 15 days ahead.
@@ -110,7 +129,54 @@
     }
 
     datePicker.min = getDate();
-    datePicker.max = getDate(15);
+    datePicker.max = getDate(30);
+
+    // Quick picks
+    document.querySelectorAll('.sg-quick-chip[data-days]').forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        datePicker.value = getDate(Number(chip.getAttribute('data-days')));
+        datePicker.dispatchEvent(new Event('change'));
+      });
+    });
+    var timeInput = document.getElementById('Time');
+    function setTimePlus(mins) {
+      var d = new Date(Date.now() + mins * 60000);
+      timeInput.value = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+      if (!datePicker.value) datePicker.value = getDate();
+      timeInput.dispatchEvent(new Event('change'));
+    }
+    document.getElementById('time-now').addEventListener('click', function () { setTimePlus(10); });
+    document.getElementById('time-plus1h').addEventListener('click', function () { setTimePlus(60); });
+
+    // Live slot check: rejects a taken time immediately with a popup.
+    var slotMsg = document.getElementById('slot-msg');
+    window.sgSlotOk = true;
+    function checkSlot() {
+      if (!datePicker.value || !timeInput.value) return;
+      fetch('/api/availability/{{ s }}?date=' + datePicker.value + '&time=' + timeInput.value, { credentials: 'same-origin' })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          window.sgSlotOk = !!data.available;
+          slotMsg.style.display = 'flex';
+          slotMsg.className = window.sgSlotOk ? 'sg-alert sg-alert-success' : 'sg-alert sg-alert-error';
+          slotMsg.innerHTML = (window.sgSlotOk ? '<i class="bi bi-check-circle"></i>' : '<i class="bi bi-exclamation-circle"></i>') + (data.message || 'Slot available.');
+          if (!window.sgSlotOk && window.sgToast) sgToast(data.message || 'Slot not available - please take another slot.', 'bi-exclamation-circle-fill');
+        })
+        .catch(function () {});
+    }
+    datePicker.addEventListener('change', checkSlot);
+    timeInput.addEventListener('change', checkSlot);
+
+    // Price offer bounds: 50% to 150% of the listed rate.
+    var offer = document.getElementById('offered_rate');
+    var baseRate = Number('{{ sk.rateperhour|default:"0" }}') || 0;
+    if (offer && baseRate > 0) {
+      var lo = Math.round(baseRate * 0.5), hi = Math.round(baseRate * 1.5);
+      offer.min = lo;
+      offer.max = hi;
+      document.getElementById('offer-hint').textContent =
+        'Listed rate: Rs. ' + baseRate + '/hour. You may offer between Rs. ' + lo + ' and Rs. ' + hi + '.';
+    }
   })();
 
   // Map pin picker (Leaflet + OpenStreetMap, free — no API key).
@@ -150,6 +216,12 @@
       mapRef = L.map('sg-pick-map').setView([27.7172, 85.3240], 13); // Kathmandu
       sgOsmTiles(L).addTo(mapRef);
       mapRef.on('click', function (e) { setPoint(e.latlng.lat, e.latlng.lng); });
+      // Ask for the browser's location straight away and pin it.
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (pos) {
+          setPoint(pos.coords.latitude, pos.coords.longitude, 17);
+        }, function () {}, { enableHighAccuracy: true, timeout: 8000 });
+      }
     }).catch(function () {
       document.getElementById('sg-pick-map').style.display = 'none';
       hint.textContent = 'Map could not load — please try refreshing the page.';
@@ -197,9 +269,20 @@
     searchInput.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') { e.preventDefault(); runSearch(); }
     });
+    var searchTimer = null;
+    searchInput.addEventListener('input', function () {
+      clearTimeout(searchTimer);
+      if (searchInput.value.trim().length < 3) { results.innerHTML = ''; return; }
+      searchTimer = setTimeout(runSearch, 450);
+    });
 
     // A hidden input skips HTML5 "required" — enforce the pin ourselves.
     gmapInput.form.addEventListener('submit', function (e) {
+      if (window.sgSlotOk === false) {
+        e.preventDefault();
+        if (window.sgToast) sgToast('Selected slot is not available - please choose another date or time.', 'bi-exclamation-circle-fill');
+        return;
+      }
       if (!gmapInput.value) {
         e.preventDefault();
         hint.innerHTML = '<i class="bi bi-exclamation-circle-fill" style="color: var(--sg-danger);"></i> Please pin your home location on the map before booking.';

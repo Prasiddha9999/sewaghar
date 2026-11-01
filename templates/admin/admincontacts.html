@@ -1,0 +1,60 @@
+{% extends 'admin/bases.html' %}
+{% block content %}
+{% load static %}
+
+<div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4">
+  <div>
+    <h2 class="mb-1">Contact Messages</h2>
+    <p class="sg-muted mb-0">Messages sent from the Contact Us form on the home page.</p>
+  </div>
+  <form method="get" action="{% url 'admincontacts' %}" class="flex-grow-1" style="max-width: 420px;">
+    <div class="input-group">
+      <input type="text" class="form-control" name="q" placeholder="Search by name, email, phone or text...">
+      <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
+      <a class="btn btn-outline-secondary" href="{% url 'admincontacts' %}">Clear</a>
+    </div>
+  </form>
+</div>
+
+<div class="sg-table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Contact</th>
+        <th scope="col">Message</th>
+        <th scope="col">Received</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for m in msgs %}
+      <tr>
+        <th scope="row">{{ m.contact_id }}</th>
+        <td>{{ m.name }}</td>
+        <td>
+          {% if m.email %}<div><a href="mailto:{{ m.email }}">{{ m.email }}</a></div>{% endif %}
+          {% if m.phone %}<div><a href="tel:{{ m.phone }}">{{ m.phone }}</a></div>{% endif %}
+        </td>
+        <td style="max-width: 420px; white-space: normal;">{{ m.message }}</td>
+        <td class="sg-muted">{{ m.created }}</td>
+        <td class="text-end">
+          <a href="{% url 'deletecontact' contact_id=m.contact_id %}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Delete this message?');">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="6">
+          <div class="sg-empty">
+            <i class="bi bi-envelope-open"></i>
+            <h5>No contact messages</h5>
+            <p>Messages from the home page form will appear here.</p>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

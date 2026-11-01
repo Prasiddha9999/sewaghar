@@ -42,6 +42,17 @@ urlpatterns = [
     
     path("notification",views.notification, name="notification"),
     path('api/notifications/status', views.notification_status, name='notification_status'),
+    path('api/notifications/mark-all-read', views.mark_all_read, name='mark_all_read'),
+    path('api/availability/<int:prof_id>', views.check_availability, name='check_availability'),
+    path('api/assistant', views.assistant_chat, name='assistant_chat'),
+    path('updateworkamount/<int:order_id>/', views.update_work_amount, name='update_work_amount'),
+    path('confirmcash/<int:order_id>/', views.confirm_cash_payment, name='confirm_cash_payment'),
+    path('adminaisettings', views.adminaisettings, name='adminaisettings'),
+    path('contactus', views.contact_us, name='contact_us'),
+    path('admincontacts', views.admincontacts, name='admincontacts'),
+    path('deletecontact/<int:contact_id>', views.deletecontact, name='deletecontact'),
+    path('robots.txt', views.robots_txt, name='robots_txt'),
+    path('sitemap.xml', views.sitemap_xml, name='sitemap_xml'),
     # path('notificationnumber/', views.notificationnumber, name='notificationnumber'),
     
     path('pupdate_notification_view/', views.pupdate_notification_view, name='pupdate_notification_view'),
