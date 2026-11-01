@@ -52,6 +52,7 @@ urlpatterns = [
     path('contactus', views.contact_us, name='contact_us'),
     path('admincontacts', views.admincontacts, name='admincontacts'),
     path('deletecontact/<int:contact_id>', views.deletecontact, name='deletecontact'),
+    path('google5d2ebb19aca3f044.html', views.google_verify, name='google_verify'),
     path('robots.txt', views.robots_txt, name='robots_txt'),
     path('sitemap.xml', views.sitemap_xml, name='sitemap_xml'),
     # path('notificationnumber/', views.notificationnumber, name='notificationnumber'),

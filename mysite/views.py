@@ -1814,3 +1814,7 @@ def order_state(request, order_id):
         'quoted': o.quoted_amount,
         'rated': o.ratingcheck,
     })
+
+
+def google_verify(request):
+    return HttpResponse("google-site-verification: google5d2ebb19aca3f044.html", content_type="text/html")
