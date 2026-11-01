@@ -45,6 +45,7 @@ urlpatterns = [
     path('api/notifications/mark-all-read', views.mark_all_read, name='mark_all_read'),
     path('api/availability/<int:prof_id>', views.check_availability, name='check_availability'),
     path('api/assistant', views.assistant_chat, name='assistant_chat'),
+    path('api/order/<int:order_id>/state', views.order_state, name='order_state'),
     path('updateworkamount/<int:order_id>/', views.update_work_amount, name='update_work_amount'),
     path('confirmcash/<int:order_id>/', views.confirm_cash_payment, name='confirm_cash_payment'),
     path('adminaisettings', views.adminaisettings, name='adminaisettings'),

@@ -355,7 +355,40 @@
     });
   }
 
+  /* ---------- Live order watch (detail pages) ---------- */
+  // Polls the order's state every 5s; when the other side changes something
+  // (accept, solve, payment, rating), the page reloads to show it.
+  function wireOrderWatch() {
+    var el = document.querySelector('[data-sg-order-watch]');
+    if (!el) return;
+    var orderId = el.getAttribute('data-sg-order-watch');
+    var baseline = null;
+    function formBusy() {
+      var a = document.activeElement;
+      return a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.tagName === 'SELECT');
+    }
+    setInterval(function () {
+      fetch('/api/order/' + orderId + '/state', { credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
+        .then(function (r) {
+          var type = r.headers.get('content-type') || '';
+          return r.ok && type.indexOf('json') > -1 ? r.json() : null;
+        })
+        .then(function (data) {
+          if (!data || !data.status) return;
+          var sig = JSON.stringify(data);
+          if (baseline === null) { baseline = sig; return; }
+          if (sig !== baseline && !formBusy()) {
+            baseline = sig;
+            if (window.sgToast) sgToast('This booking was just updated - refreshing...', 'bi-arrow-clockwise');
+            setTimeout(function () { window.location.reload(); }, 700);
+          }
+        })
+        .catch(function () {});
+    }, 5000);
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
+    wireOrderWatch();
     wirePasswordToggles();
     wireToasts();
     wireReveal();

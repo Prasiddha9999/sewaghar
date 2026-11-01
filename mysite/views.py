@@ -1792,3 +1792,25 @@ def deletecontact(request, contact_id):
         return redirect("admincontacts")
     else:
         return redirect('404')
+
+
+@login_required(login_url="hsignin")
+def order_state(request, order_id):
+    """Tiny JSON fingerprint of an order; detail pages poll it to live-refresh."""
+    o = Order.objects.filter(order_id=order_id).select_related('homeowner_id', 'professional_id').first()
+    if not o:
+        return JsonResponse({}, status=404)
+    u = request.user
+    allowed = (u.is_admin
+               or (u.is_homeowner and o.homeowner_id.username == u.username)
+               or (u.is_professional and o.professional_id.username == u.username))
+    if not allowed:
+        return JsonResponse({}, status=403)
+    return JsonResponse({
+        'status': o.status,
+        'paid': bool(o.payment_amount),
+        'amount': o.payment_amount,
+        'hours': o.totaltimehour,
+        'quoted': o.quoted_amount,
+        'rated': o.ratingcheck,
+    })

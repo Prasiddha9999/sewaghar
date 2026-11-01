@@ -3,7 +3,7 @@
 {% block content %}
 {% load static %}
 
-<section class="py-4">
+<section class="py-4" data-sg-order-watch="{{ ord.order_id }}">
   <div class="container">
     <div class="sg-section-head">
       <span class="sg-eyebrow"><i class="bi bi-receipt"></i> Booking #{{ ord.order_id }}</span>
