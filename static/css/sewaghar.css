@@ -798,13 +798,20 @@ html.sg-anim .sg-reveal.visible { opacity: 1; transform: none; }
 }
 
 /* ---------- Star rating input ---------- */
-.sg-star-input { display: inline-flex; gap: 0.25rem; }
+.sg-star-input { display: inline-flex; gap: 0.3rem; }
 .sg-star-input button {
   background: none; border: 0; padding: 0.1rem; cursor: pointer;
-  font-size: 1.8rem; line-height: 1; color: var(--sg-border-strong);
+  font-size: 2rem; line-height: 1;
+  color: var(--sg-surface);
+  -webkit-text-stroke: 1.5px var(--sg-text-faint);
+  text-stroke: 1.5px var(--sg-text-faint);
   transition: color 0.12s ease, transform 0.12s ease;
 }
-.sg-star-input button.on { color: var(--sg-accent); }
+.sg-star-input button.on {
+  color: var(--sg-accent);
+  -webkit-text-stroke: 1.5px var(--sg-accent);
+  text-stroke: 1.5px var(--sg-accent);
+}
 .sg-star-input button:hover { transform: scale(1.15); }
 
 /* ---------- Quick date/time chips ---------- */
@@ -829,13 +836,21 @@ html.sg-anim .sg-reveal.visible { opacity: 1; transform: none; }
 }
 #sg-assistant-fab:hover { background: var(--sg-primary-strong); }
 #sg-assistant-panel {
-  position: fixed; right: 18px; bottom: 140px; z-index: 1050;
-  width: min(360px, calc(100vw - 36px)); max-height: min(520px, 70vh);
-  display: none; flex-direction: column; overflow: hidden;
-  background: var(--sg-surface); border: 1px solid var(--sg-border);
-  border-radius: 16px; box-shadow: var(--sg-shadow);
+  position: fixed; right: 0; top: 0; bottom: 0; z-index: 1060;
+  width: min(380px, 92vw); height: 100dvh;
+  display: flex; flex-direction: column; overflow: hidden;
+  background: var(--sg-surface); border-left: 1px solid var(--sg-border);
+  box-shadow: -12px 0 40px -18px rgba(13, 38, 44, 0.45);
+  transform: translateX(105%);
+  transition: transform 0.28s ease;
 }
-#sg-assistant-panel.open { display: flex; }
+#sg-assistant-panel.open { transform: translateX(0); }
+#sg-assistant-close {
+  background: rgba(255, 255, 255, 0.18); border: 0; color: #fff;
+  border-radius: 8px; width: 30px; height: 30px; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+#sg-assistant-close:hover { background: rgba(255, 255, 255, 0.32); }
 .sg-assistant-head {
   padding: 0.8rem 1rem; background: var(--sg-primary); color: #fff;
   font-weight: 700; display: flex; align-items: center; gap: 0.5rem;
@@ -854,5 +869,4 @@ html.sg-anim .sg-reveal.visible { opacity: 1; transform: none; }
 #sg-assistant-input { flex: 1; }
 @media (max-width: 576px) {
   #sg-assistant-fab { bottom: 70px; right: 14px; }
-  #sg-assistant-panel { bottom: 132px; right: 14px; }
 }

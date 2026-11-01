@@ -137,8 +137,8 @@ def servicetime(request,bk):
                 except ValueError:
                     offered_rate = None
             if error_message is None and offered_rate is not None and base_rate > 0:
-                if not (base_rate * 0.5 <= offered_rate <= base_rate * 1.5):
-                    error_message = f"Your price offer must stay between Rs. {base_rate * 0.5:g} and Rs. {base_rate * 1.5:g} per hour."
+                if not (base_rate * 0.8 <= offered_rate <= base_rate * 1.5):
+                    error_message = f"Your price offer must stay between Rs. {base_rate * 0.8:g} and Rs. {base_rate * 1.5:g} per hour."
 
             if error_message:
                 return render(request, 'homeowners/servicetime.html', {'error_message': error_message, 's': s, 'sk': sk, 'servicedata': servicedata})
@@ -1688,7 +1688,7 @@ ASSISTANT_INSTRUCTIONS = (
     "Booking: Services page, choose a service, choose a sub-service, pick a professional "
     "(see ratings, rate per hour, location), choose date and time (today up to 30 days ahead; slots "
     "within 1 hour of an existing booking are unavailable), pin the home location on the map, "
-    "optionally offer your own price (between 50 and 150 percent of the listed rate) and describe the work, then book. "
+    "optionally offer your own price (between 80 and 150 percent of the listed rate) and describe the work, then book. "
     "The professional accepts or cancels. After finishing, the professional enters hours worked or a "
     "fixed amount; the home owner pays via Khalti or cash (the professional can confirm cash received, "
     "which completes the service). After completion the home owner can rate the professional 1-5 stars. "

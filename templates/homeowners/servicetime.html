@@ -171,7 +171,7 @@
     var offer = document.getElementById('offered_rate');
     var baseRate = Number('{{ sk.rateperhour|default:"0" }}') || 0;
     if (offer && baseRate > 0) {
-      var lo = Math.round(baseRate * 0.5), hi = Math.round(baseRate * 1.5);
+      var lo = Math.round(baseRate * 0.8), hi = Math.round(baseRate * 1.5);
       offer.min = lo;
       offer.max = hi;
       document.getElementById('offer-hint').textContent =

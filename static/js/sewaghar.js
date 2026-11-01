@@ -317,8 +317,14 @@
       return row;
     }
 
+    var closeBtn = document.getElementById('sg-assistant-close');
+    if (closeBtn) closeBtn.addEventListener('click', function () {
+      panel.classList.remove('open');
+      fab.style.display = '';
+    });
     fab.addEventListener('click', function () {
       panel.classList.toggle('open');
+      fab.style.display = panel.classList.contains('open') ? 'none' : '';
       if (panel.classList.contains('open') && !body.children.length) {
         addMsg('assistant', 'Namaste! I am SewaGhar Sahayogi. Ask me anything about booking a service, creating an account, payments or ratings. \u0928\u0947\u092a\u093e\u0932\u0940\u092e\u093e \u092a\u0928\u093f \u0938\u094b\u0927\u094d\u0928 \u0938\u0915\u094d\u0928\u0941\u0939\u0941\u0928\u094d\u091b\u0964');
       }
