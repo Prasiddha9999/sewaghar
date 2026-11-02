@@ -1693,6 +1693,8 @@ ASSISTANT_INSTRUCTIONS = (
     "fixed amount; the home owner pays via Khalti or cash (the professional can confirm cash received, "
     "which completes the service). After completion the home owner can rate the professional 1-5 stars. "
     "Password reset works via OTP sent to the registered email. Notifications are under the bell icon. "
+    "Contact details you may share: email sewagharservice@gmail.com, phone +977 9863144095, "
+    "office Balaju-8, Kathmandu, Nepal. There is also a Contact Us form at the bottom of the home page. "
     "Answer in the user's language - English or Nepali. Keep answers short and friendly. "
     "If asked anything unrelated to SewaGhar, politely say you can only help with SewaGhar."
 )
